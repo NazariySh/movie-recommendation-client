@@ -1,0 +1,83 @@
+<app-auth-form-wrapper
+  [titleKey]="registered ? 'AUTH.REGISTER_SUCCESS_TITLE' : 'AUTH.REGISTER'"
+  [subtitleKey]="registered ? 'AUTH.REGISTER_SUCCESS_SUBTITLE' : 'AUTH.REGISTER_SUBTITLE'">
+
+  <ng-container *ngIf="!registered; else successView">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+      <app-input-text
+        [control]="form.get('username')"
+        [label]="'AUTH.NICKNAME' | translate"
+        autocomplete="username">
+      </app-input-text>
+
+      <app-input-email
+        [control]="form.get('email')"
+        [label]="'AUTH.EMAIL' | translate">
+      </app-input-email>
+
+      <div class="password-block">
+        <app-input-password
+          [control]="form.get('password')"
+          [label]="'AUTH.PASSWORD' | translate"
+          autocomplete="new-password">
+        </app-input-password>
+        <app-password-strength-meter [password]="form.get('password')?.value || ''"></app-password-strength-meter>
+      </div>
+
+      <app-input-password
+        [control]="form.get('confirmPassword')"
+        [label]="'AUTH.CONFIRM_PASSWORD' | translate"
+        autocomplete="new-password">
+      </app-input-password>
+
+      <app-input-checkbox [control]="form.get('agreeToTerms')">
+        {{ 'AUTH.AGREE_TO' | translate }}
+        <a [routerLink]="AppPaths.RULES" target="_blank" class="link">{{ 'AUTH.TERMS' | translate }}</a>
+      </app-input-checkbox>
+
+      <app-button
+        class="auth-submit"
+        type="submit"
+        buttonType="flat"
+        color="primary"
+        size="full"
+        [disabled]="(loading$ | async) ?? false">
+        {{ 'AUTH.SIGN_UP' | translate }}
+      </app-button>
+    </form>
+
+    <app-social-auth-buttons (googleLogin)="onGoogleLogin($event)"></app-social-auth-buttons>
+
+    <div class="auth-footer">
+      {{ 'AUTH.HAVE_ACCOUNT' | translate }}
+      <a [routerLink]="AuthPaths.LOGIN" class="link link--accent">{{ 'AUTH.SIGN_IN' | translate }}</a>
+    </div>
+  </ng-container>
+
+  <ng-template #successView>
+    <div class="success-state">
+      <mat-icon class="success-state__icon">mark_email_read</mat-icon>
+      <p class="success-state__email">{{ registeredEmail }}</p>
+      <p class="success-state__hint">{{ 'AUTH.CHECK_EMAIL_HINT' | translate }}</p>
+
+      <app-button
+        type="button"
+        buttonType="flat"
+        color="primary"
+        size="full"
+        [disabled]="resendCooldown > 0 || ((loading$ | async) ?? false)"
+        (clicked)="resendVerification()">
+        <ng-container *ngIf="resendCooldown === 0">{{ 'AUTH.RESEND' | translate }}</ng-container>
+        <ng-container *ngIf="resendCooldown > 0">{{ 'AUTH.RESEND_IN' | translate }} ({{ resendCooldown }}s)</ng-container>
+      </app-button>
+
+      <app-button
+        type="button"
+        buttonType="basic"
+        size="full"
+        (clicked)="goToLogin()">
+        {{ 'AUTH.GO_TO_LOGIN' | translate }}
+      </app-button>
+    </div>
+  </ng-template>
+</app-auth-form-wrapper>

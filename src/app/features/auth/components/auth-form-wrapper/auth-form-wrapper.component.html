@@ -1,0 +1,9 @@
+<div class="auth-card">
+  <header class="auth-card__header">
+    <h1 class="auth-card__title">{{ titleKey | translate }}</h1>
+    <p *ngIf="subtitleKey" class="auth-card__subtitle">{{ subtitleKey | translate }}</p>
+  </header>
+  <div class="auth-card__body">
+    <ng-content></ng-content>
+  </div>
+</div>

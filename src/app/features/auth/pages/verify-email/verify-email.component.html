@@ -1,0 +1,45 @@
+<app-auth-form-wrapper titleKey="AUTH.VERIFY_EMAIL" subtitleKey="AUTH.VERIFY_EMAIL_SUBTITLE">
+  <div class="state state--{{ state }}">
+    <ng-container [ngSwitch]="state">
+      <ng-container *ngSwitchCase="'pending'">
+        <span class="spinner spinner--lg"></span>
+        <p>{{ 'AUTH.VERIFYING' | translate }}</p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'success'">
+        <mat-icon class="state__icon state__icon--success">check_circle</mat-icon>
+        <p>{{ 'AUTH.VERIFY_SUCCESS' | translate }}</p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'error'">
+        <mat-icon class="state__icon state__icon--error">error</mat-icon>
+        <p>{{ 'AUTH.VERIFY_FAILED' | translate }}</p>
+
+        <ng-container *ngIf="!resendSent; else resendSentTpl">
+          <p class="state__hint">{{ 'AUTH.VERIFY_RESEND_HINT' | translate }}</p>
+
+          <app-input-email
+            [control]="emailControl"
+            [label]="'AUTH.EMAIL' | translate">
+          </app-input-email>
+
+          <app-button
+            type="button"
+            buttonType="flat"
+            color="primary"
+            size="full"
+            [disabled]="(loading$ | async) ?? false"
+            (clicked)="resendVerification()">
+            {{ 'AUTH.RESEND' | translate }}
+          </app-button>
+        </ng-container>
+
+        <ng-template #resendSentTpl>
+          <p class="state__hint">{{ 'AUTH.VERIFY_RESEND_SENT' | translate }}</p>
+        </ng-template>
+
+        <a [routerLink]="AuthPaths.LOGIN" class="link">{{ 'AUTH.BACK_TO_LOGIN' | translate }}</a>
+      </ng-container>
+    </ng-container>
+  </div>
+</app-auth-form-wrapper>
