@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.app-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  padding: 1.5rem 3rem;
+}
+
+.app-layout:not([data-layout='main']) {
+  .layout-chrome {
+    display: none;
+  }
+
+  .scroll-area {
+    overflow: hidden;
+  }
+
+  .page-content {
+    padding: 0;
+  }
+}
+
+.global-spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--overlay-color);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}

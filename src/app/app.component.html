@@ -1,0 +1,19 @@
+<div class="app-layout" [attr.data-layout]="layout$ | async">
+  <app-sidebar class="layout-chrome"></app-sidebar>
+
+  <div class="main-container">
+    <app-header class="layout-chrome"></app-header>
+
+    <div class="scroll-area">
+      <main class="page-content">
+        <router-outlet></router-outlet>
+      </main>
+
+      <app-footer class="layout-chrome"></app-footer>
+    </div>
+  </div>
+</div>
+
+<div class="global-spinner-overlay" *ngIf="globalSpinner$ | async">
+  <app-spinner [diameter]="60"></app-spinner>
+</div>
