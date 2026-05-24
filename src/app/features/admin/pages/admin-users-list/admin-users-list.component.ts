@@ -9,6 +9,7 @@ import { AdminUserListItem, SearchAdminUsersQuery } from '../../models/admin-mod
 import { ToastService } from '../../../../core/services/toast.service';
 import { ConfirmActionDialogComponent } from '../../components/confirm-action-dialog/confirm-action-dialog.component';
 import { RoleEditDialogComponent } from '../../components/role-edit-dialog/role-edit-dialog.component';
+import { AdminPaths } from '../../../../core/constants/app-routes';
 import {
   ADMIN_AVAILABLE_ROLES,
   ADMIN_DEFAULT_PAGE_SIZE,
@@ -107,20 +108,27 @@ export class AdminUsersListComponent implements OnInit {
   }
 
   public openDetail(user: AdminUserListItem): void {
-    this.router.navigate(['/admin/users', user.id]);
+    this.router.navigate([AdminPaths.USERS, user.id]);
   }
 
   public editRoles(user: AdminUserListItem): void {
     const ref = this.dialog.open(RoleEditDialogComponent, {
       data: { username: user.username, roles: [...user.roles], available: this.availableRoles },
     });
-    ref.afterClosed().subscribe((roles: string[] | undefined) => {
-      if (!roles) return;
-      this.api.updateRoles(user.id, roles).subscribe(() => {
-        this.toast.success('ADMIN.USERS.ROLES_UPDATED');
-        this.reload();
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((roles: string[] | undefined) => {
+        if (!roles) return;
+        this.api.updateRoles(user.id, roles)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.toast.success('ADMIN.USERS.ROLES_UPDATED');
+              this.reload();
+            },
+            error: () => this.toast.error('ADMIN.USERS.ROLES_UPDATE_FAILED'),
+          });
       });
-    });
   }
 
   public toggleActive(user: AdminUserListItem): void {
@@ -135,16 +143,21 @@ export class AdminUsersListComponent implements OnInit {
         destructive: action === 'disable',
       },
     });
-    ref.afterClosed().subscribe((result: { confirmed: boolean; reason?: string } | undefined) => {
-      if (!result?.confirmed) return;
-      const op = action === 'disable'
-        ? this.api.disable(user.id, result.reason)
-        : this.api.enable(user.id);
-      op.subscribe(() => {
-        this.toast.success(action === 'disable' ? 'ADMIN.USERS.DISABLED' : 'ADMIN.USERS.ENABLED');
-        this.reload();
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: { confirmed: boolean; reason?: string } | undefined) => {
+        if (!result?.confirmed) return;
+        const op = action === 'disable'
+          ? this.api.disable(user.id, result.reason)
+          : this.api.enable(user.id);
+        op.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: () => {
+            this.toast.success(action === 'disable' ? 'ADMIN.USERS.DISABLED' : 'ADMIN.USERS.ENABLED');
+            this.reload();
+          },
+          error: () => this.toast.error(action === 'disable' ? 'ADMIN.USERS.DISABLE_FAILED' : 'ADMIN.USERS.ENABLE_FAILED'),
+        });
       });
-    });
   }
 
   public forceReset(user: AdminUserListItem): void {
@@ -157,12 +170,17 @@ export class AdminUsersListComponent implements OnInit {
         destructive: true,
       },
     });
-    ref.afterClosed().subscribe((result: { confirmed: boolean } | undefined) => {
-      if (!result?.confirmed) return;
-      this.api.forceResetPassword(user.id).subscribe(() => {
-        this.toast.success('ADMIN.USERS.RESET_SENT');
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: { confirmed: boolean } | undefined) => {
+        if (!result?.confirmed) return;
+        this.api.forceResetPassword(user.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => this.toast.success('ADMIN.USERS.RESET_SENT'),
+            error: () => this.toast.error('ADMIN.USERS.RESET_FAILED'),
+          });
       });
-    });
   }
 
   public delete(user: AdminUserListItem): void {
@@ -176,13 +194,20 @@ export class AdminUsersListComponent implements OnInit {
         destructive: true,
       },
     });
-    ref.afterClosed().subscribe((result: { confirmed: boolean } | undefined) => {
-      if (!result?.confirmed) return;
-      this.api.delete(user.id).subscribe(() => {
-        this.toast.success('ADMIN.USERS.DELETED');
-        this.reload();
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: { confirmed: boolean } | undefined) => {
+        if (!result?.confirmed) return;
+        this.api.delete(user.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.toast.success('ADMIN.USERS.DELETED');
+              this.reload();
+            },
+            error: () => this.toast.error('ADMIN.USERS.DELETE_FAILED'),
+          });
       });
-    });
   }
 
   private patchState(partial: Partial<ListState>): void {

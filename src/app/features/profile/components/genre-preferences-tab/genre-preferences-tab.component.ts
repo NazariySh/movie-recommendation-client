@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -23,25 +24,28 @@ export class GenrePreferencesTabComponent implements OnInit {
   public loading = true;
   public saving = false;
 
-  constructor(
+  public constructor(
     private readonly api: ProfileApiService,
     private readonly toast: ToastService,
     private readonly translate: TranslateService,
+    private readonly destroyRef: DestroyRef,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    this.api.getMyGenrePreferences().subscribe({
-      next: (prefs) => {
-        this.rows = this.toRows(prefs);
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.api.getMyGenrePreferences()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (prefs) => {
+          this.rows = this.toRows(prefs);
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   public onWeightChange(row: GenreRow, value: number): void {
@@ -60,11 +64,14 @@ export class GenrePreferencesTabComponent implements OnInit {
   }
 
   public async save(): Promise<void> {
+    if (this.saving) return;
     this.saving = true;
     this.cdr.markForCheck();
     try {
       const payload = this.rows.map((r) => ({ genreId: r.genreId, weight: r.weight }));
-      const updated = await firstValueFrom(this.api.updateGenrePreferences(payload));
+      const updated = await firstValueFrom(
+        this.api.updateGenrePreferences(payload).pipe(takeUntilDestroyed(this.destroyRef)),
+      );
       this.rows = this.toRows(updated);
       this.toast.success(this.translate.instant('PROFILE.PREFERENCES_SAVED'));
     } catch {

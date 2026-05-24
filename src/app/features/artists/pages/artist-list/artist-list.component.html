@@ -1,13 +1,11 @@
 <div class="artist-list-page">
   <h1 class="page-title">{{ 'ARTISTS.LIST_TITLE' | translate }}</h1>
 
-  <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic">
-    <mat-icon matPrefix [fontIcon]="AppIcon.Search"></mat-icon>
-    <input
-      matInput
-      [formControl]="searchControl"
-      [placeholder]="'ARTISTS.SEARCH_PLACEHOLDER' | translate" />
-  </mat-form-field>
+  <app-input-text
+    class="search-field"
+    [control]="searchControl"
+    [label]="'ARTISTS.SEARCH_PLACEHOLDER' | translate">
+  </app-input-text>
 
   <div class="role-row">
     <nav class="role-tabs" role="tablist">

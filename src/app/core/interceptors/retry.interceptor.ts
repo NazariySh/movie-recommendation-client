@@ -3,9 +3,6 @@ import { retry, throwError, timer } from 'rxjs';
 
 const MAX_RETRIES = 3;
 
-// Only retry transient failures. 4xx other than 408/429 are client errors —
-// retrying spams the server (e.g. invalid token → three 401s in 7s before the
-// auth interceptor's silent refresh even gets a turn).
 const RETRIABLE_4XX = new Set([408, 429]);
 
 export const retryInterceptor: HttpInterceptorFn = (req, next) => {

@@ -45,11 +45,6 @@
   padding: 1.25rem 1.5rem 1.75rem;
 }
 
-// Hero overlay back arrow — needs a dark backdrop to stay readable over the
-// movie's backdrop image, so we override the default <app-button buttonType="icon">
-// transparent look at the host level. Use Material's state-layer tokens (not an
-// explicit :hover background) so the hover effect doesn't stack on top of the
-// state-layer overlay, which made the hover feel "double-darkened".
 app-button.back-btn {
   ::ng-deep .mat-mdc-icon-button {
     background: rgba(0, 0, 0, 0.55);

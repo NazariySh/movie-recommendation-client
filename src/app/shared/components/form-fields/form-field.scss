@@ -1,9 +1,5 @@
 @use '../../../../styles/variables' as *;
 
-// Wrapper-level layout. The dark-theme tokens themselves live in the global
-// `mat-form-field.mat-mdc-form-field { ... }` rule in styles.scss so raw
-// <mat-form-field> blocks (used in feature pages for <mat-select>, date inputs,
-// etc.) get the same treatment as these wrapped components.
 :host {
   display: block;
   width: 100%;

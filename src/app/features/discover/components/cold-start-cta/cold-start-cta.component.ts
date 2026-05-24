@@ -11,7 +11,7 @@ import { AppPaths } from '../../../../core/constants/app-routes';
 export class ColdStartCtaComponent {
   public readonly onboardingPath = AppPaths.ONBOARDING;
 
-  constructor(private readonly router: Router) {}
+  public constructor(private readonly router: Router) {}
 
   public takeSurvey(): void {
     this.router.navigateByUrl(this.onboardingPath);

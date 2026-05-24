@@ -9,6 +9,7 @@ import { Artist } from '../../../../core/models/artist';
 import { AdminArtistsService } from '../../services/admin-artists.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { ConfirmActionDialogComponent } from '../../components/confirm-action-dialog/confirm-action-dialog.component';
+import { AdminRoutes, AppPaths } from '../../../../core/constants/app-routes';
 import {
   ADMIN_DEFAULT_PAGE_SIZE,
   ADMIN_DELETE_TYPED_CONFIRMATION,
@@ -40,6 +41,8 @@ export class AdminArtistsListComponent implements OnInit {
   public readonly displayedColumns = ['photo', 'name', 'department', 'movies', 'actions'];
   public readonly pageSizeOptions = ADMIN_PAGE_SIZE_OPTIONS;
   public readonly searchControl = new FormControl(INITIAL_STATE.search, { nonNullable: true });
+  public readonly AppPaths = AppPaths;
+  public readonly AdminRoutes = AdminRoutes;
 
   public artists: Artist[] = [];
   public totalCount = 0;
@@ -95,8 +98,13 @@ export class AdminArtistsListComponent implements OnInit {
     this.patchState({ pageNumber: event.pageIndex + 1, pageSize: event.pageSize });
   }
 
-  public createNew(): void { this.router.navigate(['/admin/artists/new']); }
-  public edit(artist: Artist): void { this.router.navigate(['/admin/artists', artist.id, 'edit']); }
+  public createNew(): void {
+    this.router.navigate([AppPaths.ADMIN, AdminRoutes.ARTISTS, AdminRoutes.ARTISTS_NEW]);
+  }
+
+  public edit(artist: Artist): void {
+    this.router.navigate([AppPaths.ADMIN, AdminRoutes.ARTISTS, artist.id, 'edit']);
+  }
 
   public delete(artist: Artist): void {
     const ref = this.dialog.open(ConfirmActionDialogComponent, {
@@ -109,13 +117,20 @@ export class AdminArtistsListComponent implements OnInit {
         destructive: true,
       },
     });
-    ref.afterClosed().subscribe((result: { confirmed: boolean } | undefined) => {
-      if (!result?.confirmed) return;
-      this.adminApi.delete(artist.id).subscribe(() => {
-        this.toast.success('ADMIN.ARTISTS.DELETED');
-        this.reload();
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: { confirmed: boolean } | undefined) => {
+        if (!result?.confirmed) return;
+        this.adminApi.delete(artist.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.toast.success('ADMIN.ARTISTS.DELETED');
+              this.reload();
+            },
+            error: () => this.toast.error('ADMIN.ARTISTS.DELETE_FAILED'),
+          });
       });
-    });
   }
 
   private patchState(partial: Partial<ListState>): void {

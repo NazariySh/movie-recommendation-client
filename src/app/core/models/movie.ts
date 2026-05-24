@@ -1,5 +1,13 @@
 import { TitleType } from './title-type';
 
+export type RecommendationReason =
+  | 'ForYou'
+  | 'Similar'
+  | 'BecauseWatched'
+  | 'PopularInGenres'
+  | 'TopRated'
+  | 'SemanticMatch';
+
 export interface Movie {
   id: string;
   key: string;
@@ -18,8 +26,5 @@ export interface Movie {
   isOngoing: boolean | null;
   genres: string[];
 
-  // Set by recommendation endpoints (for-you / cold-start / because-you-liked).
-  // Null for catalogue / search results. Used to render a "why-recommended"
-  // tooltip on the discover home page.
-  recommendationReason?: string | null;
+  recommendationReason?: RecommendationReason | null;
 }

@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { EMPTY, timer } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { AuthService } from '../../../../core/services/auth.service';
-import { ToastService } from '../../../../core/services/toast.service';
-
-const passwordMatch: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-  const newPassword = group.get('newPassword')?.value;
-  const confirm = group.get('confirmPassword')?.value;
-  return newPassword && confirm && newPassword !== confirm ? { passwordMismatch: true } : null;
-};
+import { FormComponent } from '../../../../shared/form/form-component';
+import { passwordMatchValidator } from '../../../../shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-change-password-tab',
@@ -16,34 +14,31 @@ const passwordMatch: ValidatorFn = (group: AbstractControl): ValidationErrors | 
   styleUrl: './change-password-tab.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChangePasswordTabComponent {
+export class ChangePasswordTabComponent extends FormComponent {
   public readonly form: FormGroup;
   public submitting = false;
 
-  constructor(
+  public constructor(
     private readonly fb: FormBuilder,
     private readonly auth: AuthService,
-    private readonly toast: ToastService,
-    private readonly translate: TranslateService,
-    private readonly cdr: ChangeDetectorRef,
+    private readonly destroyRef: DestroyRef,
   ) {
+    super();
     this.form = this.fb.group(
       {
         currentPassword: ['', [Validators.required]],
         newPassword: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
       },
-      { validators: passwordMatch },
+      { validators: passwordMatchValidator('newPassword', 'confirmPassword') },
     );
   }
 
-  public get newPasswordValue(): string {
-    return this.form.controls['newPassword'].value ?? '';
-  }
-
   public onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.submitting || this.form.invalid) return;
     this.submitting = true;
+    this.form.disable();
+    this.cdr.markForCheck();
 
     const value = this.form.value;
     this.auth
@@ -51,18 +46,27 @@ export class ChangePasswordTabComponent {
         currentPassword: value.currentPassword,
         newPassword: value.newPassword,
       })
-      .subscribe({
-        next: () => {
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          this.handleValidationError(err);
+          if (err.status !== 400 && err.status !== 422) {
+            this.toast.error(this.translate.instant('PROFILE.PASSWORD_CHANGE_FAILED'));
+          }
+          return EMPTY;
+        }),
+        finalize(() => {
           this.submitting = false;
+          this.form.enable();
           this.cdr.markForCheck();
-          this.form.reset();
-          this.toast.success(this.translate.instant('PROFILE.PASSWORD_CHANGED'));
-        },
-        error: () => {
-          this.submitting = false;
-          this.cdr.markForCheck();
-          this.toast.error(this.translate.instant('PROFILE.PASSWORD_CHANGE_FAILED'));
-        },
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => {
+        this.toast.success(this.translate.instant('PROFILE.PASSWORD_CHANGED'));
+        this.form.reset();
+        timer(1500)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => this.auth.logout().subscribe());
       });
   }
 }

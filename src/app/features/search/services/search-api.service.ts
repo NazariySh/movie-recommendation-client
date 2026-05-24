@@ -13,7 +13,7 @@ export class SearchApiService {
   private readonly moviesUrl = `${environment.apiUrl}/movies`;
   private readonly artistsUrl = `${environment.apiUrl}/artists`;
 
-  constructor(private readonly http: HttpClient) {}
+  public constructor(private readonly http: HttpClient) {}
 
   public getSuggestions(query: string, limit = 5): Observable<SearchSuggestions> {
     const trimmed = query.trim().toLowerCase();

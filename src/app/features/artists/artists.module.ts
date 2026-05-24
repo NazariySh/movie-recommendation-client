@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 import { SharedModule } from '../../shared/shared.module';
 import { PaginatorComponent } from '../../shared/components/paginator/paginator.component';
@@ -12,12 +10,6 @@ import { ArtistCardComponent } from './components/artist-card/artist-card.compon
 
 @NgModule({
   declarations: [ArtistListComponent, ArtistDetailComponent, ArtistCardComponent],
-  imports: [
-    SharedModule,
-    MatFormFieldModule,
-    MatInputModule,
-    PaginatorComponent,
-    ArtistsRoutingModule,
-  ],
+  imports: [SharedModule, PaginatorComponent, ArtistsRoutingModule],
 })
 export class ArtistsModule {}

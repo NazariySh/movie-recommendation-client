@@ -88,7 +88,7 @@
                   {{ 'MOVIE.ADD_TO_WATCHLIST' | translate }}
                 </button>
               </ng-template>
-              <mat-menu #watchlistMenu="matMenu">
+              <mat-menu #watchlistMenu="matMenu" class="app-menu">
                 <button
                   *ngFor="let opt of watchlistOptions"
                   type="button"

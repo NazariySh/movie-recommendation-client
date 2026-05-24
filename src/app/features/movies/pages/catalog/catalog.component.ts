@@ -67,7 +67,6 @@ export class CatalogComponent implements OnInit {
     return items;
   })();
 
-  // URL is the single source of truth for filter state.
   public readonly filters$: Observable<CatalogFilters>;
   public readonly searchControl: FormControl<string>;
   public readonly genreItems$: Observable<SelectItem[]>;

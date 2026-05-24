@@ -6,7 +6,7 @@ import { catchError, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ArtistDetail } from '../../../../core/models/artist-detail';
 import { FilmographyItem } from '../../../../core/models/filmography';
 import { AppIcon } from '../../../../core/constants/app-icons';
-import { AppRoutes } from '../../../../core/constants/app-routes';
+import { AppPaths, AppRoutes } from '../../../../core/constants/app-routes';
 import { ArtistService } from '../../services/artist.service';
 
 type DetailTab = 'information' | 'gallery' | 'works';
@@ -92,11 +92,22 @@ export class ArtistDetailComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.location.back();
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate([AppPaths.ARTISTS]);
+    }
   }
 
-  public navigateToMovie(movieKey: string): void {
-    this.router.navigate(['/', AppRoutes.MOVIE_DETAIL, movieKey]);
+  public movieLink(movieKey: string): unknown[] {
+    return ['/', AppRoutes.MOVIE_DETAIL, movieKey];
+  }
+
+  public workSubtitle(item: FilmographyItem): string | null {
+    const year = item.releaseDate ? new Date(item.releaseDate).getFullYear() : null;
+    if (year && item.character) return `${year} · ${item.character}`;
+    if (year) return String(year);
+    return item.character ?? null;
   }
 
   private buildLoadedState(artist: ArtistDetail): DetailState {

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: '',
+  apiUrl: 'api',
   appUrl: '',
   defaultLanguage: 'uk',
   supportedLanguages: ['uk', 'en'],

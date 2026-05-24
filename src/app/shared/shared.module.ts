@@ -27,6 +27,7 @@ import { AvatarComponent } from './components/avatar/avatar.component';
 import { ChipComponent } from './components/chip/chip.component';
 import { PosterCardComponent } from './components/poster-card/poster-card.component';
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
+import { PasswordStrengthMeterComponent } from './components/password-strength-meter/password-strength-meter.component';
 
 import { SpinnerModule } from './components/spinner/spinner.module';
 import { ButtonModule } from './components/button/button.module';
@@ -43,6 +44,7 @@ const STANDALONE_COMPONENTS = [
   ChipComponent,
   PosterCardComponent,
   RatingStarsComponent,
+  PasswordStrengthMeterComponent,
 ];
 
 @NgModule({

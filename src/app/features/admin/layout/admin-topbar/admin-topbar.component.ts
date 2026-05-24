@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { LanguageService } from '../../../../core/services/language.service';
 import { User } from '../../../../core/models/user.model';
+import { AppPaths } from '../../../../core/constants/app-routes';
+import { AvatarComponent } from '../../../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'app-admin-topbar',
@@ -25,10 +27,14 @@ import { User } from '../../../../core/models/user.model';
     MatButtonModule,
     MatTooltipModule,
     TranslateModule,
+    AvatarComponent,
   ],
 })
 export class AdminTopbarComponent {
   public readonly user$: Observable<User | null>;
+
+  public readonly homeLink = AppPaths.DISCOVER;
+  public readonly profileLink = AppPaths.PROFILE;
 
   public readonly languages = [
     { code: 'uk', labelKey: 'LANGUAGE.UK' },

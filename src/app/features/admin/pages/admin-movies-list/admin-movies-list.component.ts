@@ -11,6 +11,7 @@ import { TitleType } from '../../../../core/models/title-type';
 import { AdminMoviesService } from '../../services/admin-movies.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { ConfirmActionDialogComponent } from '../../components/confirm-action-dialog/confirm-action-dialog.component';
+import { AdminPaths } from '../../../../core/constants/app-routes';
 import {
   ADMIN_DEFAULT_PAGE_SIZE,
   ADMIN_DELETE_TYPED_CONFIRMATION,
@@ -102,17 +103,20 @@ export class AdminMoviesListComponent implements OnInit {
   }
 
   public createNew(): void {
-    this.router.navigate(['/admin/movies/new']);
+    this.router.navigate([AdminPaths.MOVIES_NEW]);
   }
 
   public edit(movie: MovieListItem): void {
-    this.router.navigate(['/admin/movies', movie.id, 'edit']);
+    this.router.navigate([AdminPaths.MOVIES, movie.id, 'edit']);
   }
 
   public regenerateEmbedding(movie: MovieListItem): void {
-    this.adminMovies.regenerateEmbedding(movie.id).subscribe(() => {
-      this.toast.success('ADMIN.MOVIES.EMBEDDING_REGENERATED');
-    });
+    this.adminMovies.regenerateEmbedding(movie.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.toast.success('ADMIN.MOVIES.EMBEDDING_REGENERATED'),
+        error: () => this.toast.error('ADMIN.MOVIES.EMBEDDING_FAILED'),
+      });
   }
 
   public delete(movie: MovieListItem): void {
@@ -126,13 +130,20 @@ export class AdminMoviesListComponent implements OnInit {
         destructive: true,
       },
     });
-    ref.afterClosed().subscribe((result: { confirmed: boolean } | undefined) => {
-      if (!result?.confirmed) return;
-      this.adminMovies.delete(movie.id).subscribe(() => {
-        this.toast.success('ADMIN.MOVIES.DELETED');
-        this.reload();
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: { confirmed: boolean } | undefined) => {
+        if (!result?.confirmed) return;
+        this.adminMovies.delete(movie.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () => {
+              this.toast.success('ADMIN.MOVIES.DELETED');
+              this.reload();
+            },
+            error: () => this.toast.error('ADMIN.MOVIES.DELETE_FAILED'),
+          });
       });
-    });
   }
 
   private patchState(partial: Partial<ListState>): void {

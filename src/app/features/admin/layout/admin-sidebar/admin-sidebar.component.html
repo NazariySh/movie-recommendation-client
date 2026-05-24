@@ -1,13 +1,13 @@
 <aside class="admin-sidebar" [class.admin-sidebar--collapsed]="collapsed">
   <div class="admin-sidebar__header">
-    <a routerLink="/admin/dashboard" class="admin-sidebar__logo">
+    <a [routerLink]="dashboardLink" class="admin-sidebar__logo">
       <mat-icon class="admin-sidebar__logo-icon" fontIcon="admin_panel_settings"></mat-icon>
       <span *ngIf="!collapsed" class="admin-sidebar__logo-text">{{ 'ADMIN.TITLE' | translate }}</span>
     </a>
   </div>
 
   <nav class="admin-sidebar__nav">
-    <a *ngFor="let item of navItems"
+    <a *ngFor="let item of visibleNavItems$ | async"
        [routerLink]="item.link"
        routerLinkActive="active"
        class="admin-sidebar__link"

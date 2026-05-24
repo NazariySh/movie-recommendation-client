@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserProfile } from '../../models/profile.model';
 import { ProfileApiService } from '../../services/profile-api.service';
@@ -13,30 +14,31 @@ export class ProfilePageComponent implements OnInit {
   public profile: UserProfile | null = null;
   public loading = true;
 
-  constructor(
+  public constructor(
     private readonly api: ProfileApiService,
     private readonly authService: AuthService,
+    private readonly destroyRef: DestroyRef,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    this.api.getMyProfile().subscribe({
-      next: (profile) => {
-        this.profile = profile;
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.api.getMyProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (profile) => {
+          this.profile = profile;
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   public onProfileUpdated(profile: UserProfile): void {
     this.profile = profile;
-    // Push the changed fields into AuthService.user$ so the header / sidebar /
-    // avatar menu re-render with the new username, avatar, bio, language.
     this.authService.patchCurrentUser({
       username: profile.username,
       avatarUrl: profile.avatarUrl,

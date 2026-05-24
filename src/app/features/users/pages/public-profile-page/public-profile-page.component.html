@@ -4,10 +4,7 @@
 
   <ng-container *ngIf="profile && !loading && !notFound">
     <header class="public-profile__header">
-      <img *ngIf="profile.avatarUrl; else avatarFallback" [src]="profile.avatarUrl" [alt]="profile.username" class="public-profile__avatar" />
-      <ng-template #avatarFallback>
-        <app-avatar [name]="profile.username" size="lg"></app-avatar>
-      </ng-template>
+      <app-avatar [src]="profile.avatarUrl" [name]="profile.username" size="lg"></app-avatar>
 
       <div>
         <h1 class="public-profile__name">{{ profile.username }}</h1>

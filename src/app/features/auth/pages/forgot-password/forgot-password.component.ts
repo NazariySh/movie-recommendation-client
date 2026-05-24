@@ -59,14 +59,14 @@ export class ForgotPasswordComponent extends FormComponent implements OnInit {
         }),
         finalize(() => {
           this.form.enable();
-          if (this.form.valid) {
-            this.submitted = true;
-          }
           this.cdr.markForCheck();
         })
       )
     )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe(() => {
+        this.submitted = true;
+        this.cdr.markForCheck();
+      });
   }
 }

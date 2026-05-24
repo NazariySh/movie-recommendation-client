@@ -64,48 +64,6 @@
     }
   }
 
-  &__bars {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__bar-row {
-    display: grid;
-    grid-template-columns: 80px 1fr 48px;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  &__bar-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
-    text-align: right;
-  }
-
-  &__bar-track {
-    height: 10px;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  &__bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), #4caaff);
-    border-radius: 999px;
-    transition: width 0.3s ease;
-
-    &--genre {
-      background: linear-gradient(90deg, #ff8a65, #ffb74d);
-    }
-  }
-
-  &__bar-value {
-    font-size: 0.85rem;
-    text-align: right;
-  }
-
   &__summary {
     display: flex;
     flex-wrap: wrap;

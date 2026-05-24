@@ -1,6 +1,6 @@
 <section class="user-detail" *ngIf="!loading && user as u">
   <header class="user-detail__header">
-    <a routerLink="/admin/users" class="user-detail__back">
+    <a [routerLink]="usersLink" class="user-detail__back">
       <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
     </a>
     <h1>{{ u.username }}</h1>

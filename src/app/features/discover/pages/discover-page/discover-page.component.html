@@ -30,9 +30,12 @@
   <ng-template #guestBanner>
     <div class="guest-banner">
       <p class="guest-banner__copy">{{ 'DISCOVER.GUEST_PROMPT' | translate }}</p>
-      <a mat-raised-button color="primary" [routerLink]="loginPath">
+      <app-button
+        buttonType="raised"
+        color="primary"
+        (clicked)="goToLogin()">
         {{ 'AUTH.LOGIN' | translate }}
-      </a>
+      </app-button>
     </div>
   </ng-template>
 

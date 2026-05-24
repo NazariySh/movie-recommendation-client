@@ -114,11 +114,8 @@
         <h2 *ngIf="s.activeTab === 'all'" class="search-page__section-title">{{ 'SEARCH.TAB_ARTISTS' | translate }}</h2>
         <ng-container *ngIf="s.artists && s.artists.items.length > 0; else artistsEmpty">
           <div class="search-page__artists-grid">
-            <a *ngFor="let a of s.artists.items" class="artist-tile" [routerLink]="['/artists', a.id]">
-              <img *ngIf="a.photoUrl; else artistInitial" class="artist-tile__photo" [src]="a.photoUrl" [alt]="a.name" />
-              <ng-template #artistInitial>
-                <app-avatar [name]="a.name" size="lg"></app-avatar>
-              </ng-template>
+            <a *ngFor="let a of s.artists.items" class="artist-tile" [routerLink]="[artistsPath, a.id]">
+              <app-avatar [src]="a.photoUrl" [name]="a.name" size="lg"></app-avatar>
               <p class="artist-tile__name">{{ a.name }}</p>
               <p *ngIf="a.knownForDepartment" class="artist-tile__role">{{ a.knownForDepartment }}</p>
             </a>
@@ -130,6 +127,15 @@
           </p>
         </ng-template>
       </section>
+
+      <div class="search-page__pagination" *ngIf="s.activeTab !== 'all' && activeTabLength(s) > pageSize">
+        <app-paginator
+          [length]="activeTabLength(s)"
+          [pageSize]="pageSize"
+          [pageNumber]="s.page"
+          (pageChange)="goToPage($event)">
+        </app-paginator>
+      </div>
 
       <p *ngIf="s.counts.total === 0 && (loading$ | async) === false" class="search-page__empty">
         {{ 'SEARCH.NO_RESULTS' | translate: { query: s.query } }}
@@ -143,18 +149,13 @@
             <a
               *ngFor="let item of s.semantic.items"
               class="semantic-card"
-              [routerLink]="['/movies', item.id]">
+              [routerLink]="[moviesPath, item.id]">
               <div class="semantic-card__poster">
-                <img
-                  *ngIf="item.posterUrl; else noPoster"
+                <app-image-with-fallback
                   [src]="item.posterUrl"
                   [alt]="item.title"
-                  loading="lazy" />
-                <ng-template #noPoster>
-                  <div class="semantic-card__placeholder">
-                    <mat-icon fontIcon="movie"></mat-icon>
-                  </div>
-                </ng-template>
+                  imgClass="semantic-card__poster-img">
+                </app-image-with-fallback>
                 <span class="semantic-card__score" [attr.title]="'SEARCH.SIMILARITY' | translate">
                   <mat-icon fontIcon="auto_awesome"></mat-icon>
                   {{ similarityPercent(item.similarityScore) }}%

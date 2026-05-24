@@ -39,8 +39,6 @@ export class ReviewFormComponent implements OnInit {
     });
   }
 
-  // Called by the parent after a successful HTTP response so the user keeps
-  // their text on failure but the form clears on success.
   public reset(): void {
     this.form.reset({ body: '', score: 5, isSpoiler: false });
   }

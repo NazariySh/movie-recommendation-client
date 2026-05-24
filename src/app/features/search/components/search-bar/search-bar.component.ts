@@ -50,7 +50,7 @@ export class SearchBarComponent implements OnInit {
   public suggestions: SearchSuggestions = { movies: [], artists: [] };
   public selectedIndex = -1;
 
-  constructor(
+  public constructor(
     private readonly api: SearchApiService,
     private readonly historyService: SearchHistoryService,
     private readonly router: Router,

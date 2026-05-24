@@ -1,6 +1,6 @@
 <section class="form-page" *ngIf="!loading; else loadingTpl">
   <header class="form-page__header">
-    <a routerLink="/admin/movies" class="form-page__back">
+    <a [routerLink]="moviesLink" class="form-page__back">
       <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
     </a>
     <h1>{{ (movieId ? 'ADMIN.MOVIES.EDIT' : 'ADMIN.MOVIES.NEW') | translate }}</h1>

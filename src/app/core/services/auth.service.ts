@@ -141,9 +141,6 @@ export class AuthService {
     this._user$.next(null);
   }
 
-  // Merge updated fields (username, avatar, bio, etc.) into the current user so
-  // header / sidebar / anywhere else binding to user$ re-renders without a full
-  // /auth/me round-trip.
   public patchCurrentUser(partial: Partial<User>): void {
     const current = this._user$.value;
     if (!current) return;

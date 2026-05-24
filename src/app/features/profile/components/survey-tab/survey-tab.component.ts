@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { AppPaths } from '../../../../core/constants/app-routes';
 import { SurveyResponse } from '../../models/survey.model';
@@ -16,24 +17,27 @@ export class SurveyTabComponent implements OnInit {
 
   public readonly onboardingPath = AppPaths.ONBOARDING;
 
-  constructor(
+  public constructor(
     private readonly api: SurveyApiService,
     private readonly router: Router,
+    private readonly destroyRef: DestroyRef,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    this.api.getMyLatest().subscribe({
-      next: (response) => {
-        this.response = response;
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.api.getMyLatest()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.response = response;
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   public takeSurvey(): void {

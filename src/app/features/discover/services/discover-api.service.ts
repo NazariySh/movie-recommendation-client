@@ -8,7 +8,7 @@ import { Movie } from '../../../core/models/movie';
 export class DiscoverApiService {
   private readonly baseUrl = `${environment.apiUrl}/recommendations`;
 
-  constructor(private readonly http: HttpClient) {}
+  public constructor(private readonly http: HttpClient) {}
 
   public getForYou(count = 20): Observable<Movie[]> {
     return this.http.get<Movie[]>(`${this.baseUrl}/for-you`, {

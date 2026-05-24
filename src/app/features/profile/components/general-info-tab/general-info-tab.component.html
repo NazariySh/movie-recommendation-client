@@ -1,10 +1,7 @@
 <div class="general-info" *ngIf="profile">
   <section class="general-info__avatar">
     <div class="general-info__avatar-display">
-      <img *ngIf="profile.avatarUrl; else avatarFallback" [src]="profile.avatarUrl" [alt]="profile.username" class="general-info__avatar-img" />
-      <ng-template #avatarFallback>
-        <app-avatar [name]="profile.username" size="lg"></app-avatar>
-      </ng-template>
+      <app-avatar [src]="profile.avatarUrl" [name]="profile.username" size="lg"></app-avatar>
     </div>
 
     <div class="general-info__avatar-actions">
@@ -24,16 +21,15 @@
   </section>
 
   <form class="general-info__form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" class="general-info__field">
-      <mat-label>{{ 'PROFILE.USERNAME' | translate }}</mat-label>
-      <input matInput formControlName="username" autocomplete="username" />
-      <mat-error *ngIf="form.controls.username.hasError('required')">{{ 'FORM.ERROR.REQUIRED' | translate }}</mat-error>
-      <mat-error *ngIf="form.controls.username.hasError('minlength') || form.controls.username.hasError('maxlength')">
-        {{ 'AUTH.ERROR.USERNAME_MIN' | translate }}
-      </mat-error>
-      <mat-error *ngIf="form.controls.username.hasError('pattern')">{{ 'AUTH.ERROR.USERNAME_PATTERN' | translate }}</mat-error>
-    </mat-form-field>
+    <app-input-text
+      class="general-info__field"
+      [control]="form.get('username')"
+      [label]="'PROFILE.USERNAME' | translate"
+      autocomplete="username">
+    </app-input-text>
 
+    <!-- Email is read-only with a verified-state suffix icon; keep raw <mat-form-field> since
+         no shared input supports a status badge slot. -->
     <mat-form-field appearance="outline" class="general-info__field">
       <mat-label>{{ 'PROFILE.EMAIL' | translate }}</mat-label>
       <input matInput [value]="profile.email" readonly />
@@ -45,25 +41,22 @@
       </mat-icon>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="general-info__field general-info__field--wide">
-      <mat-label>{{ 'PROFILE.BIO' | translate }}</mat-label>
-      <textarea
-        matInput
-        formControlName="bio"
-        rows="4"
-        maxlength="500"
-        [placeholder]="'PROFILE.BIO_PLACEHOLDER' | translate">
-      </textarea>
-      <mat-hint align="end">{{ form.controls.bio.value.length }}/500</mat-hint>
-    </mat-form-field>
+    <app-input-textarea
+      class="general-info__field general-info__field--wide"
+      [control]="form.get('bio')"
+      [label]="'PROFILE.BIO' | translate"
+      [placeholder]="'PROFILE.BIO_PLACEHOLDER' | translate"
+      [minRows]="4"
+      [maxRows]="6">
+    </app-input-textarea>
 
-    <mat-form-field appearance="outline" class="general-info__field">
-      <mat-label>{{ 'PROFILE.PREFERRED_LANGUAGE' | translate }}</mat-label>
-      <mat-select formControlName="preferredLanguage">
-        <mat-option value="uk">{{ 'LANGUAGE.UK' | translate }}</mat-option>
-        <mat-option value="en">{{ 'LANGUAGE.EN' | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <app-select
+      class="general-info__field"
+      mode="single"
+      formControlName="preferredLanguage"
+      [items]="languageOptions"
+      [placeholder]="'PROFILE.PREFERRED_LANGUAGE' | translate">
+    </app-select>
 
     <p class="general-info__meta">
       {{ 'PROFILE.MEMBER_SINCE' | translate }}: {{ profile.createdAt | date: 'longDate' }}

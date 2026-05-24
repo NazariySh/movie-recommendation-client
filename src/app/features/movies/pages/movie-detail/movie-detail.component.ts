@@ -347,9 +347,6 @@ export class MovieDetailComponent implements OnInit {
         this.cdr.markForCheck();
       });
 
-    // Personalised companion to the impersonal Similar rail — blends CF with
-    // embedding similarity to the current movie and excludes the user's
-    // already-rated / completed titles. Only meaningful when authenticated.
     if (!this.isAuthenticated) {
       this.becauseYouLiked = [];
       return;

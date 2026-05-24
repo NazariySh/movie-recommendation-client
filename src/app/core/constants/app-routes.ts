@@ -6,6 +6,7 @@ export const AppRoutes = {
   AUTH: 'auth',
   SEARCH: 'search',
   PROFILE: 'profile',
+  USERS: 'users',
   ADMIN: 'admin',
   ONBOARDING: 'onboarding',
   RULES: 'rules',
@@ -52,6 +53,7 @@ export const AppPaths = {
   ARTISTS: `/${AppRoutes.ARTISTS}`,
   SEARCH: `/${AppRoutes.SEARCH}`,
   PROFILE: `/${AppRoutes.PROFILE}`,
+  USERS: `/${AppRoutes.USERS}`,
   ADMIN: `/${AppRoutes.ADMIN}`,
   ONBOARDING: `/${AppRoutes.ONBOARDING}`,
   RULES: `/${AppRoutes.RULES}`,
@@ -65,4 +67,14 @@ export const AuthPaths = {
   VERIFY_EMAIL: `/${AppRoutes.AUTH}/${AuthRoutes.VERIFY_EMAIL}`,
   FORGOT_PASSWORD: `/${AppRoutes.AUTH}/${AuthRoutes.FORGOT_PASSWORD}`,
   RESET_PASSWORD: `/${AppRoutes.AUTH}/${AuthRoutes.RESET_PASSWORD}`,
+} as const;
+
+export const AdminPaths = {
+  DASHBOARD: `/${AppRoutes.ADMIN}/${AdminRoutes.DASHBOARD}`,
+  MOVIES: `/${AppRoutes.ADMIN}/${AdminRoutes.MOVIES}`,
+  MOVIES_NEW: `/${AppRoutes.ADMIN}/${AdminRoutes.MOVIES}/${AdminRoutes.MOVIES_NEW}`,
+  ARTISTS: `/${AppRoutes.ADMIN}/${AdminRoutes.ARTISTS}`,
+  ARTISTS_NEW: `/${AppRoutes.ADMIN}/${AdminRoutes.ARTISTS}/${AdminRoutes.ARTISTS_NEW}`,
+  USERS: `/${AppRoutes.ADMIN}/${AdminRoutes.USERS}`,
+  ML_MODEL: `/${AppRoutes.ADMIN}/${AdminRoutes.ML_MODEL}`,
 } as const;

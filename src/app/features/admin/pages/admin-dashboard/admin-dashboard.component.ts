@@ -31,16 +31,20 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   public refresh(): void {
-    this.dashboardApi.getSummary().subscribe(s => {
-      this.summary = s;
-      this.loading = false;
-      this.cdr.markForCheck();
-    });
-    this.dashboardApi.getActivity(ADMIN_DASHBOARD_ACTIVITY_DAYS).subscribe(a => {
-      this.activity = a;
-      this.maxActivity = Math.max(1, ...a.points.flatMap(p => [p.newUsers, p.ratings, p.reviews]));
-      this.cdr.markForCheck();
-    });
+    this.dashboardApi.getSummary()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(s => {
+        this.summary = s;
+        this.loading = false;
+        this.cdr.markForCheck();
+      });
+    this.dashboardApi.getActivity(ADMIN_DASHBOARD_ACTIVITY_DAYS)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(a => {
+        this.activity = a;
+        this.maxActivity = Math.max(1, ...a.points.flatMap(p => [p.newUsers, p.ratings, p.reviews]));
+        this.cdr.markForCheck();
+      });
   }
 
   public barHeight(value: number): number {

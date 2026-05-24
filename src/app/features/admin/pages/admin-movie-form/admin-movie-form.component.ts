@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
@@ -8,6 +9,7 @@ import { MovieDetail } from '../../../../core/models/movie-detail';
 import { AdminMovieFormDto } from '../../models/admin-models';
 import { AdminMoviesService } from '../../services/admin-movies.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { AdminPaths } from '../../../../core/constants/app-routes';
 
 @Component({
   selector: 'app-admin-movie-form',
@@ -23,6 +25,7 @@ export class AdminMovieFormComponent implements OnInit {
   public movieId: string | null = null;
   public readonly types = ['Movie', 'Series'];
   public readonly statuses = ['Released', 'In Production', 'Upcoming'];
+  public readonly moviesLink = AdminPaths.MOVIES;
 
   public constructor(
     private readonly fb: FormBuilder,
@@ -31,6 +34,7 @@ export class AdminMovieFormComponent implements OnInit {
     private readonly catalog: MovieService,
     private readonly api: AdminMoviesService,
     private readonly toast: ToastService,
+    private readonly destroyRef: DestroyRef,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
@@ -47,15 +51,21 @@ export class AdminMovieFormComponent implements OnInit {
     forkJoin({
       genres: this.catalog.getGenres(),
       detail: this.movieId ? this.catalog.getMovieById(this.movieId) : of(null as MovieDetail | null),
-    }).subscribe({
-      next: ({ genres, detail }) => {
-        this.genres = genres;
-        if (detail) this.populateFromDetail(detail);
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => { this.loading = false; this.cdr.markForCheck(); },
-    });
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ genres, detail }) => {
+          this.genres = genres;
+          if (detail) this.populateFromDetail(detail);
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.toast.error('ADMIN.MOVIES.LOAD_FAILED');
+        },
+      });
   }
 
   public addTranslation(): void {
@@ -83,30 +93,42 @@ export class AdminMovieFormComponent implements OnInit {
 
     if (this.movieId) {
       const id = this.movieId;
-      this.api.update(id, dto).subscribe({
-        next: () => {
-          this.saving = false;
-          this.cdr.markForCheck();
-          this.toast.success('ADMIN.MOVIES.UPDATED');
-          this.router.navigate(['/admin/movies', id, 'edit']);
-        },
-        error: () => { this.saving = false; this.cdr.markForCheck(); },
-      });
+      this.api.update(id, dto)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.saving = false;
+            this.cdr.markForCheck();
+            this.toast.success('ADMIN.MOVIES.UPDATED');
+            this.router.navigate([AdminPaths.MOVIES, id, 'edit']);
+          },
+          error: () => {
+            this.saving = false;
+            this.cdr.markForCheck();
+            this.toast.error('ADMIN.MOVIES.SAVE_FAILED');
+          },
+        });
     } else {
-      this.api.create(dto).subscribe({
-        next: result => {
-          this.saving = false;
-          this.cdr.markForCheck();
-          this.toast.success('ADMIN.MOVIES.CREATED');
-          this.router.navigate(['/admin/movies', result.id, 'edit']);
-        },
-        error: () => { this.saving = false; this.cdr.markForCheck(); },
-      });
+      this.api.create(dto)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: result => {
+            this.saving = false;
+            this.cdr.markForCheck();
+            this.toast.success('ADMIN.MOVIES.CREATED');
+            this.router.navigate([AdminPaths.MOVIES, result.id, 'edit']);
+          },
+          error: () => {
+            this.saving = false;
+            this.cdr.markForCheck();
+            this.toast.error('ADMIN.MOVIES.SAVE_FAILED');
+          },
+        });
     }
   }
 
   public cancel(): void {
-    this.router.navigate(['/admin/movies']);
+    this.router.navigate([AdminPaths.MOVIES]);
   }
 
   private buildForm(): FormGroup {

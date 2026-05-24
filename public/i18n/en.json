@@ -179,7 +179,8 @@
       "SIMILAR": "Similar to titles you opened",
       "BECAUSE_WATCHED": "Because you watched it",
       "POPULAR_IN_GENRES": "Popular in your favourite genres",
-      "TOP_RATED": "Top rated overall"
+      "TOP_RATED": "Top rated overall",
+      "SEMANTIC_MATCH": "Matches your description"
     },
     "TYPE": {
       "MOVIE": "Movie",
@@ -505,10 +506,13 @@
       "ACTIVITY": "Activity",
       "EDIT_ROLES": "Edit roles",
       "ROLES_UPDATED": "Roles updated",
+      "ROLES_UPDATE_FAILED": "Could not update roles. Please try again.",
       "DISABLE": "Disable",
       "ENABLE": "Enable",
       "DISABLED": "User disabled",
       "ENABLED": "User enabled",
+      "DISABLE_FAILED": "Could not disable user. Please try again.",
+      "ENABLE_FAILED": "Could not enable user. Please try again.",
       "DISABLE_TITLE": "Disable user?",
       "DISABLE_MESSAGE": "{{name}} will not be able to sign in. Their refresh tokens will be revoked.",
       "ENABLE_TITLE": "Enable user?",
@@ -517,10 +521,13 @@
       "FORCE_RESET_TITLE": "Force password reset?",
       "FORCE_RESET_MESSAGE": "Send a password reset email to {{name}} and revoke their sessions.",
       "RESET_SENT": "Reset email sent",
+      "RESET_FAILED": "Could not send reset email. Please try again.",
       "DELETE": "Delete (anonymize)",
       "DELETE_TITLE": "Delete user?",
       "DELETE_MESSAGE": "{{name}} will be anonymized. Their ratings and reviews are kept but the account becomes [deleted]. This is irreversible.",
-      "DELETED": "User anonymized"
+      "DELETED": "User anonymized",
+      "DELETE_FAILED": "Could not delete user. Please try again.",
+      "LOAD_FAILED": "Could not load user. Please try again."
     },
     "MOVIES": {
       "TITLE": "Movies",
@@ -530,12 +537,16 @@
       "YEAR": "Year",
       "EDIT": "Edit movie",
       "EMBEDDING_REGENERATED": "Embedding regenerated",
+      "EMBEDDING_FAILED": "Could not regenerate embedding. Please try again.",
       "REGENERATE_EMBEDDING": "Regenerate embedding",
       "DELETE_TITLE": "Delete movie?",
       "DELETE_MESSAGE": "{{name}} will be soft-deleted.",
       "DELETED": "Movie deleted",
+      "DELETE_FAILED": "Could not delete movie. Please try again.",
       "CREATED": "Movie created",
       "UPDATED": "Movie updated",
+      "SAVE_FAILED": "Could not save movie. Please try again.",
+      "LOAD_FAILED": "Could not load movie. Please try again.",
       "SECTION_BASIC": "Basic info",
       "SECTION_MEDIA": "Media",
       "SECTION_IDS": "External IDs",
@@ -577,6 +588,7 @@
       "DELETE_TITLE": "Delete artist?",
       "DELETE_MESSAGE": "{{name}} will be soft-deleted.",
       "DELETED": "Artist deleted",
+      "DELETE_FAILED": "Could not delete artist. They may still be referenced from movie casts.",
       "CREATED": "Artist created",
       "UPDATED": "Artist updated",
       "SECTION_BASIC": "Basic info",
@@ -593,7 +605,9 @@
       "RETRAIN": "Retrain now",
       "RETRAIN_TITLE": "Retrain model?",
       "RETRAIN_MESSAGE": "This kicks off a long-running training job in the background. You can refresh this page to see the new metrics once it finishes.",
-      "RETRAIN_STARTED": "Training job queued"
+      "RETRAIN_STARTED": "Training job queued",
+      "RETRAIN_FAILED": "Could not start training. Please try again.",
+      "LOAD_FAILED": "Could not load model status."
     }
   },
   "ARTISTS": {

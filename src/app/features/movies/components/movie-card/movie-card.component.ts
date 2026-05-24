@@ -1,20 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Movie } from '../../../../core/models/movie';
+import { Movie, RecommendationReason } from '../../../../core/models/movie';
 import { AppIcon } from '../../../../core/constants/app-icons';
 import { AppRoutes } from '../../../../core/constants/app-routes';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { WatchlistService } from '../../../../core/services/watchlist.service';
 
-// Maps the engine's English reason labels to i18n keys. Unknown reasons fall
-// through as raw text (the translate pipe returns the input on miss).
-const REASON_KEY: Record<string, string> = {
-  'Recommended for you': 'MOVIE.REASON.FOR_YOU',
-  'Similar movie': 'MOVIE.REASON.SIMILAR',
-  'Because you watched': 'MOVIE.REASON.BECAUSE_WATCHED',
-  'Popular in your genres': 'MOVIE.REASON.POPULAR_IN_GENRES',
-  'Top rated': 'MOVIE.REASON.TOP_RATED',
+const REASON_KEY: Record<RecommendationReason, string> = {
+  ForYou: 'MOVIE.REASON.FOR_YOU',
+  Similar: 'MOVIE.REASON.SIMILAR',
+  BecauseWatched: 'MOVIE.REASON.BECAUSE_WATCHED',
+  PopularInGenres: 'MOVIE.REASON.POPULAR_IN_GENRES',
+  TopRated: 'MOVIE.REASON.TOP_RATED',
+  SemanticMatch: 'MOVIE.REASON.SEMANTIC_MATCH',
 };
 
 @Component({
@@ -54,13 +53,9 @@ export class MovieCardComponent implements OnInit {
   public get reasonI18n(): string | null {
     const r = this.movie?.recommendationReason;
     if (!r) return null;
-    return REASON_KEY[r] ?? r;
+    return REASON_KEY[r] ?? null;
   }
 
-  // Toggles the watchlist "Plan to Watch" status. Optimistic UI: flip state
-  // immediately, revert if the request fails. The heart's initial state isn't
-  // synced from the server — that would require either a per-card watchlist
-  // fetch (N+1) or a watchlist field on the list-item DTO.
   public toggleFavorite(event: Event): void {
     event.stopPropagation();
     event.preventDefault();

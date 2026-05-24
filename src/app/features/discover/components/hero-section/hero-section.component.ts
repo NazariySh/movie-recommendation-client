@@ -15,7 +15,7 @@ export class HeroSectionComponent {
 
   public readonly AppIcon = AppIcon;
 
-  constructor(private readonly router: Router) {}
+  public constructor(private readonly router: Router) {}
 
   public navigateToDetail(): void {
     if (!this.movie) return;

@@ -11,9 +11,6 @@ export class ToastService {
     private readonly translate: TranslateService,
   ) {}
 
-  // Accepts either a translation key (`MOVIE.RATING_SAVED`) or a literal string.
-  // Keys are resolved via ngx-translate; non-key strings pass through (instant()
-  // returns the input when no entry matches).
   public show(message: string, type: ToastType = 'info', duration = 4000, params?: Record<string, unknown>): void {
     this.snackBar.open(this.translate.instant(message, params), '✕', {
       duration,

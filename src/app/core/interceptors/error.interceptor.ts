@@ -34,7 +34,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           break;
 
         case 403:
-          toast.error(translate.instant('ERRORS.FORBIDDEN'));
+          if (isProblemType(error, 'EmailNotVerifiedException')) {
+            toast.error(translate.instant('AUTH.ERROR.EMAIL_NOT_VERIFIED'));
+          } else {
+            toast.error(translate.instant('ERRORS.FORBIDDEN'));
+          }
           break;
 
         case 404:
@@ -70,4 +74,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
 function isUrl(error: HttpErrorResponse, segment: string): boolean {
   return !!error.url && error.url.includes(segment);
+}
+
+function isProblemType(error: HttpErrorResponse, exceptionName: string): boolean {
+  const body = error.error as { type?: unknown } | null | undefined;
+  return typeof body?.type === 'string' && body.type === exceptionName;
 }

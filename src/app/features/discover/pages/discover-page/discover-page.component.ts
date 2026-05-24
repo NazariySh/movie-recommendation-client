@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Movie } from '../../../../core/models/movie';
 import { User } from '../../../../core/models/user.model';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AppPaths, AuthPaths } from '../../../../core/constants/app-routes';
@@ -17,7 +19,7 @@ export class DiscoverPageComponent implements OnInit {
   public readonly trendingMovies$: Observable<DiscoverSection>;
   public readonly trendingSeries$: Observable<DiscoverSection>;
   public readonly popular$: Observable<DiscoverSection>;
-  public readonly featured$;
+  public readonly featured$: Observable<Movie | null>;
 
   public readonly user$: Observable<User | null>;
   public readonly isAuthenticated$: Observable<boolean>;
@@ -25,9 +27,10 @@ export class DiscoverPageComponent implements OnInit {
   public readonly loginPath = AuthPaths.LOGIN;
   public readonly moviesPath = AppPaths.MOVIES;
 
-  constructor(
+  public constructor(
     private readonly facade: DiscoverFacade,
     private readonly auth: AuthService,
+    private readonly router: Router,
   ) {
     this.forYou$ = this.facade.forYou$;
     this.trendingMovies$ = this.facade.trendingMovies$;
@@ -40,5 +43,9 @@ export class DiscoverPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.facade.load();
+  }
+
+  public goToLogin(): void {
+    this.router.navigateByUrl(this.loginPath);
   }
 }

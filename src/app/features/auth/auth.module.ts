@@ -10,7 +10,6 @@ import { VerifyEmailComponent } from './pages/verify-email/verify-email.componen
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { AuthFormWrapperComponent } from './components/auth-form-wrapper/auth-form-wrapper.component';
-import { PasswordStrengthMeterComponent } from './components/password-strength-meter/password-strength-meter.component';
 import { SocialAuthButtonsComponent } from './components/social-auth-buttons/social-auth-buttons.component';
 
 @NgModule({
@@ -23,6 +22,6 @@ import { SocialAuthButtonsComponent } from './components/social-auth-buttons/soc
     AuthFormWrapperComponent,
     SocialAuthButtonsComponent,
   ],
-  imports: [SharedModule, ReactiveFormsModule, PasswordStrengthMeterComponent, AuthRoutingModule],
+  imports: [SharedModule, ReactiveFormsModule, AuthRoutingModule],
 })
 export class AuthModule {}

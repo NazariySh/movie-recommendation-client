@@ -11,11 +11,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { SharedModule } from '../../shared/shared.module';
-import { PasswordStrengthMeterComponent } from '../auth/components/password-strength-meter/password-strength-meter.component';
+import { PaginatorComponent } from '../../shared/components/paginator/paginator.component';
 
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { PublicProfilePageComponent } from './pages/public-profile-page/public-profile-page.component';
 import { WatchlistPageComponent } from './pages/watchlist-page/watchlist-page.component';
 import { GeneralInfoTabComponent } from './components/general-info-tab/general-info-tab.component';
 import { ChangePasswordTabComponent } from './components/change-password-tab/change-password-tab.component';
@@ -26,7 +25,6 @@ import { GenrePreferencesTabComponent } from './components/genre-preferences-tab
 @NgModule({
   declarations: [
     ProfilePageComponent,
-    PublicProfilePageComponent,
     WatchlistPageComponent,
     GeneralInfoTabComponent,
     ChangePasswordTabComponent,
@@ -46,7 +44,7 @@ import { GenrePreferencesTabComponent } from './components/genre-preferences-tab
     MatTabsModule,
     MatTooltipModule,
     NgxChartsModule,
-    PasswordStrengthMeterComponent,
+    PaginatorComponent,
     ProfileRoutingModule,
   ],
 })

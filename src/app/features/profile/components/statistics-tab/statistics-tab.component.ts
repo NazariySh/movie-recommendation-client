@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
 import { UserStats } from '../../models/profile.model';
 import { ProfileApiService } from '../../services/profile-api.service';
@@ -7,6 +8,9 @@ interface ChartPoint {
   name: string;
   value: number;
 }
+
+const DISTRIBUTION_PALETTE = ['#2283dc'];
+const GENRE_PALETTE = ['#ff8a65', '#ffb74d', '#ffd54f', '#aed581', '#4fc3f7', '#ba68c8'];
 
 @Component({
   selector: 'app-statistics-tab',
@@ -19,7 +23,7 @@ export class StatisticsTabComponent implements OnInit {
   public loading = true;
   public errored = false;
 
-  public readonly distributionLabels = ['1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5', '5+'];
+  public readonly distributionLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   public distributionData: ChartPoint[] = [];
   public topGenresData: ChartPoint[] = [];
@@ -30,36 +34,39 @@ export class StatisticsTabComponent implements OnInit {
     name: 'rating-distribution',
     selectable: false,
     group: ScaleType.Ordinal,
-    domain: ['#2283dc'],
+    domain: DISTRIBUTION_PALETTE,
   };
 
   public readonly genreColors: Color = {
     name: 'top-genres',
     selectable: false,
     group: ScaleType.Ordinal,
-    domain: ['#ff8a65', '#ffb74d', '#ffd54f', '#aed581', '#4fc3f7', '#ba68c8'],
+    domain: GENRE_PALETTE,
   };
 
-  constructor(
+  public constructor(
     private readonly api: ProfileApiService,
+    private readonly destroyRef: DestroyRef,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    this.api.getMyStats().subscribe({
-      next: (stats) => {
-        this.stats = stats;
-        this.distributionData = this.buildDistributionData(stats);
-        this.topGenresData = this.buildGenresData(stats);
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.loading = false;
-        this.errored = true;
-        this.cdr.markForCheck();
-      },
-    });
+    this.api.getMyStats()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (stats) => {
+          this.stats = stats;
+          this.distributionData = this.buildDistributionData(stats);
+          this.topGenresData = this.buildGenresData(stats);
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.loading = false;
+          this.errored = true;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   public get hoursWatched(): number {

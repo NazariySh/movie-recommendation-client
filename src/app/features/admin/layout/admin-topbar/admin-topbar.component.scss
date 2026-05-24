@@ -75,23 +75,4 @@
     font-size: 0.9rem;
     @media (max-width: 640px) { display: none; }
   }
-
-  &__avatar,
-  &__avatar-initials {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-  }
-
-  &__avatar { object-fit: cover; }
-
-  &__avatar-initials {
-    background-color: var(--primary-color);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
 }

@@ -101,7 +101,6 @@ export interface AdminMovieFormDto {
 
 export interface AdminArtistFormDto {
   name: string;
-  slug?: string;
   imdbId?: string | null;
   tmdbId?: number | null;
   photoUrl?: string | null;

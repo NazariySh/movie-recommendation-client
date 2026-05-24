@@ -5,6 +5,7 @@ import { catchError, distinctUntilChanged, map, shareReplay, switchMap, tap } fr
 import { Artist } from '../../../../core/models/artist';
 import { MovieListItem } from '../../../../core/models/movie-list-item';
 import { PagedList } from '../../../../core/models/paged-list';
+import { AppPaths } from '../../../../core/constants/app-routes';
 import {
   SearchCounts,
   SearchMode,
@@ -46,10 +47,13 @@ const EMPTY_COUNTS: SearchCounts = { total: 0, movies: 0, series: 0, artists: 0 
 })
 export class SearchPageComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(false);
+  public readonly pageSize = PAGE_SIZE;
+  public readonly artistsPath = AppPaths.ARTISTS;
+  public readonly moviesPath = AppPaths.MOVIES;
 
   public state$!: Observable<SearchPageState>;
 
-  constructor(
+  public constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly api: SearchApiService,
@@ -76,12 +80,21 @@ export class SearchPageComponent implements OnInit {
     });
   }
 
-  public goToPage(page: number): void {
+  public goToPage(change: { pageNumber: number }): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page },
+      queryParams: { page: change.pageNumber },
       queryParamsHandling: 'merge',
     });
+  }
+
+  public activeTabLength(state: SearchPageState): number {
+    switch (state.activeTab) {
+      case 'movies': return state.counts.movies;
+      case 'series': return state.counts.series;
+      case 'artists': return state.counts.artists;
+      default: return 0;
+    }
   }
 
   public showMovies(activeTab: SearchTab): boolean {

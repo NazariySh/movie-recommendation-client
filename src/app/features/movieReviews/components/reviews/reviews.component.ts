@@ -116,10 +116,6 @@ export class ReviewsComponent implements OnInit {
         },
         error: (err: { status?: number }) => {
           this.submitting.set(false);
-          // 401/403/429 are surfaced by the global error interceptor; for everything
-          // else we toast a feature-specific message so the user knows submission
-          // failed (their text stays in the textarea since reset() is only called
-          // on success above).
           if (err?.status !== 401 && err?.status !== 403 && err?.status !== 429) {
             this.toast.error('REVIEWS.SUBMIT_FAILED');
           }

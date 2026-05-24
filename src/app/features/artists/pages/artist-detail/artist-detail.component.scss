@@ -7,7 +7,7 @@
   align-items: center;
   padding: 64px 16px;
   text-align: center;
-  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  color: var(--text-secondary);
 
   mat-icon {
     font-size: 48px;
@@ -31,9 +31,9 @@
 .back-btn {
   align-self: flex-start;
   margin-bottom: 0.5rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
 
-  &:hover { color: #fff; }
+  &:hover { color: var(--text-primary); }
 }
 
 .header-body {
@@ -78,14 +78,14 @@
 
 .artist-roles {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-muted);
   margin: 0;
 }
 
 .artist-bio {
   font-size: 0.95rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--text-secondary);
   margin: 0.75rem 0 0;
   max-width: 700px;
 }
@@ -102,7 +102,7 @@
   font-size: 5rem;
   width: 5rem;
   height: 5rem;
-  color: rgba(255, 255, 255, 0.04);
+  color: var(--border-color);
   user-select: none;
 }
 
@@ -110,13 +110,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border-color);
 
   .tab-btn {
     background: none;
     border: none;
     border-bottom: 3px solid transparent;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-muted);
     font-size: 1rem;
     font-weight: 500;
     font-family: inherit;
@@ -125,7 +125,7 @@
     margin-bottom: -1px;
     transition: color 0.2s, border-color 0.2s;
 
-    &:hover { color: rgba(255, 255, 255, 0.8); }
+    &:hover { color: var(--text-secondary); }
 
     &.active {
       color: $color-primary;
@@ -143,7 +143,7 @@
   align-items: center;
   gap: 1rem;
   padding: 4rem 0;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-faint);
 
   mat-icon {
     font-size: 3rem;
@@ -163,7 +163,7 @@
 .section-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 1rem;
 }
 
@@ -182,7 +182,7 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1rem 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
 
   &:nth-child(odd) { padding-right: 2rem; }
 }
@@ -193,7 +193,7 @@
   gap: 0.5rem;
   min-width: 160px;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   white-space: nowrap;
 
   mat-icon {
@@ -206,7 +206,7 @@
 
 .info-value {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-primary);
   flex: 1;
 }
 
@@ -222,114 +222,18 @@
   gap: 1rem;
 }
 
-.work-card {
-  cursor: pointer;
-  border-radius: $border-radius-1;
-  overflow: hidden;
-  background: var(--surface-color);
-  transition: transform 0.2s ease;
-  outline: none;
-
-  &:hover {
-    transform: translateY(-3px);
-
-    .work-poster ::ng-deep .work-poster__img { transform: scale(1.04); }
-  }
-
-  &:focus-visible {
-    box-shadow: 0 0 0 2px $color-primary;
-  }
-}
-
-.work-poster-wrapper {
-  position: relative;
-  aspect-ratio: 2/3;
-  overflow: hidden;
-}
-
-.work-poster {
-  display: block;
-  width: 100%;
-  height: 100%;
-
-  ::ng-deep .work-poster__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s ease;
-  }
-}
-
-.work-gradient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: linear-gradient(to top, rgba(23,24,26,0.95), transparent);
-  pointer-events: none;
-}
-
-.work-rating {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(4px);
-  border-radius: 6px;
-  padding: 3px 7px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #fff;
-
-  mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
-    color: $color-primary;
-  }
-}
-
-.work-info {
-  padding: 8px 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.work-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.work-meta {
-  font-size: 0.73rem;
-  color: rgba(255, 255, 255, 0.4);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .works-section .role-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 1rem;
 
   .tab-btn {
     background: none;
     border: none;
     border-bottom: 3px solid transparent;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-muted);
     font-size: 0.9rem;
     font-weight: 500;
     font-family: inherit;
@@ -338,10 +242,10 @@
     margin-bottom: -1px;
     transition: color 0.2s, border-color 0.2s;
 
-    &:hover { color: rgba(255, 255, 255, 0.8); }
+    &:hover { color: var(--text-secondary); }
 
     &.active {
-      color: #fff;
+      color: var(--text-primary);
       font-weight: 700;
       border-bottom-color: $color-primary;
     }

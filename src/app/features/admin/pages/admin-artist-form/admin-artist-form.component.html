@@ -1,6 +1,6 @@
 <section class="form-page" *ngIf="!loading; else loadingTpl">
   <header class="form-page__header">
-    <a routerLink="/admin/artists" class="form-page__back">
+    <a [routerLink]="[AppPaths.ADMIN, AdminRoutes.ARTISTS]" class="form-page__back">
       <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
     </a>
     <h1>{{ (artistId ? 'ADMIN.ARTISTS.EDIT' : 'ADMIN.ARTISTS.NEW') | translate }}</h1>
@@ -11,17 +11,15 @@
       <legend>{{ 'ADMIN.ARTISTS.SECTION_BASIC' | translate }}</legend>
       <div class="form__row">
         <app-input-text [control]="form.get('name')" [label]="('ADMIN.ARTISTS.NAME' | translate) + ' *'"></app-input-text>
-        <app-input-text [control]="form.get('slug')" [label]="'ADMIN.ARTISTS.SLUG' | translate"></app-input-text>
+        <app-input-text [control]="form.get('knownForDepartment')" [label]="'ADMIN.ARTISTS.DEPARTMENT' | translate"></app-input-text>
       </div>
       <div class="form__row">
-        <app-input-text [control]="form.get('knownForDepartment')" [label]="'ADMIN.ARTISTS.DEPARTMENT' | translate"></app-input-text>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'ADMIN.ARTISTS.GENDER' | translate }}</mat-label>
-          <mat-select formControlName="gender">
-            <mat-option [value]="''">—</mat-option>
-            <mat-option *ngFor="let g of genders" [value]="g">{{ g }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <app-select
+          mode="single"
+          formControlName="gender"
+          [items]="genderOptions"
+          [placeholder]="'ADMIN.ARTISTS.GENDER' | translate">
+        </app-select>
         <app-input-text [control]="form.get('nationality')" [label]="'ADMIN.ARTISTS.NATIONALITY' | translate"></app-input-text>
       </div>
       <div class="form__row">
@@ -56,10 +54,12 @@
     </fieldset>
 
     <div class="form__actions">
-      <button type="button" mat-button (click)="cancel()">{{ 'COMMON.CANCEL' | translate }}</button>
-      <button type="submit" mat-flat-button color="primary" [disabled]="saving">
+      <app-button buttonType="basic" color="" (clicked)="cancel()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </app-button>
+      <app-button type="submit" buttonType="flat" color="primary" [disabled]="saving">
         {{ 'COMMON.SAVE' | translate }}
-      </button>
+      </app-button>
     </div>
   </form>
 </section>

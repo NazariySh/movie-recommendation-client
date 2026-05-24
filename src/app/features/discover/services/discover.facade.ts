@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, of, take } from 'rxjs';
+import { DestroyRef, Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, Observable, catchError, distinctUntilChanged, map, of, switchMap } from 'rxjs';
 import { Movie } from '../../../core/models/movie';
 import { AuthService } from '../../../core/services/auth.service';
-import { DiscoverSection } from '../models/discover-section.model';
+import { DiscoverSection, emptySection } from '../models/discover-section.model';
 import { DiscoverApiService } from './discover-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class DiscoverFacade {
-  private readonly _forYou$ = new BehaviorSubject<DiscoverSection>({ status: 'loading', items: [] });
-  private readonly _trendingMovies$ = new BehaviorSubject<DiscoverSection>({ status: 'loading', items: [] });
-  private readonly _trendingSeries$ = new BehaviorSubject<DiscoverSection>({ status: 'loading', items: [] });
-  private readonly _popular$ = new BehaviorSubject<DiscoverSection>({ status: 'loading', items: [] });
+  private readonly _forYou$ = new BehaviorSubject<DiscoverSection>(emptySection);
+  private readonly _trendingMovies$ = new BehaviorSubject<DiscoverSection>(emptySection);
+  private readonly _trendingSeries$ = new BehaviorSubject<DiscoverSection>(emptySection);
+  private readonly _popular$ = new BehaviorSubject<DiscoverSection>(emptySection);
 
   private readonly _featured$ = new BehaviorSubject<Movie | null>(null);
 
@@ -20,62 +21,56 @@ export class DiscoverFacade {
   public readonly popular$ = this._popular$.asObservable();
   public readonly featured$ = this._featured$.asObservable();
 
-  constructor(
+  private loaded = false;
+
+  public constructor(
     private readonly api: DiscoverApiService,
     private readonly auth: AuthService,
-  ) {}
-
-  public load(): void {
-    this.auth.user$.pipe(take(1)).subscribe((user) => {
-      if (user) {
-        this.loadForYou();
-      } else {
-        this._forYou$.next({ status: 'empty', items: [] });
-      }
-
-      this.loadTrendingMovies();
-      this.loadTrendingSeries();
-      this.loadPopular();
-    });
+    private readonly destroyRef: DestroyRef,
+  ) {
+    // React to login/logout so the for-you section refreshes without a page reload.
+    this.auth.user$
+      .pipe(
+        map((u) => u?.id ?? null),
+        distinctUntilChanged(),
+        switchMap((userId) => this.loadForYouStream(userId !== null)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((section) => this._forYou$.next(section));
   }
 
-  private loadForYou(): void {
-    this._forYou$.next({ status: 'loading', items: [] });
-    this.api
-      .getForYou(20)
-      .pipe(
-        catchError(() => {
-          this._forYou$.next({ status: 'error', items: [] });
-          return of<Movie[]>([]);
-        }),
-      )
-      .subscribe((movies) => {
-        if (movies.length > 0) {
-          this._forYou$.next({ status: 'ready', items: movies });
-          return;
-        }
+  public load(): void {
+    if (this.loaded) return;
+    this.loaded = true;
+    this.loadTrendingMovies();
+    this.loadTrendingSeries();
+    this.loadPopular();
+  }
 
-        // No personalised recs yet (new user, or fewer than ColdStartRatingThreshold
-        // ratings). Try the cold-start endpoint — it returns Bayesian-weighted top
-        // picks scoped to the user's onboarding genre preferences. Only fall through
-        // to the static CTA if that's empty too (effectively empty catalogue).
-        this.api
-          .getColdStart(20)
-          .pipe(catchError(() => of<Movie[]>([])))
-          .subscribe((cold) => {
-            this._forYou$.next({
-              status: cold.length === 0 ? 'empty' : 'ready',
-              items: cold,
-            });
-          });
-      });
+  private loadForYouStream(isAuthenticated: boolean): Observable<DiscoverSection> {
+    if (!isAuthenticated) {
+      return of<DiscoverSection>({ status: 'empty', items: [] });
+    }
+    return this.api.getForYou(20).pipe(
+      switchMap((movies) =>
+        movies.length > 0
+          ? of<DiscoverSection>({ status: 'ready', items: movies })
+          : this.api.getColdStart(20).pipe(
+              map((cold) => ({
+                status: cold.length === 0 ? 'empty' : 'ready',
+                items: cold,
+              }) as DiscoverSection),
+            ),
+      ),
+      catchError(() => of<DiscoverSection>({ status: 'error', items: [] })),
+    );
   }
 
   private loadTrendingMovies(): void {
-    this._trendingMovies$.next({ status: 'loading', items: [] });
+    this._trendingMovies$.next(emptySection);
     this.api
       .getTrendingMovies(7, 20)
-      .pipe(catchError(() => this.markError(this._trendingMovies$)))
+      .pipe(catchError(() => this.markError(this._trendingMovies$)), takeUntilDestroyed(this.destroyRef))
       .subscribe((movies) => {
         this._trendingMovies$.next({
           status: movies.length === 0 ? 'empty' : 'ready',
@@ -86,10 +81,10 @@ export class DiscoverFacade {
   }
 
   private loadTrendingSeries(): void {
-    this._trendingSeries$.next({ status: 'loading', items: [] });
+    this._trendingSeries$.next(emptySection);
     this.api
       .getTrendingSeries(7, 20)
-      .pipe(catchError(() => this.markError(this._trendingSeries$)))
+      .pipe(catchError(() => this.markError(this._trendingSeries$)), takeUntilDestroyed(this.destroyRef))
       .subscribe((movies) => {
         this._trendingSeries$.next({
           status: movies.length === 0 ? 'empty' : 'ready',
@@ -99,10 +94,10 @@ export class DiscoverFacade {
   }
 
   private loadPopular(): void {
-    this._popular$.next({ status: 'loading', items: [] });
+    this._popular$.next(emptySection);
     this.api
       .getPopular({ count: 20 })
-      .pipe(catchError(() => this.markError(this._popular$)))
+      .pipe(catchError(() => this.markError(this._popular$)), takeUntilDestroyed(this.destroyRef))
       .subscribe((movies) => {
         this._popular$.next({
           status: movies.length === 0 ? 'empty' : 'ready',
