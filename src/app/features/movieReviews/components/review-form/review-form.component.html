@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="review-form">
+  <div class="form-header">
+    <span class="form-label">{{ 'REVIEWS.POST_PROMPT' | translate }}</span>
+    <div class="spoiler-toggle">
+      <span class="toggle-text">{{ 'REVIEWS.CONTAINS_SPOILERS' | translate }}</span>
+      <mat-slide-toggle
+        formControlName="isSpoiler"
+        [attr.aria-label]="'REVIEWS.SPOILER_ARIA' | translate">
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div class="text-row">
+    <textarea
+      formControlName="body"
+      class="review-textarea"
+      [placeholder]="'REVIEWS.BODY_PLACEHOLDER' | translate"
+      rows="4"
+      [attr.aria-label]="'REVIEWS.BODY_ARIA' | translate">
+    </textarea>
+    <div class="avatar-placeholder" aria-hidden="true">
+      <mat-icon [fontIcon]="AppIcon.Person"></mat-icon>
+    </div>
+  </div>
+
+  <div *ngIf="bodyTooShort" class="form-hint form-hint--error">
+    {{ 'REVIEWS.BODY_MIN_LENGTH_HINT' | translate: { count: bodyMinLength } }}
+  </div>
+
+  <div class="form-footer">
+    <app-button
+      class="submit-btn"
+      type="submit"
+      buttonType="flat"
+      color="primary"
+      [disabled]="form.invalid || submitting"
+      [attr.aria-label]="'REVIEWS.SUBMIT_ARIA' | translate">
+      {{ (submitting ? 'COMMON.LOADING' : 'REVIEWS.SUBMIT') | translate }}
+      <mat-icon [fontIcon]="AppIcon.Send"></mat-icon>
+    </app-button>
+
+    <div class="score-control">
+      <span class="score-label">{{ 'REVIEWS.YOUR_SCORE' | translate }}</span>
+      <mat-slider min="1" max="10" step="1" class="score-slider" [attr.aria-label]="'REVIEWS.SCORE_ARIA' | translate">
+        <input matSliderThumb formControlName="score" />
+      </mat-slider>
+      <span class="score-value">{{ scoreValue }}/10</span>
+    </div>
+  </div>
+</form>

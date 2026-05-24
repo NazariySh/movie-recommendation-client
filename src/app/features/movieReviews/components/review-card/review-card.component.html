@@ -1,0 +1,173 @@
+<div class="review-card">
+  <ng-container *ngIf="review.isSpoiler && !spoilerRevealed(); else reviewContent">
+    <div class="spoiler-overlay">
+      <div class="spoiler-meta">
+        <span class="spoiler-author">{{ review.authorName }}</span>
+        <span class="spoiler-date">{{ review.createdAt | date:'longDate' }}</span>
+      </div>
+      <div class="spoiler-body">
+        <mat-icon [fontIcon]="AppIcon.Warning" class="spoiler-icon"></mat-icon>
+        <p class="spoiler-text">{{ 'REVIEWS.SPOILER_WARNING' | translate }}</p>
+        <app-button
+          class="view-btn"
+          buttonType="basic"
+          color="primary"
+          size="sm"
+          (clicked)="revealSpoiler()">
+          {{ 'REVIEWS.VIEW' | translate }}
+        </app-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #reviewContent>
+    <div class="card-header">
+      <div class="author-row">
+        <div class="avatar" aria-hidden="true">
+          <img
+            *ngIf="review.authorAvatarUrl; else avatarFallback"
+            [src]="review.authorAvatarUrl"
+            [alt]="review.authorName"
+            class="avatar-img" />
+          <ng-template #avatarFallback>
+            <mat-icon [fontIcon]="AppIcon.Person"></mat-icon>
+          </ng-template>
+        </div>
+        <span class="author-name">{{ review.authorName }}</span>
+      </div>
+      <div class="header-right">
+        <span class="review-date">{{ review.createdAt | date:'longDate' }}</span>
+        <span class="score-badge" *ngIf="review.score !== null">{{ 'REVIEWS.SCORE' | translate }}: {{ review.score }}/10</span>
+      </div>
+    </div>
+
+    <p class="review-text">{{ review.body }}</p>
+
+    <div class="card-footer">
+      <div class="reactions">
+        <span
+          *ngIf="isOwnReview; else helpfulBtn"
+          class="reaction-btn reaction-btn--readonly"
+          [attr.aria-label]="'REVIEWS.OWN_HELPFUL_COUNT_ARIA' | translate">
+          <mat-icon [fontIcon]="AppIcon.ThumbUp"></mat-icon>
+          <span>{{ formatCount(review.helpfulCount) }}</span>
+        </span>
+        <ng-template #helpfulBtn>
+          <button
+            class="reaction-btn"
+            [class.reaction-btn--active]="review.markedHelpful"
+            (click)="onHelpful()"
+            type="button"
+            [attr.aria-label]="'REVIEWS.MARK_HELPFUL_ARIA' | translate">
+            <mat-icon [fontIcon]="AppIcon.ThumbUp"></mat-icon>
+            <span>{{ formatCount(review.helpfulCount) }}</span>
+          </button>
+        </ng-template>
+        <span class="comment-count">
+          <mat-icon [fontIcon]="AppIcon.Comment"></mat-icon>
+          <span>{{ review.replyCount }}</span>
+        </span>
+        <app-button
+          *ngIf="canReply"
+          class="reply-btn"
+          buttonType="basic"
+          color=""
+          size="sm"
+          [attr.aria-label]="'REVIEWS.REPLY_ARIA' | translate"
+          (clicked)="toggleReplyForm()">
+          {{ 'REVIEWS.REPLY' | translate }}
+        </app-button>
+      </div>
+    </div>
+
+    <form
+      *ngIf="replyFormOpen()"
+      class="reply-form"
+      (submit)="$event.preventDefault(); submitReply()">
+      <input
+        [formControl]="replyControl"
+        class="reply-input"
+        [placeholder]="'REVIEWS.REPLY_PLACEHOLDER' | translate"
+        required
+        [disabled]="replySubmitting()" />
+      <app-button
+        class="reply-submit"
+        type="submit"
+        buttonType="flat"
+        color="primary"
+        size="sm"
+        [disabled]="replySubmitting() || !replyControl.value.trim()">
+        {{ 'REVIEWS.REPLY' | translate }}
+      </app-button>
+    </form>
+
+    <ng-container *ngIf="repliesLoading()">
+      <div class="replies replies--loading">{{ 'REVIEWS.LOADING_REPLIES' | translate }}</div>
+    </ng-container>
+
+    <ng-container *ngIf="replies().length">
+      <div class="replies">
+        <div
+          *ngFor="let reply of replies()"
+          class="reply-card">
+
+          <ng-container *ngIf="reply.isSpoiler && !isReplySpoilerRevealed(reply.id); else replyContent">
+            <div class="spoiler-overlay spoiler-overlay--reply">
+              <div class="spoiler-meta">
+                <span class="spoiler-author">{{ reply.authorName }}</span>
+                <span class="spoiler-date">{{ reply.createdAt | date:'longDate' }}</span>
+              </div>
+              <div class="spoiler-body">
+                <mat-icon [fontIcon]="AppIcon.Warning" class="spoiler-icon"></mat-icon>
+                <p class="spoiler-text">{{ 'REVIEWS.SPOILER_WARNING' | translate }}</p>
+                <app-button
+                  class="view-btn"
+                  buttonType="basic"
+                  color="primary"
+                  size="sm"
+                  (clicked)="revealReplySpoiler(reply.id)">
+                  {{ 'REVIEWS.VIEW' | translate }}
+                </app-button>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #replyContent>
+            <div class="card-header">
+              <div class="author-row">
+                <div class="avatar avatar--sm" aria-hidden="true">
+                  <img
+                    *ngIf="reply.authorAvatarUrl; else replyAvatarFallback"
+                    [src]="reply.authorAvatarUrl"
+                    [alt]="reply.authorName"
+                    class="avatar-img" />
+                  <ng-template #replyAvatarFallback>
+                    <mat-icon [fontIcon]="AppIcon.Person"></mat-icon>
+                  </ng-template>
+                </div>
+                <span class="author-name">{{ reply.authorName }}</span>
+                <span *ngIf="reply.replyToUserName" class="reply-to">
+                  {{ 'REVIEWS.REPLIED_TO' | translate }}: <span class="reply-mention">{{ '@' + reply.replyToUserName }}</span>
+                </span>
+              </div>
+              <div class="header-right">
+                <span class="review-date">{{ reply.createdAt | date:'longDate' }}</span>
+                <span class="score-badge" *ngIf="reply.score !== null">{{ 'REVIEWS.SCORE' | translate }}: {{ reply.score }}/10</span>
+              </div>
+            </div>
+            <p class="review-text">{{ reply.body }}</p>
+            <div class="card-footer">
+              <div class="reactions">
+                <span class="reaction-btn reaction-btn--readonly">
+                  <mat-icon [fontIcon]="AppIcon.ThumbUp"></mat-icon>
+                  <span>{{ formatCount(reply.helpfulCount) }}</span>
+                </span>
+              </div>
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
