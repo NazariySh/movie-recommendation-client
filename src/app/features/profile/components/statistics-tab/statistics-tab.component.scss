@@ -1,0 +1,133 @@
+.stats {
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__loading,
+  &__error,
+  &__empty {
+    color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+    margin: 0;
+    padding: 1rem 0;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  &__card {
+    background: var(--surface-color, #2a2b2c);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__card-value {
+    font-size: 1.85rem;
+    font-weight: 700;
+  }
+
+  &__card-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+  }
+
+  &__section-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  &__chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    
+    ::ng-deep {
+      .ngx-charts text {
+        fill: var(--text-secondary, rgba(255, 255, 255, 0.7));
+      }
+      .ngx-charts .gridline-path {
+        stroke: rgba(255, 255, 255, 0.06);
+      }
+      .ngx-charts .legend-labels {
+        background: transparent !important;
+      }
+      .ngx-charts .legend-label-text {
+        color: var(--text-secondary, rgba(255, 255, 255, 0.7)) !important;
+      }
+    }
+  }
+
+  &__bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__bar-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 48px;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__bar-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    text-align: right;
+  }
+
+  &__bar-track {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), #4caaff);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+
+    &--genre {
+      background: linear-gradient(90deg, #ff8a65, #ffb74d);
+    }
+  }
+
+  &__bar-value {
+    font-size: 0.85rem;
+    text-align: right;
+  }
+
+  &__summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  }
+
+  &__summary-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__summary-item--tier {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+
+    &[data-tier='bronze'] { background: rgba(205, 127, 50, 0.15); color: #cd7f32; }
+    &[data-tier='silver'] { background: rgba(192, 192, 192, 0.18); color: #c0c0c0; }
+    &[data-tier='gold']   { background: rgba(255, 215, 0, 0.18);   color: #ffd700; }
+  }
+}

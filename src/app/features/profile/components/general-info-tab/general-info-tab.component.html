@@ -1,0 +1,78 @@
+<div class="general-info" *ngIf="profile">
+  <section class="general-info__avatar">
+    <div class="general-info__avatar-display">
+      <img *ngIf="profile.avatarUrl; else avatarFallback" [src]="profile.avatarUrl" [alt]="profile.username" class="general-info__avatar-img" />
+      <ng-template #avatarFallback>
+        <app-avatar [name]="profile.username" size="lg"></app-avatar>
+      </ng-template>
+    </div>
+
+    <div class="general-info__avatar-actions">
+      <input
+        #fileInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="general-info__file-input"
+        (change)="onAvatarSelected($event)"
+      />
+      <app-button buttonType="stroked" [disabled]="uploadingAvatar" (clicked)="fileInput.click()">
+        <mat-icon fontIcon="upload"></mat-icon>
+        {{ (uploadingAvatar ? 'COMMON.LOADING' : 'PROFILE.UPLOAD_AVATAR') | translate }}
+      </app-button>
+      <p class="general-info__hint">{{ 'PROFILE.AVATAR_HINT' | translate }}</p>
+    </div>
+  </section>
+
+  <form class="general-info__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="general-info__field">
+      <mat-label>{{ 'PROFILE.USERNAME' | translate }}</mat-label>
+      <input matInput formControlName="username" autocomplete="username" />
+      <mat-error *ngIf="form.controls.username.hasError('required')">{{ 'FORM.ERROR.REQUIRED' | translate }}</mat-error>
+      <mat-error *ngIf="form.controls.username.hasError('minlength') || form.controls.username.hasError('maxlength')">
+        {{ 'AUTH.ERROR.USERNAME_MIN' | translate }}
+      </mat-error>
+      <mat-error *ngIf="form.controls.username.hasError('pattern')">{{ 'AUTH.ERROR.USERNAME_PATTERN' | translate }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="general-info__field">
+      <mat-label>{{ 'PROFILE.EMAIL' | translate }}</mat-label>
+      <input matInput [value]="profile.email" readonly />
+      <mat-icon
+        matSuffix
+        [class.is-verified]="profile.emailConfirmed"
+        [fontIcon]="profile.emailConfirmed ? 'verified' : 'pending'"
+        [matTooltip]="(profile.emailConfirmed ? 'PROFILE.EMAIL_VERIFIED' : 'PROFILE.EMAIL_UNVERIFIED') | translate">
+      </mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="general-info__field general-info__field--wide">
+      <mat-label>{{ 'PROFILE.BIO' | translate }}</mat-label>
+      <textarea
+        matInput
+        formControlName="bio"
+        rows="4"
+        maxlength="500"
+        [placeholder]="'PROFILE.BIO_PLACEHOLDER' | translate">
+      </textarea>
+      <mat-hint align="end">{{ form.controls.bio.value.length }}/500</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="general-info__field">
+      <mat-label>{{ 'PROFILE.PREFERRED_LANGUAGE' | translate }}</mat-label>
+      <mat-select formControlName="preferredLanguage">
+        <mat-option value="uk">{{ 'LANGUAGE.UK' | translate }}</mat-option>
+        <mat-option value="en">{{ 'LANGUAGE.EN' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <p class="general-info__meta">
+      {{ 'PROFILE.MEMBER_SINCE' | translate }}: {{ profile.createdAt | date: 'longDate' }}
+    </p>
+
+    <div class="general-info__actions">
+      <app-button buttonType="raised" color="primary" type="submit" [disabled]="form.invalid || saving">
+        {{ (saving ? 'COMMON.LOADING' : 'COMMON.SAVE') | translate }}
+      </app-button>
+    </div>
+  </form>
+</div>

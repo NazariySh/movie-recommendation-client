@@ -1,0 +1,87 @@
+<div class="stats">
+  <ng-container *ngIf="loading">
+    <p class="stats__loading">{{ 'COMMON.LOADING' | translate }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="errored">
+    <p class="stats__error">{{ 'PROFILE.STATS_ERROR' | translate }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="stats && !loading && !errored">
+    <div class="stats__cards">
+      <div class="stats__card">
+        <span class="stats__card-value">{{ stats.totalRatings }}</span>
+        <span class="stats__card-label">{{ 'PROFILE.STATS_TOTAL_RATINGS' | translate }}</span>
+      </div>
+      <div class="stats__card">
+        <span class="stats__card-value">{{ stats.totalReviews }}</span>
+        <span class="stats__card-label">{{ 'PROFILE.STATS_TOTAL_REVIEWS' | translate }}</span>
+      </div>
+      <div class="stats__card">
+        <span class="stats__card-value">{{ stats.watchlistCounts.completed }}</span>
+        <span class="stats__card-label">{{ 'PROFILE.STATS_COMPLETED' | translate }}</span>
+      </div>
+      <div class="stats__card">
+        <span class="stats__card-value">{{ hoursWatched }}h</span>
+        <span class="stats__card-label">{{ 'PROFILE.STATS_HOURS_WATCHED' | translate }}</span>
+      </div>
+    </div>
+
+    <section class="stats__section">
+      <h3 class="stats__section-title">{{ 'PROFILE.RATING_DISTRIBUTION' | translate }}</h3>
+      <div *ngIf="stats.totalRatings > 0; else noRatings" class="stats__chart-wrap">
+        <ngx-charts-bar-vertical
+          [view]="[640, 260]"
+          [results]="distributionData"
+          [scheme]="distributionColors"
+          [xAxis]="true"
+          [yAxis]="true"
+          [showXAxisLabel]="false"
+          [showYAxisLabel]="false"
+          [gradient]="false"
+          [roundDomains]="true"
+          [roundEdges]="true"
+          [animations]="true">
+        </ngx-charts-bar-vertical>
+      </div>
+      <ng-template #noRatings>
+        <p class="stats__empty">{{ 'PROFILE.STATS_NO_RATINGS' | translate }}</p>
+      </ng-template>
+    </section>
+
+    <section class="stats__section">
+      <h3 class="stats__section-title">{{ 'PROFILE.TOP_GENRES' | translate }}</h3>
+      <div *ngIf="topGenresData.length > 0; else noGenres" class="stats__chart-wrap">
+        <ngx-charts-pie-chart
+          [view]="[640, 280]"
+          [results]="topGenresData"
+          [scheme]="genreColors"
+          [legend]="true"
+          [legendPosition]="legendPositionRight"
+          [labels]="false"
+          [doughnut]="true"
+          [animations]="true">
+        </ngx-charts-pie-chart>
+      </div>
+      <ng-template #noGenres>
+        <p class="stats__empty">{{ 'PROFILE.STATS_NO_GENRES' | translate }}</p>
+      </ng-template>
+    </section>
+
+    <section class="stats__summary">
+      <div class="stats__summary-item">
+        <strong>{{ stats.memberSinceDays }}</strong> {{ 'PROFILE.STATS_DAYS_MEMBER' | translate }}
+      </div>
+      <div class="stats__summary-item">
+        <strong>{{ stats.ratingsThisMonth }}</strong> {{ 'PROFILE.STATS_RATINGS_THIS_MONTH' | translate }}
+      </div>
+      <div class="stats__summary-item">
+        <strong>{{ stats.longestStreak }}</strong> {{ 'PROFILE.STATS_LONGEST_STREAK' | translate }}
+      </div>
+      <div class="stats__summary-item stats__summary-item--tier" [attr.data-tier]="memberLevel().tier">
+        <mat-icon fontIcon="emoji_events"></mat-icon>
+        <span>{{ memberLevel().key | translate }}</span>
+      </div>
+    </section>
+  </ng-container>
+</div>

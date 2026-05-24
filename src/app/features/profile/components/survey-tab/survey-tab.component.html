@@ -1,0 +1,25 @@
+<div class="survey-tab">
+  <ng-container *ngIf="loading">
+    <p>{{ 'COMMON.LOADING' | translate }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="response; else noResponse">
+      <p class="survey-tab__status">
+        {{ 'PROFILE.SURVEY_COMPLETED_AT' | translate }}: <strong>{{ response.completedAt | date: 'longDate' }}</strong>
+      </p>
+      <p class="survey-tab__hint">{{ 'PROFILE.SURVEY_RETAKE_HINT' | translate }}</p>
+      <app-button buttonType="stroked" (clicked)="takeSurvey()">
+        <mat-icon fontIcon="refresh"></mat-icon>
+        {{ 'PROFILE.RETAKE_SURVEY' | translate }}
+      </app-button>
+    </ng-container>
+
+    <ng-template #noResponse>
+      <p>{{ 'PROFILE.SURVEY_NEVER_TAKEN' | translate }}</p>
+      <app-button buttonType="raised" color="primary" (clicked)="takeSurvey()">
+        {{ 'PROFILE.TAKE_SURVEY' | translate }}
+      </app-button>
+    </ng-template>
+  </ng-container>
+</div>
