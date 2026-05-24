@@ -1,0 +1,57 @@
+<a
+  *ngIf="movie"
+  class="movie-card"
+  [routerLink]="['/', AppRoutes.MOVIES, movie.id]"
+  (mouseenter)="isHovered = true"
+  (mouseleave)="isHovered = false">
+  <mat-card class="movie-card__inner">
+    <div class="poster-container">
+      <img
+        mat-card-image
+        class="poster"
+        [src]="movie.posterUrl || 'images/placeholder.png'"
+        [alt]="movie.title"
+        (error)="$any($event.target).src = 'images/placeholder.png'">
+      <div class="gradient-overlay" [class.darkened]="isHovered"></div>
+
+      <div class="top-bar">
+        <div class="rating-badge" [class.dimmed]="isHovered">
+          <mat-icon class="star-icon" [fontIcon]="AppIcon.Star"></mat-icon>
+          <span class="rating-val">{{ movie.rating | number:'1.1-1' }}</span><span class="rating-max">/10</span>
+        </div>
+
+        <button
+          *ngIf="reasonI18n as reason"
+          type="button"
+          class="reason-badge"
+          [matTooltip]="reason | translate"
+          matTooltipPosition="above"
+          [attr.aria-label]="reason | translate"
+          (click)="$event.stopPropagation(); $event.preventDefault()">
+          <mat-icon [fontIcon]="AppIcon.HelpOutline"></mat-icon>
+        </button>
+
+        <button
+          *ngIf="isAuthenticated"
+          type="button"
+          class="favorite-btn"
+          [class.active]="isFavorite"
+          [disabled]="favoritePending"
+          [attr.aria-label]="(isFavorite ? 'WATCHLIST.REMOVED' : 'WATCHLIST.SAVED') | translate"
+          (click)="toggleFavorite($event)">
+          <mat-icon [fontIcon]="AppIcon.Favorite"></mat-icon>
+        </button>
+      </div>
+
+      <div class="hover-overview" [class.visible]="isHovered">
+        <p>{{ (movie.overview | slice:0:150) + (movie.overview && movie.overview.length > 150 ? '...' : '') }}</p>
+      </div>
+    </div>
+
+    <mat-card-content class="movie-info">
+      <h3 class="title">{{ movie.title }}</h3>
+      <p class="genres" *ngIf="!isHovered">{{ movie.genres ? movie.genres.join(', ') : ('COMMON.UNKNOWN' | translate) }}</p>
+      <p class="year" *ngIf="isHovered">({{ movie.releaseDate | date:'yyyy' }})</p>
+    </mat-card-content>
+  </mat-card>
+</a>

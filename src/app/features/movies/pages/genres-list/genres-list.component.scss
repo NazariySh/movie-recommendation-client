@@ -1,0 +1,70 @@
+@use '../../../../../styles/variables' as *;
+
+:host { display: block; }
+
+.genres-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+}
+
+.genres-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.genre-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  border-radius: $border-radius-2;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+
+  &:hover { transform: translateY(-3px); }
+}
+
+.tile-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba($color-primary, 0.4), rgba(0, 0, 0, 0.6));
+}
+
+.tile-name {
+  position: relative;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: rgba(255, 255, 255, 0.3);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  p { margin: 0; }
+}

@@ -1,0 +1,58 @@
+<div class="filters-page">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()" [attr.aria-label]="'COMMON.BACK' | translate">
+      <mat-icon [fontIcon]="AppIcon.ArrowBack"></mat-icon>
+    </button>
+    <h1 class="page-title">{{ 'FILTERS.TITLE' | translate }}</h1>
+  </div>
+
+  <div class="filters-body">
+
+    <div class="filter-section">
+      <p class="filter-section-title">{{ 'FILTERS.SORT_BY' | translate }}</p>
+      <div class="chips">
+        <button
+          *ngFor="let opt of sortOptions"
+          class="chip"
+          [class.active]="draft.sortBy === opt.value"
+          (click)="setSortBy(opt.value)">
+          {{ opt.label | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <p class="filter-section-title">{{ 'FILTERS.GENRES' | translate }}</p>
+      <div class="chips">
+        <button
+          *ngFor="let genre of genres"
+          class="chip"
+          [class.active]="draft.genres.includes(genre)"
+          (click)="toggleGenre(genre)">
+          {{ genre }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <p class="filter-section-title">{{ 'FILTERS.MIN_RATING' | translate }}</p>
+      <div class="chips">
+        <button
+          *ngFor="let r of ratingOptions"
+          class="chip"
+          [class.active]="draft.minRating === r"
+          (click)="setRating(r)">
+          {{ r }}+
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="filter-actions">
+    <button class="reset-btn" (click)="resetFilters()">{{ 'FILTERS.RESET' | translate }}</button>
+    <button class="apply-btn" (click)="applyFilters()">{{ 'FILTERS.APPLY' | translate }}</button>
+  </div>
+
+</div>

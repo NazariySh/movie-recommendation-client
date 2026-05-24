@@ -1,0 +1,221 @@
+﻿@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.movie-card {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  outline: none;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-primary;
+    border-radius: 16px;
+  }
+}
+
+.movie-card__inner {
+  background-color: var(--surface-color);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+  padding: 0;
+}
+
+.poster-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4; 
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 6px 6px 0 6px;
+  width: calc(100% - 12px);
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(to top, var(--surface-color) 0%, rgba(23, 24, 26, 0.6) 60%, transparent 100%);
+  pointer-events: none;
+  transition: opacity 0.3s ease, background 0.3s ease;
+
+  &.darkened {
+    height: 100%;
+    background: rgba(15, 15, 15, 0.85); 
+  }
+}
+
+.top-bar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.rating-badge {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: opacity 0.3s ease;
+  color: #fff;
+
+  .star-icon {
+    color: $color-primary;
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 4px;
+    margin-bottom: 2px;
+  }
+
+  .rating-max {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-left: 2px;
+  }
+
+  &.dimmed {
+    opacity: 0.4;
+  }
+}
+
+.favorite-btn {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active mat-icon {
+    color: #ff4757;
+  }
+}
+
+.reason-badge {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  color: rgba(255, 255, 255, 0.85);
+  margin-left: auto;
+  margin-right: 4px;
+  transition: background-color 0.2s ease;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+  }
+}
+
+.hover-overview {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  text-align: center;
+  opacity: 0;
+  z-index: 3;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+.movie-info {
+  padding: 12px 16px 20px 16px;
+  text-align: center;
+  background-color: var(--surface-color);
+  z-index: 2;
+  min-height: 80px;
+
+  .title {
+    margin: 0 0 4px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .genres, .year {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

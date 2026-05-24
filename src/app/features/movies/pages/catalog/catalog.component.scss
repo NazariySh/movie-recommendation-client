@@ -1,0 +1,203 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  --mat-menu-container-color: var(--surface-2-color);
+  --mat-menu-item-label-text-color: rgba(255, 255, 255, 0.85);
+
+  display: block;
+}
+
+.catalog-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+
+
+.top-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.5rem;
+}
+
+.type-tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1 1 auto;
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 0.5rem 1.25rem 0.75rem;
+    cursor: pointer;
+    margin-bottom: -7px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover { color: rgba(255, 255, 255, 0.8); }
+
+    &.active {
+      color: #fff;
+      font-weight: 700;
+      border-bottom-color: $color-primary;
+    }
+  }
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 auto;
+}
+
+.search-field {
+  width: 320px;
+}
+
+.ghost-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+}
+
+
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .badge {
+    background: rgba($color-primary, 0.18);
+    color: $color-primary;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    padding: 1px 7px;
+  }
+
+  &:hover { background: rgba(255, 255, 255, 0.09); }
+}
+
+.rating-cell {
+  margin-left: auto;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 16rem;
+}
+
+.rating-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+
+  strong {
+    color: var(--text-primary, #fff);
+    font-weight: 600;
+    margin-left: 0.25rem;
+  }
+}
+
+.rating-slider {
+  width: 100%;
+
+  --mdc-slider-active-track-color: #{$color-primary};
+  --mdc-slider-inactive-track-color: rgba(255, 255, 255, 0.12);
+  --mdc-slider-handle-color: #{$color-primary};
+  --mdc-slider-focus-handle-color: #{$color-primary};
+  --mdc-slider-hover-handle-color: #{$color-primary};
+  --mdc-slider-with-overlap-handle-outline-color: var(--surface-color, #14141a);
+  --mat-slider-ripple-color: #{$color-primary};
+  --mat-slider-hover-state-layer-color: rgba(34, 131, 220, 0.18);
+  --mat-slider-focus-state-layer-color: rgba(34, 131, 220, 0.28);
+  --mat-slider-value-indicator-text-color: #fff;
+  --mat-slider-value-indicator-opacity: 0.95;
+  --mdc-slider-label-container-color: #{$color-primary};
+  --mdc-slider-label-label-text-color: #fff;
+}
+
+
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+}
+
+
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: rgba(255, 255, 255, 0.3);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  p { margin: 0; }
+}
+
+.pagination-row {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0 1rem;
+}

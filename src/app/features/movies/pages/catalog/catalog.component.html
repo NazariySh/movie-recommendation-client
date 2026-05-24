@@ -1,0 +1,157 @@
+<ng-container *ngIf="filters$ | async as f">
+  <div class="catalog-page">
+
+    <div class="top-row">
+      <nav class="type-tabs" role="tablist">
+        <button
+          *ngFor="let tab of typeTabs"
+          type="button"
+          class="tab-btn"
+          [class.active]="f.type === tab.id"
+          (click)="setType(tab.id)"
+          role="tab"
+          [attr.aria-selected]="f.type === tab.id">
+          {{ tab.labelKey | translate }}
+        </button>
+      </nav>
+
+      <div class="top-actions">
+        <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic">
+          <mat-icon matPrefix [fontIcon]="AppIcon.Search"></mat-icon>
+          <input
+            matInput
+            [formControl]="searchControl"
+            [placeholder]="'CATALOG.SEARCH_PLACEHOLDER' | translate" />
+        </mat-form-field>
+
+        <button
+          *ngIf="hasActiveFilters(f)"
+          type="button"
+          class="ghost-btn"
+          (click)="clearAll()">
+          {{ 'CATALOG.RESET' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-cell">
+        <app-select
+          mode="single"
+          [items]="sortItems"
+          [value]="f.sort"
+          [placeholder]="'CATALOG.SORT.LABEL' | translate"
+          (valueChange)="onSortChange($event)">
+        </app-select>
+      </div>
+
+      <div class="filter-cell">
+        <app-select
+          mode="multi"
+          searchable
+          [items]="(genreItems$ | async) ?? []"
+          [value]="f.genres"
+          [placeholder]="'CATALOG.GENRE' | translate"
+          (valueChange)="onGenresChange($event)">
+        </app-select>
+      </div>
+
+      <div class="filter-cell">
+        <app-select
+          mode="multi"
+          searchable
+          [items]="yearItems"
+          [value]="f.years"
+          [placeholder]="'CATALOG.YEAR' | translate"
+          (valueChange)="onYearsChange($event)">
+        </app-select>
+      </div>
+
+      <div class="filter-cell rating-cell">
+        <span class="rating-label">
+          {{ 'CATALOG.RATING' | translate }}:
+          <strong>{{ f.minRating ?? ratingMinBound }} – {{ f.maxRating ?? ratingMaxBound }}</strong>
+        </span>
+        <mat-slider
+          class="rating-slider"
+          [min]="ratingMinBound"
+          [max]="ratingMaxBound"
+          step="1"
+          discrete>
+          <input
+            matSliderStartThumb
+            [value]="f.minRating ?? ratingMinBound"
+            (change)="onRatingMinChange($event)" />
+          <input
+            matSliderEndThumb
+            [value]="f.maxRating ?? ratingMaxBound"
+            (change)="onRatingMaxChange($event)" />
+        </mat-slider>
+      </div>
+    </div>
+
+    <div class="chips-row" *ngIf="f.genres.length || f.years.length">
+      <app-chip
+        *ngFor="let slug of f.genres"
+        [label]="slug"
+        removable
+        (remove)="removeGenre(slug)">
+      </app-chip>
+      <app-chip
+        *ngFor="let year of f.years"
+        [label]="year.toString()"
+        removable
+        (remove)="removeYear(year)">
+      </app-chip>
+    </div>
+
+    <ng-container *ngIf="movies$ | async as p; else loadingState">
+      <ng-container *ngIf="(loading$ | async); else readyContent">
+        <ng-container *ngTemplateOutlet="loadingState"></ng-container>
+      </ng-container>
+
+      <ng-template #readyContent>
+        <ng-container *ngIf="p.items.length; else emptyState">
+          <div class="movie-grid">
+            <app-poster-card
+              *ngFor="let movie of p.items"
+              [posterUrl]="movie.posterUrl"
+              [title]="movie.title"
+              [subtitle]="movieSubtitle(movie)"
+              [rating]="movie.averageRating * 2"
+              [link]="['/movies', movie.id]">
+            </app-poster-card>
+          </div>
+
+          <div class="pagination-row" *ngIf="p.totalCount > f.pageSize">
+            <app-paginator
+              [length]="p.totalCount"
+              [pageSize]="f.pageSize"
+              [pageNumber]="f.page"
+              (pageChange)="onPageChange($event)">
+            </app-paginator>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyState>
+          <app-empty-state
+            [icon]="AppIcon.PersonSearch"
+            [titleKey]="(error$ | async) ? 'CATALOG.ERROR' : 'CATALOG.NO_RESULTS'"
+            [ctaLabelKey]="hasActiveFilters(f) ? 'CATALOG.RESET' : null"
+            (ctaClick)="clearAll()">
+          </app-empty-state>
+        </ng-template>
+      </ng-template>
+    </ng-container>
+
+    <ng-template #loadingState>
+      <div class="movie-grid">
+        <app-skeleton-loader
+          *ngFor="let i of skeletonSlots"
+          shape="card"
+          height="320px">
+        </app-skeleton-loader>
+      </div>
+    </ng-template>
+  </div>
+</ng-container>
