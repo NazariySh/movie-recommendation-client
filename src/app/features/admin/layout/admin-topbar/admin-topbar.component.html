@@ -1,0 +1,34 @@
+<header class="admin-topbar">
+  <a routerLink="/" class="admin-topbar__exit" [matTooltip]="'ADMIN.BACK_TO_SITE' | translate">
+    <mat-icon fontIcon="arrow_back"></mat-icon>
+    <span class="admin-topbar__exit-text">{{ 'ADMIN.BACK_TO_SITE' | translate }}</span>
+  </a>
+
+  <div class="admin-topbar__actions">
+    <button class="admin-topbar__lang" [mat-menu-trigger-for]="langMenu" [matTooltip]="'LANGUAGE.' + currentLang.toUpperCase() | translate">
+      <span>{{ currentLang.toUpperCase() }}</span>
+    </button>
+    <mat-menu #langMenu="matMenu">
+      <button mat-menu-item *ngFor="let lang of languages" (click)="setLanguage(lang.code)" [class.active]="currentLang === lang.code">
+        {{ lang.labelKey | translate }}
+      </button>
+    </mat-menu>
+
+    <button class="admin-topbar__user" [mat-menu-trigger-for]="userMenu" *ngIf="user$ | async as user">
+      <img *ngIf="user.avatarUrl; else initials" [src]="user.avatarUrl" [alt]="user.username" class="admin-topbar__avatar" />
+      <ng-template #initials>
+        <span class="admin-topbar__avatar-initials">{{ user.username.charAt(0).toUpperCase() }}</span>
+      </ng-template>
+      <span class="admin-topbar__user-name">{{ user.username }}</span>
+      <mat-icon fontIcon="arrow_drop_down"></mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon fontIcon="person"></mat-icon> {{ 'NAV.PROFILE' | translate }}
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon fontIcon="logout"></mat-icon> {{ 'AUTH.LOGOUT' | translate }}
+      </button>
+    </mat-menu>
+  </div>
+</header>

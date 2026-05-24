@@ -1,0 +1,59 @@
+<section class="user-detail" *ngIf="!loading && user as u">
+  <header class="user-detail__header">
+    <a routerLink="/admin/users" class="user-detail__back">
+      <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
+    </a>
+    <h1>{{ u.username }}</h1>
+    <span class="status" [class.status--ok]="u.isActive" [class.status--off]="!u.isActive">
+      {{ (u.isActive ? 'ADMIN.USERS.ACTIVE' : 'ADMIN.USERS.INACTIVE') | translate }}
+    </span>
+  </header>
+
+  <div class="user-detail__grid">
+    <div class="user-detail__panel">
+      <div class="profile">
+        <img *ngIf="u.avatarUrl; else initials" [src]="u.avatarUrl" [alt]="u.username" class="profile__avatar" />
+        <ng-template #initials>
+          <span class="profile__initials">{{ u.username.charAt(0).toUpperCase() }}</span>
+        </ng-template>
+        <div class="profile__info">
+          <div class="profile__line"><strong>{{ u.email }}</strong></div>
+          <div class="profile__line"><span *ngFor="let r of u.roles" class="chip">{{ r }}</span></div>
+          <div class="profile__line muted">{{ 'ADMIN.USERS.JOINED' | translate }}: {{ u.createdAt | date: 'mediumDate' }}</div>
+          <div class="profile__line muted">{{ 'PROFILE.LANGUAGE' | translate }}: {{ u.preferredLanguage }}</div>
+        </div>
+      </div>
+
+      <p *ngIf="u.bio" class="bio">{{ u.bio }}</p>
+
+      <div class="actions">
+        <button mat-stroked-button (click)="editRoles()">
+          <mat-icon fontIcon="manage_accounts"></mat-icon> {{ 'ADMIN.USERS.EDIT_ROLES' | translate }}
+        </button>
+        <button mat-stroked-button (click)="toggleActive()">
+          <mat-icon [fontIcon]="u.isActive ? 'block' : 'check_circle'"></mat-icon>
+          {{ (u.isActive ? 'ADMIN.USERS.DISABLE' : 'ADMIN.USERS.ENABLE') | translate }}
+        </button>
+        <button mat-stroked-button (click)="forceReset()">
+          <mat-icon fontIcon="lock_reset"></mat-icon> {{ 'ADMIN.USERS.FORCE_RESET' | translate }}
+        </button>
+        <button mat-stroked-button color="warn" (click)="deleteUser()">
+          <mat-icon fontIcon="delete_forever"></mat-icon> {{ 'ADMIN.USERS.DELETE' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="user-detail__panel">
+      <h2>{{ 'ADMIN.USERS.ACTIVITY' | translate }}</h2>
+      <ul class="activity">
+        <li><span>{{ 'PROFILE.RATINGS' | translate }}</span><span>{{ u.activity.totalRatings }}</span></li>
+        <li><span>{{ 'PROFILE.REVIEWS' | translate }}</span><span>{{ u.activity.totalReviews }}</span></li>
+        <li><span>{{ 'COMMENTS.TITLE' | translate }}</span><span>{{ u.activity.totalReplies }}</span></li>
+        <li><span>{{ 'WATCHLIST.TITLE' | translate }}</span><span>{{ u.activity.watchlistCount }}</span></li>
+        <li><span>{{ 'ADMIN.USERS.LAST_ACTIVITY' | translate }}</span><span>{{ u.activity.lastActivityAt ? (u.activity.lastActivityAt | date: 'short') : '—' }}</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<p *ngIf="loading">{{ 'COMMON.LOADING' | translate }}</p>

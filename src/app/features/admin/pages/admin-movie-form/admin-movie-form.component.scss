@@ -1,0 +1,93 @@
+.form-page {
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    h1 { margin: 0; font-size: 1.4rem; }
+  }
+
+  &__back {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    &:hover { color: var(--text-primary); }
+    mat-icon { font-size: 1rem; width: 1rem; height: 1rem; }
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__group {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    legend {
+      padding: 0 0.5rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    mat-form-field,
+    app-input-text,
+    app-input-number,
+    app-input-textarea {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .lang { flex: 0 0 120px; min-width: 120px; }
+    .grow { flex: 1 1 auto; }
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}
+
+.full {
+  width: 100%;
+}
+
+.translation {
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.translations {
+  display: flex;
+  flex-direction: column;
+}

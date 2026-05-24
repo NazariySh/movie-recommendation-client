@@ -1,0 +1,97 @@
+:host {
+  display: block;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 1.5rem;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
+
+  &__exit {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover { color: var(--text-primary); }
+
+    mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; }
+  }
+
+  &__exit-text {
+    @media (max-width: 640px) { display: none; }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  &__lang {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    height: 32px;
+    padding: 0 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+
+    &:hover {
+      background-color: var(--surface-2-color);
+      color: var(--text-primary);
+    }
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--surface-2-color);
+    }
+
+    mat-icon { color: var(--text-muted); }
+  }
+
+  &__user-name {
+    font-size: 0.9rem;
+    @media (max-width: 640px) { display: none; }
+  }
+
+  &__avatar,
+  &__avatar-initials {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+  }
+
+  &__avatar { object-fit: cover; }
+
+  &__avatar-initials {
+    background-color: var(--primary-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,63 @@
+$admin-radius: 12px;
+$admin-border: 1px solid var(--border-color);
+$admin-card-bg: var(--surface-color);
+$admin-section-gap: 1.5rem;
+$admin-row-gap: 0.75rem;
+
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: $admin-section-gap;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+  }
+
+  &__header-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    mat-form-field,
+    app-input-text,
+    app-input-number {
+      min-width: 180px;
+    }
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 240px;
+    display: block;
+  }
+
+  &__table {
+    background: $admin-card-bg;
+    border: $admin-border;
+    border-radius: $admin-radius;
+    overflow: hidden;
+  }
+
+  &__loading,
+  &__empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+}

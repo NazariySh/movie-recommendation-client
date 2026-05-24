@@ -1,0 +1,32 @@
+@use '../../styles/admin-page' as *;
+
+.admin-table {
+  width: 100%;
+  background: var(--surface-color);
+  color: var(--text-primary);
+}
+
+.poster {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary-color);
+  cursor: pointer;
+  font: inherit;
+
+  &:hover { text-decoration: underline; }
+}
+
+.muted {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.danger { color: var(--error-color); }

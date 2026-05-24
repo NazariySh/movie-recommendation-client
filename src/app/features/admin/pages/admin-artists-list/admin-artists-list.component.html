@@ -1,0 +1,78 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <h1>{{ 'ADMIN.ARTISTS.TITLE' | translate }}</h1>
+    <div class="admin-page__header-actions">
+      <button mat-flat-button color="primary" (click)="createNew()">
+        <mat-icon fontIcon="add"></mat-icon> {{ 'ADMIN.ARTISTS.NEW' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-page__filters">
+    <app-input-text
+      class="admin-page__search"
+      [control]="searchControl"
+      [label]="'COMMON.SEARCH' | translate">
+    </app-input-text>
+  </div>
+
+  <div class="admin-page__table">
+    <table mat-table [dataSource]="artists" class="admin-table">
+      <ng-container matColumnDef="photo">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let a">
+          <img *ngIf="a.photoUrl; else noPhoto" [src]="a.photoUrl" [alt]="a.name" class="avatar" />
+          <ng-template #noPhoto><span class="initials">{{ a.name.charAt(0).toUpperCase() }}</span></ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.ARTISTS.NAME' | translate }}</th>
+        <td mat-cell *matCellDef="let a">
+          <button type="button" class="link" (click)="edit(a)">{{ a.name }}</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.ARTISTS.DEPARTMENT' | translate }}</th>
+        <td mat-cell *matCellDef="let a">{{ a.knownForDepartment ?? '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="movies">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.ARTISTS.MOVIE_COUNT' | translate }}</th>
+        <td mat-cell *matCellDef="let a">{{ a.movieCount }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let a">
+          <button mat-icon-button [mat-menu-trigger-for]="menu">
+            <mat-icon fontIcon="more_vert"></mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit(a)">
+              <mat-icon fontIcon="edit"></mat-icon> {{ 'COMMON.EDIT' | translate }}
+            </button>
+            <button mat-menu-item (click)="delete(a)" class="danger">
+              <mat-icon fontIcon="delete_forever"></mat-icon> {{ 'COMMON.DELETE' | translate }}
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <div *ngIf="loading" class="admin-page__loading">{{ 'COMMON.LOADING' | translate }}</div>
+    <div *ngIf="!loading && artists.length === 0" class="admin-page__empty">{{ 'COMMON.NO_RESULTS' | translate }}</div>
+
+    <mat-paginator
+      [length]="totalCount"
+      [pageSize]="state.pageSize"
+      [pageIndex]="state.pageNumber - 1"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPage($event)">
+    </mat-paginator>
+  </div>
+</section>
