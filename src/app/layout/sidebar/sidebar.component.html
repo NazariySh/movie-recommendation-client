@@ -1,0 +1,40 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <a routerLink="/" class="brand">
+      <img [src]="isCollapsed ? 'images/logo.png' : 'images/logo_full.png'" [alt]="'COMMON.LOGO' | translate" class="logo-image">
+    </a>
+  </div>
+
+  <button class="collapse-btn"
+          type="button"
+          (click)="toggleSidebar()"
+          [attr.aria-label]="(isCollapsed ? 'NAV.EXPAND_SIDEBAR' : 'NAV.COLLAPSE_SIDEBAR') | translate">
+    <mat-icon [fontIcon]="AppIcon.Menu"></mat-icon>
+  </button>
+
+  <nav class="nav-menu">
+    <div class="menu-label" *ngIf="!isCollapsed">{{ 'NAV.MENU' | translate }}</div>
+
+    <ul class="menu-list main-menu">
+      <li *ngFor="let item of mainMenuItems">
+        <a [routerLink]="item.route" routerLinkActive="active" class="menu-link">
+          <div class="active-indicator"></div>
+          <mat-icon class="menu-icon" [fontIcon]="item.icon"></mat-icon>
+          <span class="menu-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <hr class="divider" *ngIf="!isCollapsed" />
+
+    <ul class="menu-list bottom-list">
+      <li *ngFor="let item of bottomMenuItems">
+        <a [routerLink]="item.route" routerLinkActive="active" class="menu-link">
+          <div class="active-indicator"></div>
+          <mat-icon class="menu-icon" [fontIcon]="item.icon"></mat-icon>
+          <span class="menu-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
