@@ -1,0 +1,21 @@
+.section-skeleton {
+  margin-bottom: 2.5rem;
+
+  &__title {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+  }
+
+  &__row {
+    display: flex;
+    gap: 1rem;
+    overflow: hidden;
+  }
+
+  &__card {
+    flex: 0 0 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

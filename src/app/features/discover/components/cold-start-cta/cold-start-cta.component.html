@@ -1,0 +1,13 @@
+<div class="cold-start">
+  <div class="cold-start__copy">
+    <h3 class="cold-start__title">{{ 'DISCOVER.COLD_START_TITLE' | translate }}</h3>
+    <p class="cold-start__text">{{ 'DISCOVER.COLD_START_DESC' | translate }}</p>
+  </div>
+  <app-button
+    class="cold-start__cta"
+    buttonType="raised"
+    color="primary"
+    (clicked)="takeSurvey()">
+    {{ 'DISCOVER.COLD_START_CTA' | translate }}
+  </app-button>
+</div>

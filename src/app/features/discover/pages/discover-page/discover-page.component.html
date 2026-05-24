@@ -1,0 +1,104 @@
+<div class="discover-page">
+  <app-hero-section [movie]="featured$ | async"></app-hero-section>
+
+  <ng-container *ngIf="isAuthenticated$ | async; else guestBanner">
+    <ng-container *ngIf="forYou$ | async as forYou">
+      <ng-container [ngSwitch]="forYou.status">
+        <app-section-skeleton
+          *ngSwitchCase="'loading'"
+          titleKey="DISCOVER.FOR_YOU"
+          [count]="6">
+        </app-section-skeleton>
+
+        <app-movie-slider
+          *ngSwitchCase="'ready'"
+          [title]="'DISCOVER.FOR_YOU' | translate"
+          [movies]="forYou.items"
+          [viewAllPath]="moviesPath"
+          [viewAllQueryParams]="{ source: 'for-you' }">
+        </app-movie-slider>
+
+        <app-cold-start-cta *ngSwitchCase="'empty'"></app-cold-start-cta>
+
+        <p *ngSwitchCase="'error'" class="section-error">
+          {{ 'DISCOVER.SECTION_ERROR' | translate }}
+        </p>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #guestBanner>
+    <div class="guest-banner">
+      <p class="guest-banner__copy">{{ 'DISCOVER.GUEST_PROMPT' | translate }}</p>
+      <a mat-raised-button color="primary" [routerLink]="loginPath">
+        {{ 'AUTH.LOGIN' | translate }}
+      </a>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="trendingMovies$ | async as section">
+    <ng-container [ngSwitch]="section.status">
+      <app-section-skeleton
+        *ngSwitchCase="'loading'"
+        titleKey="DISCOVER.TRENDING_MOVIES"
+        [count]="6">
+      </app-section-skeleton>
+
+      <app-movie-slider
+        *ngSwitchCase="'ready'"
+        [title]="'DISCOVER.TRENDING_MOVIES' | translate"
+        [movies]="section.items"
+        [viewAllPath]="moviesPath"
+        [viewAllQueryParams]="{ type: 'movie', sort: 'trending' }">
+      </app-movie-slider>
+
+      <p *ngSwitchCase="'error'" class="section-error">
+        {{ 'DISCOVER.SECTION_ERROR' | translate }}
+      </p>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="trendingSeries$ | async as section">
+    <ng-container [ngSwitch]="section.status">
+      <app-section-skeleton
+        *ngSwitchCase="'loading'"
+        titleKey="DISCOVER.TRENDING_SERIES"
+        [count]="6">
+      </app-section-skeleton>
+
+      <app-movie-slider
+        *ngSwitchCase="'ready'"
+        [title]="'DISCOVER.TRENDING_SERIES' | translate"
+        [movies]="section.items"
+        [viewAllPath]="moviesPath"
+        [viewAllQueryParams]="{ type: 'series', sort: 'trending' }">
+      </app-movie-slider>
+
+      <p *ngSwitchCase="'error'" class="section-error">
+        {{ 'DISCOVER.SECTION_ERROR' | translate }}
+      </p>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="popular$ | async as section">
+    <ng-container [ngSwitch]="section.status">
+      <app-section-skeleton
+        *ngSwitchCase="'loading'"
+        titleKey="DISCOVER.POPULAR"
+        [count]="6">
+      </app-section-skeleton>
+
+      <app-movie-slider
+        *ngSwitchCase="'ready'"
+        [title]="'DISCOVER.POPULAR' | translate"
+        [movies]="section.items"
+        [viewAllPath]="moviesPath"
+        [viewAllQueryParams]="{ sort: 'rating' }">
+      </app-movie-slider>
+
+      <p *ngSwitchCase="'error'" class="section-error">
+        {{ 'DISCOVER.SECTION_ERROR' | translate }}
+      </p>
+    </ng-container>
+  </ng-container>
+</div>

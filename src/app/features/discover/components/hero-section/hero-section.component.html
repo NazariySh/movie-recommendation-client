@@ -1,0 +1,45 @@
+<section class="hero" [class.hero--loading]="!movie">
+  <ng-container *ngIf="movie; else heroSkeleton">
+    <div
+      class="hero__backdrop"
+      [style.background-image]="movie.backdropUrl ? 'url(' + movie.backdropUrl + ')' : null">
+    </div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+      <h1 class="hero__title">{{ movie.title }}</h1>
+
+      <div class="hero__meta">
+        <span *ngIf="movie.releaseDate" class="hero__year">{{ movie.releaseDate | date: 'yyyy' }}</span>
+        <span *ngIf="movie.rating" class="hero__rating">
+          <mat-icon [fontIcon]="AppIcon.Star"></mat-icon>
+          {{ movie.rating | number: '1.1-1' }}
+        </span>
+        <span *ngFor="let g of movie.genres | slice: 0 : 3" class="hero__genre">{{ g }}</span>
+      </div>
+
+      <p *ngIf="movie.overview" class="hero__overview">
+        {{ movie.overview | slice: 0 : 240 }}{{ movie.overview.length > 240 ? '…' : '' }}
+      </p>
+
+      <div class="hero__actions">
+        <app-button
+          buttonType="raised"
+          color="primary"
+          (clicked)="navigateToDetail()">
+          {{ 'DISCOVER.HERO_DETAILS' | translate }}
+        </app-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #heroSkeleton>
+    <div class="hero__backdrop hero__backdrop--placeholder"></div>
+    <div class="hero__content">
+      <app-skeleton-loader shape="line" width="60%" height="3rem"></app-skeleton-loader>
+      <app-skeleton-loader shape="line" width="30%" height="1rem"></app-skeleton-loader>
+      <app-skeleton-loader shape="line" width="90%" height="1rem"></app-skeleton-loader>
+      <app-skeleton-loader shape="line" width="80%" height="1rem"></app-skeleton-loader>
+    </div>
+  </ng-template>
+</section>

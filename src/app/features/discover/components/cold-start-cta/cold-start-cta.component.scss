@@ -1,0 +1,37 @@
+.cold-start {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, rgba(34, 131, 220, 0.18), rgba(34, 131, 220, 0.05));
+  border: 1px solid rgba(34, 131, 220, 0.35);
+  border-radius: 12px;
+
+  &__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  &__text {
+    margin: 0;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    line-height: 1.5;
+  }
+
+  &__cta {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
