@@ -1,0 +1,106 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.artist-card {
+  display: block;
+  border-radius: $border-radius-2;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+  outline: none;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-primary;
+  }
+}
+
+.photo-wrapper {
+  position: relative;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  ::ng-deep .photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+}
+
+.artist-card:hover .photo ::ng-deep .photo__img {
+  transform: scale(1.04);
+}
+
+.role-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  z-index: 2;
+}
+
+.role-badge {
+  padding: 3px 9px;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.2px;
+}
+
+.gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(to top, rgba(13, 14, 15, 0.97) 0%, rgba(13, 14, 15, 0.5) 55%, transparent 100%);
+  pointer-events: none;
+}
+
+.artist-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 14px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.artist-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-count {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}

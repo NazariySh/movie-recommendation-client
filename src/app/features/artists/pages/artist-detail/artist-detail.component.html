@@ -1,0 +1,218 @@
+<ng-container *ngIf="state$ | async as s">
+  <div class="detail-page" *ngIf="s.status === 'loaded'; else nonLoaded">
+
+    <div class="artist-header">
+      <app-button
+        class="back-btn"
+        buttonType="icon"
+        color=""
+        [attr.aria-label]="'COMMON.BACK' | translate"
+        (clicked)="goBack()">
+        <mat-icon [fontIcon]="AppIcon.ArrowBack"></mat-icon>
+      </app-button>
+
+      <div class="header-body">
+        <app-image-with-fallback
+          class="artist-photo"
+          imgClass="artist-photo__img"
+          [src]="s.artist.photoUrl"
+          [alt]="s.artist.name">
+        </app-image-with-fallback>
+
+        <div class="header-info">
+          <h1 class="artist-name">{{ s.artist.name }}</h1>
+
+          <p class="artist-roles" *ngIf="s.artist.roles?.length">
+            <ng-container *ngFor="let role of s.artist.roles; let last = last">
+              {{ ('ARTISTS.ROLE.' + role.toUpperCase()) | translate }}<span *ngIf="!last"> · </span>
+            </ng-container>
+          </p>
+
+          <p class="artist-bio" *ngIf="s.artist.biography">
+            <ng-container *ngIf="s.artist.biography.length <= bioCollapseThreshold || bioExpanded; else collapsedBio">
+              {{ s.artist.biography }}
+            </ng-container>
+            <ng-template #collapsedBio>
+              {{ s.artist.biography | slice:0:bioCollapseThreshold }}…
+            </ng-template>
+          </p>
+
+          <app-button
+            *ngIf="s.artist.biography && s.artist.biography.length > bioCollapseThreshold"
+            class="bio-toggle"
+            buttonType="basic"
+            color="primary"
+            size="sm"
+            (clicked)="toggleBio()">
+            {{ (bioExpanded ? 'ARTISTS.BIO_LESS' : 'ARTISTS.BIO_MORE') | translate }}
+          </app-button>
+        </div>
+
+        <mat-icon class="decor-icon" [fontIcon]="AppIcon.TheaterComedy"></mat-icon>
+      </div>
+    </div>
+
+    <nav class="detail-tabs" role="tablist">
+      <button
+        *ngFor="let tab of detailTabs"
+        type="button"
+        class="tab-btn"
+        role="tab"
+        [class.active]="activeTab === tab.id"
+        [attr.aria-selected]="activeTab === tab.id"
+        (click)="setTab(tab.id)">
+        {{ tab.labelKey | translate }}
+      </button>
+    </nav>
+
+    <div class="tab-content" [ngSwitch]="activeTab">
+
+      <div *ngSwitchCase="'information'" class="information-tab">
+        <h2 class="section-title">{{ 'ARTISTS.INFORMATION' | translate }}</h2>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.PersonOutline"></mat-icon>
+              {{ 'ARTISTS.FIELD.FULL_NAME' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.name }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.birthday">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.Cake"></mat-icon>
+              {{ 'ARTISTS.FIELD.BORN' | translate }}
+            </span>
+            <span class="info-value">
+              {{ s.artist.birthday | date:'longDate' }}
+              <span *ngIf="s.lifeYears as years"> · {{ years }}</span>
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.placeOfBirth">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.Public"></mat-icon>
+              {{ 'ARTISTS.FIELD.PLACE_OF_BIRTH' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.placeOfBirth }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.nationality">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.Public"></mat-icon>
+              {{ 'ARTISTS.FIELD.NATIONALITY' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.nationality }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.knownForDepartment">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.EmojiEvents"></mat-icon>
+              {{ 'ARTISTS.FIELD.KNOWN_FOR' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.knownForDepartment }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.gender">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.Person"></mat-icon>
+              {{ 'ARTISTS.FIELD.GENDER' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.gender }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="s.artist.dateOfDeath">
+            <span class="info-label">
+              <mat-icon [fontIcon]="AppIcon.Flag"></mat-icon>
+              {{ 'ARTISTS.FIELD.DIED' | translate }}
+            </span>
+            <span class="info-value">{{ s.artist.dateOfDeath | date:'longDate' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'gallery'" class="placeholder-tab">
+        <mat-icon [fontIcon]="AppIcon.PhotoLibrary"></mat-icon>
+        <p>{{ 'ARTISTS.GALLERY_SOON' | translate }}</p>
+      </div>
+
+      <div *ngSwitchCase="'works'">
+        <ng-container *ngTemplateOutlet="filmographySection; context: { $implicit: s.roleGroups }"></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #filmographySection let-roleGroups>
+  <div class="works-section" *ngIf="roleGroups.length; else emptyFilmography">
+    <h2 class="section-title">{{ 'ARTISTS.FILMOGRAPHY' | translate }}</h2>
+
+    <nav class="role-tabs" role="tablist">
+      <button
+        *ngFor="let group of roleGroups"
+        type="button"
+        class="tab-btn"
+        role="tab"
+        [class.active]="activeRoleId === group.role"
+        [attr.aria-selected]="activeRoleId === group.role"
+        (click)="setActiveRole(group.role)">
+        {{ ('ARTISTS.ROLE_AS.' + group.role.toUpperCase()) | translate }} ({{ group.count }})
+      </button>
+    </nav>
+
+    <ng-container *ngFor="let group of roleGroups">
+      <div *ngIf="group.role === activeRoleId" class="works-grid">
+        <div
+          *ngFor="let item of group.items"
+          class="work-card"
+          tabindex="0"
+          role="link"
+          [attr.aria-label]="item.movieTitle"
+          (click)="navigateToMovie(item.movieKey)"
+          (keydown.enter)="navigateToMovie(item.movieKey)"
+          (keydown.space)="$event.preventDefault(); navigateToMovie(item.movieKey)">
+          <div class="work-poster-wrapper">
+            <app-image-with-fallback
+              class="work-poster"
+              imgClass="work-poster__img"
+              [src]="item.posterUrl"
+              [alt]="item.movieTitle">
+            </app-image-with-fallback>
+            <div class="work-gradient"></div>
+            <span class="work-rating" *ngIf="item.rating > 0">
+              <mat-icon [fontIcon]="AppIcon.Star"></mat-icon>{{ item.rating | number:'1.1-1' }}
+            </span>
+          </div>
+          <div class="work-info">
+            <span class="work-title">{{ item.movieTitle }}</span>
+            <span class="work-meta">
+              <ng-container *ngIf="item.releaseDate">{{ item.releaseDate | date:'yyyy' }}</ng-container>
+              <ng-container *ngIf="item.character"> · {{ item.character }}</ng-container>
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #emptyFilmography>
+    <div class="placeholder-tab">
+      <mat-icon [fontIcon]="AppIcon.VideocamOff"></mat-icon>
+      <p>{{ 'ARTISTS.NO_FILMOGRAPHY' | translate }}</p>
+    </div>
+  </ng-template>
+</ng-template>
+
+<ng-template #nonLoaded>
+  <ng-container [ngSwitch]="(state$ | async)?.status">
+    <div *ngSwitchCase="'error'" class="detail-page-state detail-page-state--error">
+      <mat-icon [fontIcon]="AppIcon.PersonSearch"></mat-icon>
+      <p>{{ 'ARTISTS.ERROR_LOADING' | translate }}</p>
+    </div>
+    <div *ngSwitchDefault class="detail-page-state detail-page-state--loading">
+      <app-skeleton-loader shape="line" width="60%" height="40px"></app-skeleton-loader>
+      <app-skeleton-loader shape="card" height="280px"></app-skeleton-loader>
+    </div>
+  </ng-container>
+</ng-template>

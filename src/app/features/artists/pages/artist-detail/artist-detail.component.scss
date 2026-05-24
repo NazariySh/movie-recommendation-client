@@ -1,0 +1,349 @@
+@use '../../../../../styles/variables' as *;
+
+.detail-page-state {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding: 64px 16px;
+  text-align: center;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.7;
+  }
+}
+
+:host {
+  display: block;
+}
+
+.detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 3rem;
+}
+
+.back-btn {
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+
+  &:hover { color: #fff; }
+}
+
+.header-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+}
+
+.artist-photo {
+  display: block;
+  width: 160px;
+  flex-shrink: 0;
+  aspect-ratio: 2/3;
+  border-radius: $border-radius-2;
+  overflow: hidden;
+
+  ::ng-deep .artist-photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+}
+
+.header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.artist-name {
+  font-size: 2rem;
+  font-weight: 800;
+  color: $color-primary;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.artist-roles {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+.artist-bio {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0.75rem 0 0;
+  max-width: 700px;
+}
+
+.bio-toggle {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
+.decor-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 5rem;
+  width: 5rem;
+  height: 5rem;
+  color: rgba(255, 255, 255, 0.04);
+  user-select: none;
+}
+
+.detail-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 0.5rem 1.25rem 0.75rem;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover { color: rgba(255, 255, 255, 0.8); }
+
+    &.active {
+      color: $color-primary;
+      font-weight: 700;
+      border-bottom-color: $color-primary;
+    }
+  }
+}
+
+.tab-content { min-height: 200px; }
+
+.placeholder-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: rgba(255, 255, 255, 0.2);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  p { margin: 0; font-size: 0.95rem; }
+}
+
+.information-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  &:nth-child(odd) { padding-right: 2rem; }
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 160px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $color-primary;
+  }
+}
+
+.info-value {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  flex: 1;
+}
+
+.works-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.work-card {
+  cursor: pointer;
+  border-radius: $border-radius-1;
+  overflow: hidden;
+  background: var(--surface-color);
+  transition: transform 0.2s ease;
+  outline: none;
+
+  &:hover {
+    transform: translateY(-3px);
+
+    .work-poster ::ng-deep .work-poster__img { transform: scale(1.04); }
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-primary;
+  }
+}
+
+.work-poster-wrapper {
+  position: relative;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+}
+
+.work-poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  ::ng-deep .work-poster__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+}
+
+.work-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(23,24,26,0.95), transparent);
+  pointer-events: none;
+}
+
+.work-rating {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: $color-primary;
+  }
+}
+
+.work-info {
+  padding: 8px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.work-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.work-meta {
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.works-section .role-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 1rem;
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 0.4rem 1rem 0.6rem;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover { color: rgba(255, 255, 255, 0.8); }
+
+    &.active {
+      color: #fff;
+      font-weight: 700;
+      border-bottom-color: $color-primary;
+    }
+  }
+}
