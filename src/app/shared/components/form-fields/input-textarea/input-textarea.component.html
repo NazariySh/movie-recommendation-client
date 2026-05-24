@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline" subscriptSizing="dynamic">
+  <mat-label>{{ label }}</mat-label>
+  <textarea
+    matInput
+    cdkTextareaAutosize
+    [cdkAutosizeMinRows]="minRows"
+    [cdkAutosizeMaxRows]="maxRows"
+    [formControl]="formControl"
+    [placeholder]="placeholder"
+    [errorStateMatcher]="this">
+  </textarea>
+  <mat-error>{{ displayError }}</mat-error>
+</mat-form-field>

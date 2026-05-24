@@ -1,0 +1,21 @@
+@use '../../../../styles/variables' as *;
+
+// Wrapper-level layout. The dark-theme tokens themselves live in the global
+// `mat-form-field.mat-mdc-form-field { ... }` rule in styles.scss so raw
+// <mat-form-field> blocks (used in feature pages for <mat-select>, date inputs,
+// etc.) get the same treatment as these wrapped components.
+:host {
+  display: block;
+  width: 100%;
+
+  --mat-icon-button-state-layer-color: rgba(255, 255, 255, 0.1);
+  --mat-icon-button-ripple-color: rgba(255, 255, 255, 0.1);
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    color: var(--text-secondary, #a1a1aa);
+  }
+}

@@ -1,0 +1,8 @@
+<div class="empty-state">
+  <mat-icon class="empty-state__icon">{{ icon }}</mat-icon>
+  <h3 class="empty-state__title">{{ titleKey | translate }}</h3>
+  <p class="empty-state__desc">{{ descKey | translate }}</p>
+  <button *ngIf="ctaLabelKey" class="empty-state__cta" (click)="ctaClick.emit()">
+    {{ ctaLabelKey | translate }}
+  </button>
+</div>

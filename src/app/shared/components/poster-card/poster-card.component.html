@@ -1,0 +1,50 @@
+<ng-container *ngIf="linkValue; else plainCard">
+  <a class="app-poster-card" [routerLink]="linkValue" (click)="onCardClick()">
+    <ng-container *ngTemplateOutlet="cardBody"></ng-container>
+  </a>
+</ng-container>
+
+<ng-template #plainCard>
+  <div
+    class="app-poster-card"
+    role="button"
+    tabindex="0"
+    (click)="onCardClick()"
+    (keydown.enter)="onCardClick()"
+    (keydown.space)="onCardKeyboardActivate($event)">
+    <ng-container *ngTemplateOutlet="cardBody"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #cardBody>
+  <div class="app-poster-card__poster">
+    <span *ngIf="hasRating" class="app-poster-card__rating" aria-hidden="true">
+      {{ rating | number: '1.1-1' }}
+    </span>
+
+    <button
+      *ngIf="showBookmark"
+      type="button"
+      class="app-poster-card__bookmark"
+      [class.app-poster-card__bookmark--active]="bookmarked"
+      [attr.aria-pressed]="bookmarked"
+      [attr.aria-label]="'COMMON.BOOKMARK' | translate"
+      (click)="onBookmarkClick($event)">
+      {{ bookmarked ? '★' : '☆' }}
+    </button>
+
+    <app-image-with-fallback
+      [src]="posterUrl"
+      [alt]="title"
+      [fallback]="fallback"
+      imgClass="app-poster-card__image">
+    </app-image-with-fallback>
+
+    <div class="app-poster-card__overlay" aria-hidden="true"></div>
+  </div>
+
+  <div class="app-poster-card__meta">
+    <span class="app-poster-card__title">{{ title }}</span>
+    <span *ngIf="subtitle" class="app-poster-card__subtitle">{{ subtitle }}</span>
+  </div>
+</ng-template>

@@ -1,0 +1,8 @@
+<mat-checkbox [formControl]="formControl" color="primary" class="app-checkbox">
+  <span class="app-checkbox__label">
+    <ng-content></ng-content>
+  </span>
+</mat-checkbox>
+<div class="app-checkbox__error" *ngIf="displayError && (control?.touched ?? false)">
+  {{ displayError }}
+</div>

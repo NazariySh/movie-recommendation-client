@@ -1,0 +1,84 @@
+<button
+  type="button"
+  class="app-select__trigger"
+  cdkOverlayOrigin
+  #triggerOrigin="cdkOverlayOrigin"
+  [class.app-select__trigger--open]="isOpen"
+  [class.app-select__trigger--placeholder]="!hasValue"
+  [disabled]="disabled"
+  (click)="toggle()">
+  <span *ngIf="triggerIcon as icon" class="app-select__trigger-icon" aria-hidden="true">{{ icon }}</span>
+  <span class="app-select__trigger-label">{{ triggerLabel | translate }}</span>
+  <mat-icon class="app-select__caret" aria-hidden="true">expand_more</mat-icon>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayPositions]="panelPositions"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayMinWidth]="triggerWidth"
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  cdkConnectedOverlayPanelClass="app-select__overlay"
+  (backdropClick)="close()"
+  (overlayKeydown)="onOverlayKeydown($event)">
+  <div class="app-select__panel">
+    <input
+      *ngIf="searchable"
+      type="text"
+      class="app-select__search"
+      [placeholder]="searchPlaceholder | translate"
+      [(ngModel)]="searchQuery">
+
+    <div class="app-select__options">
+      <ng-container *ngIf="filteredItems.length; else emptyState">
+        <ng-container *ngIf="mode === 'multi'; else singleList">
+          <button
+            *ngFor="let item of filteredItems"
+            type="button"
+            class="app-select__option app-select__option--multi"
+            [class.app-select__option--checked]="isStaged(item.value)"
+            [disabled]="item.disabled"
+            (click)="toggleStaged(item)">
+            <mat-icon class="app-select__option-check" aria-hidden="true">
+              {{ isStaged(item.value) ? 'check_box' : 'check_box_outline_blank' }}
+            </mat-icon>
+            <span *ngIf="item.icon" class="app-select__option-icon" aria-hidden="true">{{ item.icon }}</span>
+            <span class="app-select__option-label">{{ item.label | translate }}</span>
+          </button>
+        </ng-container>
+        <ng-template #singleList>
+          <button
+            *ngFor="let item of filteredItems"
+            type="button"
+            class="app-select__option"
+            [class.app-select__option--active]="isActive(item.value)"
+            [disabled]="item.disabled"
+            (click)="selectSingle(item)">
+            <span *ngIf="item.icon" class="app-select__option-icon" aria-hidden="true">{{ item.icon }}</span>
+            <span class="app-select__option-label">{{ item.label | translate }}</span>
+          </button>
+        </ng-template>
+      </ng-container>
+      <ng-template #emptyState>
+        <div class="app-select__empty">{{ emptyLabel | translate }}</div>
+      </ng-template>
+    </div>
+
+    <div *ngIf="mode === 'multi'" class="app-select__footer">
+      <button
+        type="button"
+        class="app-select__footer-btn app-select__footer-btn--ghost"
+        (click)="resetStaged()">
+        {{ resetLabel | translate }}
+      </button>
+      <button
+        type="button"
+        class="app-select__footer-btn app-select__footer-btn--primary"
+        (click)="applyStaged()">
+        {{ applyLabel | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>

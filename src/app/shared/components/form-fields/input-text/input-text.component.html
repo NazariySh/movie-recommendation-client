@@ -1,0 +1,11 @@
+<mat-form-field appearance="outline" subscriptSizing="dynamic">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    matInput
+    type="text"
+    [formControl]="formControl"
+    [placeholder]="placeholder"
+    [attr.autocomplete]="autocomplete"
+    [errorStateMatcher]="this">
+  <mat-error>{{ displayError }}</mat-error>
+</mat-form-field>

@@ -1,0 +1,22 @@
+<button
+  type="button"
+  class="lang-trigger"
+  [class.lang-trigger--inline]="variant === 'inline'"
+  [matMenuTriggerFor]="langMenu"
+  [attr.aria-label]="'LANGUAGE.SWITCH' | translate">
+  <span class="lang-trigger__code">{{ currentLang.toUpperCase() }}</span>
+  <mat-icon class="lang-trigger__caret" aria-hidden="true">expand_more</mat-icon>
+</button>
+
+<mat-menu #langMenu="matMenu" class="lang-menu" xPosition="before">
+  <button
+    *ngFor="let lang of languages"
+    type="button"
+    mat-menu-item
+    class="lang-menu__item"
+    [class.lang-menu__item--active]="currentLang === lang.code"
+    (click)="setLanguage(lang.code)">
+    <span class="lang-menu__label">{{ lang.labelKey | translate }}</span>
+    <mat-icon *ngIf="currentLang === lang.code" class="lang-menu__check" aria-hidden="true">check</mat-icon>
+  </button>
+</mat-menu>

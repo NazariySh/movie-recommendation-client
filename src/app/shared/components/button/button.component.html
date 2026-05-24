@@ -1,0 +1,62 @@
+<ng-template #buttonContent>
+  <ng-content></ng-content>
+</ng-template>
+
+<ng-container [ngSwitch]="buttonType">
+  <button *ngSwitchCase="'basic'"
+          mat-button
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'flat'"
+          mat-flat-button
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'raised'"
+          mat-raised-button
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'stroked'"
+          mat-stroked-button
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'icon'"
+          mat-icon-button
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'fab'"
+          mat-fab
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+  <button *ngSwitchCase="'mini-fab'"
+          mat-mini-fab
+          [color]="materialColor"
+          [type]="type"
+          [disabled]="disabled"
+          (click)="onClick($event)">
+    <ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+  </button>
+</ng-container>
