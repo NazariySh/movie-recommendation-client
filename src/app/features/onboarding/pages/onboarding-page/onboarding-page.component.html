@@ -1,0 +1,151 @@
+<div class="onboarding">
+  <div class="onboarding__progress">
+    <span
+      *ngFor="let s of steps; let i = index"
+      class="onboarding__dot"
+      [class.onboarding__dot--done]="i < stepIndex"
+      [class.onboarding__dot--active]="i === stepIndex">
+    </span>
+    <span class="onboarding__step-count">{{ stepIndex + 1 }} / {{ steps.length }}</span>
+  </div>
+
+  <section class="onboarding__step">
+    <ng-container *ngIf="stepIndex === 0">
+      <div class="onboarding__hero">
+        <mat-icon class="onboarding__hero-icon" fontIcon="movie_filter"></mat-icon>
+        <h2 class="onboarding__title">{{ 'ONBOARDING.WELCOME_TITLE' | translate }}</h2>
+        <p class="onboarding__subtitle">{{ 'ONBOARDING.WELCOME_TEXT' | translate }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepIndex === 1">
+      <h2 class="onboarding__title">{{ 'ONBOARDING.GENRES_TITLE' | translate }}</h2>
+      <p class="onboarding__subtitle">{{ 'ONBOARDING.GENRES_SUBTITLE' | translate: { min: minGenres } }}</p>
+      <p class="onboarding__counter" [class.onboarding__counter--ok]="canAdvance()">
+        {{ 'ONBOARDING.GENRES_SELECTED' | translate: { count: selectedGenreIds.size, min: minGenres } }}
+      </p>
+      <div class="onboarding__genre-grid">
+        <button
+          *ngFor="let genre of genres"
+          type="button"
+          class="onboarding__genre-tile"
+          [class.onboarding__genre-tile--selected]="isGenreSelected(genre.id)"
+          (click)="toggleGenre(genre.id)">
+          {{ genre.name }}
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepIndex === 2">
+      <h2 class="onboarding__title">{{ 'ONBOARDING.RATE_TITLE' | translate }}</h2>
+      <p class="onboarding__subtitle">{{ 'ONBOARDING.RATE_SUBTITLE' | translate: { min: minRatings } }}</p>
+      <p class="onboarding__counter" [class.onboarding__counter--ok]="canAdvance()">
+        {{ 'ONBOARDING.RATED' | translate: { count: ratingsCount(), min: minRatings } }}
+      </p>
+      <div class="onboarding__movies-grid">
+        <div *ngFor="let movie of seedMovies" class="onboarding__movie-tile">
+          <img
+            *ngIf="movie.posterUrl; else posterFallback"
+            class="onboarding__movie-poster"
+            [src]="movie.posterUrl"
+            [alt]="movie.title"
+            loading="lazy"
+          />
+          <ng-template #posterFallback>
+            <div class="onboarding__movie-poster"></div>
+          </ng-template>
+          <p class="onboarding__movie-title">{{ movie.title }}</p>
+          <div class="onboarding__stars">
+            <button
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              type="button"
+              class="onboarding__star"
+              [class.onboarding__star--active]="getRating(movie.id) >= star"
+              (click)="setRating(movie.id, star)">
+              ★
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepIndex === 3">
+      <h2 class="onboarding__title">{{ 'ONBOARDING.SURVEY_TITLE' | translate }}</h2>
+      <p class="onboarding__subtitle">{{ 'ONBOARDING.SURVEY_SUBTITLE' | translate }}</p>
+
+      <div class="onboarding__moods">
+        <div *ngFor="let key of moodKeys" class="onboarding__mood-row">
+          <span class="onboarding__mood-label">{{ 'ONBOARDING.MOOD.' + key.toUpperCase() | translate }}</span>
+          <input
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+            [value]="moodScores[key]"
+            (input)="setMood(key, $any($event.target).valueAsNumber)"
+            class="onboarding__mood-slider" />
+        </div>
+      </div>
+
+      <h3 class="onboarding__title" style="font-size: 1.1rem; margin-top: 1.5rem;">
+        {{ 'ONBOARDING.ERAS_TITLE' | translate }}
+      </h3>
+      <div class="onboarding__eras">
+        <button
+          *ngFor="let era of eraOptions"
+          type="button"
+          class="onboarding__era-pill"
+          [class.onboarding__era-pill--selected]="selectedEras.has(era)"
+          (click)="toggleEra(era)">
+          {{ 'ONBOARDING.ERA.' + era.toUpperCase() | translate }}
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepIndex === 4">
+      <div class="onboarding__done">
+        <mat-icon class="onboarding__done-icon" fontIcon="check_circle"></mat-icon>
+        <h2 class="onboarding__title">{{ 'ONBOARDING.DONE_TITLE' | translate }}</h2>
+        <p class="onboarding__subtitle">{{ 'ONBOARDING.DONE_TEXT' | translate }}</p>
+      </div>
+    </ng-container>
+  </section>
+
+  <div class="onboarding__actions">
+    <app-button
+      *ngIf="stepIndex > 0 && stepIndex < steps.length - 1"
+      buttonType="stroked"
+      (clicked)="back()">
+      {{ 'COMMON.BACK' | translate }}
+    </app-button>
+    <span *ngIf="stepIndex === 0"></span>
+
+    <div>
+      <button
+        *ngIf="stepIndex > 0 && stepIndex < 4 && !canAdvance()"
+        type="button"
+        class="onboarding__skip"
+        (click)="skip()">
+        {{ 'ONBOARDING.SKIP' | translate }}
+      </button>
+
+      <app-button
+        *ngIf="stepIndex < steps.length - 1"
+        buttonType="raised"
+        color="primary"
+        [disabled]="!canAdvance()"
+        (clicked)="next()">
+        {{ 'COMMON.CONTINUE' | translate }}
+      </app-button>
+
+      <app-button
+        *ngIf="stepIndex === steps.length - 1"
+        buttonType="raised"
+        color="primary"
+        [disabled]="submitting"
+        (clicked)="finish()">
+        {{ (submitting ? 'COMMON.LOADING' : 'ONBOARDING.GO_TO_DISCOVER') | translate }}
+      </app-button>
+    </div>
+  </div>
+</div>
