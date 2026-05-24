@@ -1,0 +1,12 @@
+<section class="rules-page">
+  <header class="rules-page__header">
+    <h1 class="rules-page__title">{{ 'RULES.TITLE' | translate }}</h1>
+    <p class="rules-page__intro">{{ 'RULES.INTRO' | translate }}</p>
+  </header>
+
+  <ol class="rules-page__list">
+    <li *ngFor="let key of ruleKeys" class="rules-page__item">
+      {{ key | translate }}
+    </li>
+  </ol>
+</section>
