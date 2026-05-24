@@ -1,0 +1,126 @@
+<div class="search-bar" [class.search-bar--open]="open">
+  <div class="search-bar__input-wrap">
+    <mat-icon class="search-bar__icon" [fontIcon]="AppIcon.Search"></mat-icon>
+
+    <input
+      #inputEl
+      type="search"
+      class="search-bar__input"
+      role="combobox"
+      autocomplete="off"
+      aria-controls="search-bar-listbox"
+      [attr.aria-expanded]="open"
+      [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+      [formControl]="query"
+      (focus)="onFocus()"
+      (keydown.enter)="onSubmit(); $event.preventDefault()"
+    />
+
+    <button
+      *ngIf="query.value"
+      type="button"
+      class="search-bar__clear"
+      [attr.aria-label]="'COMMON.CLEAR' | translate"
+      (click)="onClear($event)">
+      <mat-icon fontIcon="close"></mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="open" id="search-bar-listbox" class="search-bar__dropdown" role="listbox">
+    <ng-container *ngIf="!hasMinQuery">
+      <div *ngIf="history.length > 0; else emptyHistory" class="search-bar__group">
+        <div class="search-bar__group-header">
+          <span>{{ 'SEARCH.RECENT' | translate }}</span>
+          <button type="button" class="search-bar__group-clear" (click)="clearHistory($event)">
+            {{ 'SEARCH.CLEAR' | translate }}
+          </button>
+        </div>
+
+        <button
+          *ngFor="let q of history; let i = index"
+          type="button"
+          class="search-bar__row"
+          [class.search-bar__row--active]="selectedIndex === i"
+          (click)="selectHistoryItem(q)">
+          <mat-icon class="search-bar__row-icon" fontIcon="history"></mat-icon>
+          <span class="search-bar__row-text">{{ q }}</span>
+          <mat-icon
+            class="search-bar__row-remove"
+            fontIcon="close"
+            [attr.aria-label]="'COMMON.REMOVE' | translate"
+            (click)="removeHistory(q, $event)">
+          </mat-icon>
+        </button>
+      </div>
+
+      <ng-template #emptyHistory>
+        <div class="search-bar__empty">{{ 'SEARCH.NO_HISTORY' | translate }}</div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="hasMinQuery">
+      <div *ngIf="loading" class="search-bar__empty">{{ 'COMMON.LOADING' | translate }}</div>
+
+      <ng-container *ngIf="!loading">
+        <div *ngIf="suggestions.movies.length > 0" class="search-bar__group">
+          <div class="search-bar__group-header">{{ 'SEARCH.GROUP_TITLES' | translate }}</div>
+          <button
+            *ngFor="let m of suggestions.movies; let i = index"
+            type="button"
+            class="search-bar__row"
+            [class.search-bar__row--active]="selectedIndex === i"
+            (click)="selectMovie(m)">
+            <img
+              *ngIf="m.posterUrl; else movieIcon"
+              class="search-bar__row-poster"
+              [src]="m.posterUrl"
+              [alt]="m.title"
+              loading="lazy"
+            />
+            <ng-template #movieIcon>
+              <mat-icon class="search-bar__row-icon" fontIcon="movie"></mat-icon>
+            </ng-template>
+            <span class="search-bar__row-text">
+              {{ m.title }}
+              <span *ngIf="m.releaseYear" class="search-bar__row-year">({{ m.releaseYear }})</span>
+            </span>
+          </button>
+        </div>
+
+        <div *ngIf="suggestions.artists.length > 0" class="search-bar__group">
+          <div class="search-bar__group-header">{{ 'SEARCH.GROUP_ARTISTS' | translate }}</div>
+          <button
+            *ngFor="let a of suggestions.artists; let i = index"
+            type="button"
+            class="search-bar__row"
+            [class.search-bar__row--active]="selectedIndex === suggestions.movies.length + i"
+            (click)="selectArtist(a)">
+            <img
+              *ngIf="a.photoUrl; else artistIcon"
+              class="search-bar__row-avatar"
+              [src]="a.photoUrl"
+              [alt]="a.name"
+              loading="lazy"
+            />
+            <ng-template #artistIcon>
+              <mat-icon class="search-bar__row-icon" [fontIcon]="AppIcon.Person"></mat-icon>
+            </ng-template>
+            <span class="search-bar__row-text">{{ a.name }}</span>
+          </button>
+        </div>
+
+        <button
+          *ngIf="hasContent"
+          type="button"
+          class="search-bar__see-all"
+          [class.search-bar__row--active]="selectedIndex === suggestions.movies.length + suggestions.artists.length"
+          (click)="onSubmit()">
+          {{ 'SEARCH.SEE_ALL_FOR' | translate: { query: query.value } }}
+          <mat-icon [fontIcon]="AppIcon.ArrowForward"></mat-icon>
+        </button>
+
+        <div *ngIf="!hasContent" class="search-bar__empty">{{ 'SEARCH.NO_SUGGESTIONS' | translate }}</div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
