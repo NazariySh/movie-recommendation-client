@@ -1,10 +1,8 @@
 export const environment = {
   production: true,
-  apiUrl: 'api',
+  apiUrl: '/api',
   appUrl: '',
-  defaultLanguage: 'uk',
-  supportedLanguages: ['uk', 'en'],
-  pageSize: 20,
-  recaptchaSiteKey: '',
+  defaultLanguage: 'en',
+  supportedLanguages: ['en', 'uk'],
   googleClientId: '',
 };

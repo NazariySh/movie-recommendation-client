@@ -28,8 +28,6 @@
       autocomplete="username">
     </app-input-text>
 
-    <!-- Email is read-only with a verified-state suffix icon; keep raw <mat-form-field> since
-         no shared input supports a status badge slot. -->
     <mat-form-field appearance="outline" class="general-info__field">
       <mat-label>{{ 'PROFILE.EMAIL' | translate }}</mat-label>
       <input matInput [value]="profile.email" readonly />

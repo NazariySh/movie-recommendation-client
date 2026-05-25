@@ -147,7 +147,7 @@ export class OnboardingPageComponent implements OnInit {
 
       for (const [movieId, score] of this.ratings.entries()) {
         try {
-          await firstValueFrom(this.ratingService.upsertRating(movieId, score));
+          await firstValueFrom(this.ratingService.upsertRating(movieId, score * 2));
         } catch {
           continue;
         }

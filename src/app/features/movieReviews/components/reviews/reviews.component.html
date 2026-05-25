@@ -56,8 +56,7 @@
   <div *ngIf="error()" class="error-state">
     {{ 'REVIEWS.LOAD_FAILED' | translate }}
     <app-button
-      class="retry-btn"
-      buttonType="basic"
+      buttonType="stroked"
       color="primary"
       size="sm"
       (clicked)="retry()">

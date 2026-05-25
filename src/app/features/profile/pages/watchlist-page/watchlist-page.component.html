@@ -31,19 +31,19 @@
 
       <div *ngIf="page.items.length > 0" class="watchlist-tab__grid">
         <article *ngFor="let item of page.items" class="wl-item">
-          <app-poster-card
-            class="wl-item__poster"
-            [posterUrl]="item.posterUrl"
-            [title]="item.movieTitle"
-            [subtitle]="item.notes"
-            [link]="movieLink(item.movieId)"
-            [showRating]="false">
-          </app-poster-card>
+          <a class="wl-item__poster" [routerLink]="movieLink(item.movieId)">
+            <app-image-with-fallback
+              [src]="item.posterUrl"
+              [alt]="item.movieTitle"
+              imgClass="wl-item__poster-img">
+            </app-image-with-fallback>
+          </a>
 
           <div class="wl-item__body">
+            <a class="wl-item__title" [routerLink]="movieLink(item.movieId)">{{ item.movieTitle }}</a>
             <p *ngIf="item.notes" class="wl-item__notes">{{ item.notes }}</p>
             <p class="wl-item__updated">
-              {{ 'PROFILE.UPDATED_AT' | translate }}: {{ item.updatedAt | date: 'shortDate' }}
+              {{ 'PROFILE.UPDATED_AT' | translate }}: {{ item.updatedAt | localizedDate: 'medium' }}
             </p>
           </div>
 

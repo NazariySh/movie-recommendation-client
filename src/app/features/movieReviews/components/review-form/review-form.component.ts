@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppIcon } from '../../../../core/constants/app-icons';
 import { CreateMovieReviewRequest } from '../../../../core/models/review';
 
-const BODY_MIN_LENGTH = 10;
+const BODY_MIN_LENGTH = 5;
 
 @Component({
   selector: 'app-review-form',

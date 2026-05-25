@@ -57,11 +57,10 @@
             <p class="hero-overview" *ngIf="movie.overview">{{ movie.overview }}</p>
 
             <div class="hero-actions">
-              <app-button
+              <app-button *ngIf="movie.trailerYoutubeId"
                 class="trailer-btn"
                 buttonType="flat"
                 color="primary"
-                [disabled]="!movie.trailerYoutubeId"
                 [matTooltip]="movie.trailerYoutubeId ? '' : ('MOVIE.NO_TRAILER' | translate)"
                 (clicked)="openTrailer(movie)">
                 <mat-icon [fontIcon]="AppIcon.PlayArrow"></mat-icon>
@@ -117,7 +116,7 @@
 
               <app-rating-stars
                 [value]="myRating"
-                [max]="5"
+                [max]="10"
                 [scale]="10"
                 [disabled]="ratingPending"
                 [ariaLabel]="'MOVIE.RATE_THIS' | translate"
@@ -164,7 +163,7 @@
           <div class="info-card__row" *ngIf="movie.releaseDate">
             <mat-icon class="info-card__icon" [fontIcon]="AppIcon.CalendarMonth"></mat-icon>
             <span class="info-card__label">{{ 'MOVIE.RELEASE_DATE' | translate }}</span>
-            <span class="info-card__value">{{ movie.releaseDate | date:'longDate' }}</span>
+            <span class="info-card__value">{{ movie.releaseDate | localizedDate:'long' }}</span>
           </div>
           <div class="info-card__row" *ngIf="director(movie) as d">
             <mat-icon class="info-card__icon" [fontIcon]="AppIcon.MovieFilter"></mat-icon>
@@ -184,7 +183,7 @@
           <div class="info-card__row" *ngIf="movie.status">
             <mat-icon class="info-card__icon" [fontIcon]="AppIcon.TagFaces"></mat-icon>
             <span class="info-card__label">{{ 'MOVIE.STATUS_LABEL' | translate }}</span>
-            <span class="info-card__value">{{ movie.status }}</span>
+            <span class="info-card__value">{{ statusKey(movie.status) | translate }}</span>
           </div>
           <div class="info-card__row" *ngIf="movie.tagline">
             <mat-icon class="info-card__icon" [fontIcon]="AppIcon.Forum"></mat-icon>
@@ -260,30 +259,8 @@
       </div>
 
       <div *ngSwitchCase="'similar'">
-        <section *ngIf="isAuthenticated && becauseYouLiked.length" class="similar-block">
-          <h3 class="similar-block__title">
-            {{ 'MOVIE.BECAUSE_YOU_LIKED' | translate: { title: movie.title } }}
-          </h3>
-          <div class="similar-grid">
-            <a
-              *ngFor="let item of becauseYouLiked"
-              class="similar-card"
-              [routerLink]="['/movies', item.id]">
-              <div class="poster-wrap">
-                <span class="rating-badge" *ngIf="item.rating > 0">{{ item.rating | number:'1.1-1' }}</span>
-                <img
-                  [src]="item.posterUrl || 'images/placeholder.png'"
-                  [alt]="item.title"
-                  loading="lazy"
-                  (error)="$any($event.target).src = 'images/placeholder.png'">
-              </div>
-              <span class="similar-title">{{ item.title }}</span>
-            </a>
-          </div>
-        </section>
-
         <section class="similar-block">
-          <h3 *ngIf="isAuthenticated && becauseYouLiked.length" class="similar-block__title">
+          <h3 class="similar-block__title">
             {{ 'MOVIE.SIMILAR_TITLES' | translate }}
           </h3>
           <div class="similar-grid" *ngIf="similar.length; else noSimilar">

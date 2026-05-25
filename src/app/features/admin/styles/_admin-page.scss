@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins' as *;
+
 $admin-radius: 12px;
 $admin-border: 1px solid var(--border-color);
 $admin-card-bg: var(--surface-color);
@@ -9,6 +11,10 @@ $admin-row-gap: 0.75rem;
   flex-direction: column;
   gap: $admin-section-gap;
 
+  @include respond-to('sm') {
+    gap: 1rem;
+  }
+
   &__header {
     display: flex;
     align-items: center;
@@ -19,6 +25,10 @@ $admin-row-gap: 0.75rem;
     h1 {
       margin: 0;
       font-size: 1.4rem;
+
+      @include respond-to('sm') {
+        font-size: 1.15rem;
+      }
     }
   }
 
@@ -26,6 +36,10 @@ $admin-row-gap: 0.75rem;
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+
+    @include respond-to('sm') {
+      width: 100%;
+    }
   }
 
   &__filters {
@@ -39,12 +53,36 @@ $admin-row-gap: 0.75rem;
     app-input-number {
       min-width: 180px;
     }
+
+    @include respond-to('md') {
+      gap: 0.625rem;
+
+      mat-form-field,
+      app-input-text,
+      app-input-number {
+        min-width: 0;
+        flex: 1 1 calc(50% - 0.625rem);
+      }
+    }
+
+    @include respond-to('sm') {
+      mat-form-field,
+      app-input-text,
+      app-input-number {
+        flex: 1 1 100%;
+      }
+    }
   }
 
   &__search {
     flex: 1;
     min-width: 240px;
     display: block;
+
+    @include respond-to('md') {
+      min-width: 0;
+      flex: 1 1 100%;
+    }
   }
 
   &__table {
@@ -54,10 +92,19 @@ $admin-row-gap: 0.75rem;
     overflow: hidden;
   }
 
+  &__table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   &__loading,
   &__empty {
     padding: 2rem;
     text-align: center;
     color: var(--text-secondary);
+
+    @include respond-to('sm') {
+      padding: 1.25rem 0.75rem;
+    }
   }
 }

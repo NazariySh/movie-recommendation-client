@@ -1,10 +1,18 @@
 <header class="header">
+  <button
+    type="button"
+    class="header__hamburger"
+    [attr.aria-label]="'NAV.EXPAND_SIDEBAR' | translate"
+    (click)="openDrawer()">
+    <mat-icon fontIcon="menu"></mat-icon>
+  </button>
+
   <nav class="header__nav">
     <a *ngFor="let item of navItems"
        [routerLink]="item.route"
        [queryParams]="item.queryParams"
        routerLinkActive="active"
-       [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+       [routerLinkActiveOptions]="{ paths: 'exact', queryParams: 'exact', matrixParams: 'ignored', fragment: 'ignored' }"
        class="header__nav-link">
       {{ item.labelKey | translate }}
     </a>

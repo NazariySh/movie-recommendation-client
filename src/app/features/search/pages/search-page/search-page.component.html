@@ -145,34 +145,8 @@
     <ng-template #semanticBlock>
       <section class="search-page__section">
         <ng-container *ngIf="s.semantic && s.semantic.items.length > 0; else semanticEmpty">
-          <div class="search-page__semantic-grid">
-            <a
-              *ngFor="let item of s.semantic.items"
-              class="semantic-card"
-              [routerLink]="[moviesPath, item.id]">
-              <div class="semantic-card__poster">
-                <app-image-with-fallback
-                  [src]="item.posterUrl"
-                  [alt]="item.title"
-                  imgClass="semantic-card__poster-img">
-                </app-image-with-fallback>
-                <span class="semantic-card__score" [attr.title]="'SEARCH.SIMILARITY' | translate">
-                  <mat-icon fontIcon="auto_awesome"></mat-icon>
-                  {{ similarityPercent(item.similarityScore) }}%
-                </span>
-              </div>
-              <div class="semantic-card__body">
-                <h3 class="semantic-card__title">{{ item.title }}</h3>
-                <p class="semantic-card__meta">
-                  <span *ngIf="item.releaseYear">{{ item.releaseYear }}</span>
-                  <span *ngIf="item.voteAverage > 0">
-                    <mat-icon fontIcon="star"></mat-icon>
-                    {{ item.voteAverage | number:'1.1-1' }}
-                  </span>
-                </p>
-                <p *ngIf="item.overview" class="semantic-card__overview">{{ item.overview }}</p>
-              </div>
-            </a>
+          <div class="search-page__grid">
+            <app-movie-card *ngFor="let m of s.semantic.items" [movie]="$any(m)"></app-movie-card>
           </div>
         </ng-container>
         <ng-template #semanticEmpty>

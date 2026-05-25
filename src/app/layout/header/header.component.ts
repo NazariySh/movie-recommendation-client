@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { AppRoutes } from '../../core/constants/app-routes';
 import { FilterService } from '../../core/services/filter.service';
 import { AuthService } from '../../core/services/auth.service';
+import { SidebarStateService } from '../../core/services/sidebar-state.service';
 import { User } from '../../core/models/user.model';
 import { SearchBarComponent } from '../../features/search/components/search-bar/search-bar.component';
 import { LanguageSwitcherComponent } from '../../shared/components/language-switcher/language-switcher.component';
@@ -34,11 +35,12 @@ import { LanguageSwitcherComponent } from '../../shared/components/language-swit
 export class HeaderComponent {
   private readonly filterService = inject(FilterService);
   private readonly authService = inject(AuthService);
+  private readonly sidebarState = inject(SidebarStateService);
 
   public readonly AppRoutes = AppRoutes;
 
   public readonly navItems = [
-    { labelKey: 'NAV.ALL', route: '/' },
+    { labelKey: 'NAV.ALL', route: '/movies' },
     { labelKey: 'NAV.MOVIES', route: '/movies', queryParams: { type: 'movie' } },
     { labelKey: 'NAV.SERIES', route: '/movies', queryParams: { type: 'series' } },
     { labelKey: 'NAV.GENRES', route: '/movies/genres' },
@@ -49,6 +51,10 @@ export class HeaderComponent {
 
   public get hasActiveFilters(): boolean {
     return this.filterService.isActive();
+  }
+
+  public openDrawer(): void {
+    this.sidebarState.open();
   }
 
   public logout(): void {

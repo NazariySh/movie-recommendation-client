@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { MovieService } from '../../../movies/services/movie.service';
 import { Genre } from '../../../../core/models/genre';
-import { MovieDetail } from '../../../../core/models/movie-detail';
-import { AdminMovieFormDto } from '../../models/admin-models';
+import { AdminMovieDetail, AdminMovieFormDto } from '../../models/admin-models';
 import { AdminMoviesService } from '../../services/admin-movies.service';
-import { ToastService } from '../../../../core/services/toast.service';
 import { AdminPaths } from '../../../../core/constants/app-routes';
+import { FormComponent } from '../../../../shared/form/form-component';
 
 @Component({
   selector: 'app-admin-movie-form',
@@ -17,7 +17,7 @@ import { AdminPaths } from '../../../../core/constants/app-routes';
   styleUrl: './admin-movie-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminMovieFormComponent implements OnInit {
+export class AdminMovieFormComponent extends FormComponent implements OnInit {
   public form!: FormGroup;
   public genres: Genre[] = [];
   public loading = false;
@@ -33,10 +33,10 @@ export class AdminMovieFormComponent implements OnInit {
     private readonly router: Router,
     private readonly catalog: MovieService,
     private readonly api: AdminMoviesService,
-    private readonly toast: ToastService,
     private readonly destroyRef: DestroyRef,
-    private readonly cdr: ChangeDetectorRef,
-  ) {}
+  ) {
+    super();
+  }
 
   public get translations(): FormArray {
     return this.form.get('translations') as FormArray;
@@ -50,7 +50,7 @@ export class AdminMovieFormComponent implements OnInit {
     this.cdr.markForCheck();
     forkJoin({
       genres: this.catalog.getGenres(),
-      detail: this.movieId ? this.catalog.getMovieById(this.movieId) : of(null as MovieDetail | null),
+      detail: this.movieId ? this.api.getById(this.movieId) : of(null as AdminMovieDetail | null),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -102,11 +102,7 @@ export class AdminMovieFormComponent implements OnInit {
             this.toast.success('ADMIN.MOVIES.UPDATED');
             this.router.navigate([AdminPaths.MOVIES, id, 'edit']);
           },
-          error: () => {
-            this.saving = false;
-            this.cdr.markForCheck();
-            this.toast.error('ADMIN.MOVIES.SAVE_FAILED');
-          },
+          error: (err: HttpErrorResponse) => this.onSubmitError(err),
         });
     } else {
       this.api.create(dto)
@@ -118,13 +114,19 @@ export class AdminMovieFormComponent implements OnInit {
             this.toast.success('ADMIN.MOVIES.CREATED');
             this.router.navigate([AdminPaths.MOVIES, result.id, 'edit']);
           },
-          error: () => {
-            this.saving = false;
-            this.cdr.markForCheck();
-            this.toast.error('ADMIN.MOVIES.SAVE_FAILED');
-          },
+          error: (err: HttpErrorResponse) => this.onSubmitError(err),
         });
     }
+  }
+
+  private onSubmitError(err: HttpErrorResponse): void {
+    this.saving = false;
+    if (err.status === 400 || err.status === 422) {
+      this.handleValidationError(err);
+    } else {
+      this.toast.error('ADMIN.MOVIES.SAVE_FAILED');
+    }
+    this.cdr.markForCheck();
   }
 
   public cancel(): void {
@@ -143,8 +145,6 @@ export class AdminMovieFormComponent implements OnInit {
       trailerYoutubeId: [''],
       releaseDate: [null],
       runtime: [null],
-      budget: [null],
-      revenue: [null],
       imdbId: [''],
       tmdbId: [null],
       seasonsCount: [null],
@@ -155,27 +155,33 @@ export class AdminMovieFormComponent implements OnInit {
     });
   }
 
-  private populateFromDetail(detail: MovieDetail): void {
+  private populateFromDetail(detail: AdminMovieDetail): void {
     this.form.patchValue({
       key: detail.key,
-      type: detail.type === 'Series' ? 'Series' : 'Movie',
+      type: detail.type,
       status: detail.status,
       originalTitle: detail.originalTitle,
-      originalLang: 'en',
+      originalLang: detail.originalLang,
       posterUrl: detail.posterUrl,
       backdropUrl: detail.backdropUrl,
-      releaseDate: detail.releaseDate,
+      trailerYoutubeId: detail.trailerYoutubeId,
+      releaseDate: detail.releaseDate ? detail.releaseDate.substring(0, 10) : null,
       runtime: detail.runtime,
+      imdbId: detail.imdbId,
+      tmdbId: detail.tmdbId,
       seasonsCount: detail.seasonsCount,
-      episodesCount: detail.episodesCount,
       isOngoing: detail.isOngoing,
-      genreIds: [],
+      genreIds: detail.genreIds,
     });
-    this.translations.push(this.fb.group({
-      languageCode: ['uk', Validators.required],
-      title: [detail.title, Validators.required],
-      overview: [detail.overview ?? ''],
-      tagline: [''],
-    }));
+
+    this.translations.clear();
+    for (const t of detail.translations) {
+      this.translations.push(this.fb.group({
+        languageCode: [t.languageCode, Validators.required],
+        title: [t.title, Validators.required],
+        overview: [t.overview ?? ''],
+        tagline: [t.tagline ?? ''],
+      }));
+    }
   }
 }

@@ -17,7 +17,7 @@
       <div class="top-bar">
         <div class="rating-badge" [class.dimmed]="isHovered">
           <mat-icon class="star-icon" [fontIcon]="AppIcon.Star"></mat-icon>
-          <span class="rating-val">{{ movie.rating | number:'1.1-1' }}</span><span class="rating-max">/10</span>
+          <span class="rating-val">{{ ($any(movie).rating ?? $any(movie).averageRating ?? 0) | number:'1.1-1' }}</span><span class="rating-max">/10</span>
         </div>
 
         <button

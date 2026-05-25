@@ -49,7 +49,6 @@ export class SearchPageComponent implements OnInit {
   public readonly loading$ = new BehaviorSubject<boolean>(false);
   public readonly pageSize = PAGE_SIZE;
   public readonly artistsPath = AppPaths.ARTISTS;
-  public readonly moviesPath = AppPaths.MOVIES;
 
   public state$!: Observable<SearchPageState>;
 
@@ -107,10 +106,6 @@ export class SearchPageComponent implements OnInit {
 
   public showArtists(activeTab: SearchTab): boolean {
     return activeTab === 'all' || activeTab === 'artists';
-  }
-
-  public similarityPercent(score: number): number {
-    return Math.round(score * 100);
   }
 
   private initTableStream(): Observable<SearchPageState> {

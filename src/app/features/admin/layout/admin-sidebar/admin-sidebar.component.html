@@ -1,4 +1,11 @@
-<aside class="admin-sidebar" [class.admin-sidebar--collapsed]="collapsed">
+<button
+  type="button"
+  class="admin-sidebar-backdrop"
+  *ngIf="drawerOpen$ | async"
+  [attr.aria-label]="'COMMON.COLLAPSE' | translate"
+  (click)="closeDrawer()"></button>
+
+<aside class="admin-sidebar" [class.admin-sidebar--collapsed]="collapsed" [class.admin-sidebar--drawer-open]="drawerOpen$ | async">
   <div class="admin-sidebar__header">
     <a [routerLink]="dashboardLink" class="admin-sidebar__logo">
       <mat-icon class="admin-sidebar__logo-icon" fontIcon="admin_panel_settings"></mat-icon>

@@ -44,6 +44,7 @@
     "ARTISTS": "Artists",
     "PROFILE": "Profile",
     "ADMIN": "Admin",
+    "ONBOARDING": "Finish setup",
     "SETTINGS": "Settings",
     "HELP": "Help",
     "MENU": "Menu",
@@ -158,6 +159,8 @@
     "RELEASE_DATE": "Release Date",
     "RUNTIME": "Runtime",
     "MIN": "min",
+    "HOUR_UNIT": "h",
+    "MIN_UNIT": "m",
     "SEASONS": "seasons",
     "LANGUAGE": "Language",
     "STATUS_LABEL": "Status",
@@ -189,7 +192,14 @@
     "STATUS": {
       "RELEASED": "Released",
       "IN_PRODUCTION": "In Production",
-      "UPCOMING": "Upcoming"
+      "POST_PRODUCTION": "Post-production",
+      "PLANNED": "Planned",
+      "ANNOUNCED": "Announced",
+      "CANCELED": "Canceled",
+      "RETURNING": "Returning Series",
+      "ENDED": "Ended",
+      "UPCOMING": "Upcoming",
+      "UNKNOWN": "Unknown"
     },
     "TAB": {
       "INFORMATION": "Information",
@@ -374,10 +384,6 @@
     "RATE_LIMIT": "Too many requests. Please try again later.",
     "VALIDATION": "Validation error",
     "GO_HOME": "GO HOME"
-  },
-  "THEME": {
-    "LIGHT": "Light theme",
-    "DARK": "Dark theme"
   },
   "LANGUAGE": {
     "UK": "Ukrainian",
@@ -688,19 +694,18 @@
     "TITLE": "Terms of Use",
     "INTRO": "Rules for using the MovieMatch website",
     "ITEMS": {
-      "1": "Comments are allowed only in Ukrainian and/or any language other than the language of the aggressor.",
-      "2": "It is forbidden to incite religious disputes, interethnic enmity, or promote national and racial hatred, as well as to insult users for their attitude toward nationality or political views.",
-      "3": "Insulting other members of the site, including the administration, is not allowed. If you are insulted, use the «Report comment» button marked with «!» in the lower-right corner of the comment.",
-      "4": "Use of profanity in any form (including abbreviations or letter omissions) is not allowed.",
-      "5": "Propaganda of racism, nazism, ruscism, xenophobia, fascism, anti-Semitism, or any other form of hatred toward any group of people is forbidden.",
-      "6": "Provocation and discrimination based on gender, sexual orientation, age, level of education, nationality, religion, profession, or social class is forbidden.",
-      "7": "Setting offensive or degrading avatars, or using images with nazi symbolism, propaganda of interethnic or religious hatred, or sexual content, is not allowed.",
-      "8": "Disclosing important plot details (spoilers) is forbidden. Such text must be placed within a <spoiler> </spoiler> tag using the «SPOILER» button.",
-      "9": "Single-word phrases without meaning and comments containing only emojis are not allowed. Such comments will be removed.",
-      "10": "Flooding in any form and comments unrelated to the discussion of the content being watched are not allowed.",
-      "11": "Asking about release dates of new episodes or translations, or requesting to translate/replace translations in videos, is not allowed.",
-      "12": "Inserting any links to third-party resources is forbidden.",
-      "13": "Discussing personal issues related to playback or display of content is not allowed. For such questions, use the «Player not working?» button, contact technical support, or send a detailed report by email."
+      "1": "It is forbidden to incite religious disputes, interethnic enmity, or promote national and racial hatred, as well as to insult users for their attitude toward nationality or political views.",
+      "2": "Insulting other members of the site, including the administration, is not allowed. If you are insulted, use the «Report comment» button marked with «!» in the lower-right corner of the comment.",
+      "3": "Use of profanity in any form (including abbreviations or letter omissions) is not allowed.",
+      "4": "Propaganda of racism, nazism, ruscism, xenophobia, fascism, anti-Semitism, or any other form of hatred toward any group of people is forbidden.",
+      "5": "Provocation and discrimination based on gender, sexual orientation, age, level of education, nationality, religion, profession, or social class is forbidden.",
+      "6": "Setting offensive or degrading avatars, or using images with nazi symbolism, propaganda of interethnic or religious hatred, or sexual content, is not allowed.",
+      "7": "Disclosing important plot details (spoilers) is forbidden. Such text must be placed within a <spoiler> </spoiler> tag using the «SPOILER» button.",
+      "8": "Single-word phrases without meaning and comments containing only emojis are not allowed. Such comments will be removed.",
+      "9": "Flooding in any form and comments unrelated to the discussion of the content being watched are not allowed.",
+      "10": "Asking about release dates of new episodes or translations, or requesting to translate/replace translations in videos, is not allowed.",
+      "11": "Inserting any links to third-party resources is forbidden.",
+      "12": "Discussing personal issues related to playback or display of content is not allowed. For such questions, use the «Player not working?» button, contact technical support, or send a detailed report by email."
     }
   }
 }

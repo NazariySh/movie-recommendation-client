@@ -132,11 +132,6 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="'gallery'" class="placeholder-tab">
-        <mat-icon [fontIcon]="AppIcon.PhotoLibrary"></mat-icon>
-        <p>{{ 'ARTISTS.GALLERY_SOON' | translate }}</p>
-      </div>
-
       <div *ngSwitchCase="'works'">
         <ng-container *ngTemplateOutlet="filmographySection; context: { $implicit: s.roleGroups }"></ng-container>
       </div>

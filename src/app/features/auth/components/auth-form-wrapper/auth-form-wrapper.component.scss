@@ -1,4 +1,5 @@
 @use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
 :host {
   display: flex;
@@ -7,6 +8,11 @@
   min-height: 100vh;
   padding: 2rem 1rem;
   background-color: var(--bg-color);
+
+  @include respond-to('sm') {
+    padding: 1rem 0.75rem;
+    align-items: flex-start;
+  }
 }
 
 .auth-card {
@@ -18,9 +24,21 @@
   padding: 2.5rem 2rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 
+  @include respond-to('sm') {
+    padding: 1.5rem 1.25rem;
+    border-radius: 12px;
+    box-shadow: none;
+    border: none;
+    background-color: transparent;
+  }
+
   &__header {
     text-align: center;
     margin-bottom: 1.75rem;
+
+    @include respond-to('sm') {
+      margin-bottom: 1.25rem;
+    }
   }
 
   &__title {
@@ -28,6 +46,10 @@
     color: #fff;
     font-size: 1.875rem;
     font-weight: 700;
+
+    @include respond-to('sm') {
+      font-size: 1.5rem;
+    }
   }
 
   &__subtitle {

@@ -1,6 +1,11 @@
 :host {
   display: inline-block;
 
+  ::ng-deep .mat-mdc-button-base:not(.mat-mdc-icon-button) .mat-icon {
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
   &[data-size='full'] {
     width: 100%;
     display: block;

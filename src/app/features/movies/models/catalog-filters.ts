@@ -37,10 +37,10 @@ export const DEFAULT_FILTERS: CatalogFilters = {
   sort: 'popularity',
   order: 'desc',
   page: 1,
-  pageSize: 20,
+  pageSize: 21,
 };
 
-export const PAGE_SIZE_OPTIONS = [20, 40, 60] as const;
+export const PAGE_SIZE_OPTIONS = [21, 42, 63] as const;
 
 export const SORT_OPTIONS: { value: CatalogSort; labelKey: string }[] = [
   { value: 'popularity', labelKey: 'CATALOG.SORT.POPULARITY' },

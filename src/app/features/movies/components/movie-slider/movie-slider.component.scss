@@ -1,8 +1,13 @@
-﻿@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
 :host {
   display: block;
   margin-bottom: 2rem;
+
+  @include respond-to('sm') {
+    margin-bottom: 1.25rem;
+  }
 }
 
 .slider-container {
@@ -13,13 +18,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1.25rem;
+
+  @include respond-to('sm') {
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+  }
 
   .slider-title {
     font-size: 1.4rem;
     font-weight: 700;
     color: #fff;
     margin: 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include respond-to('md') {
+      font-size: 1.15rem;
+    }
+
+    @include respond-to('sm') {
+      font-size: 1rem;
+      white-space: nowrap;
+    }
   }
 
   .view-all-link {
@@ -29,7 +52,20 @@
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
+    flex-shrink: 0;
+    white-space: nowrap;
     transition: opacity 0.2s ease, color 0.2s ease;
+
+    @include respond-to('sm') {
+      font-size: 0.8125rem;
+
+      mat-icon {
+        font-size: 1rem !important;
+        width: 1rem !important;
+        height: 1rem !important;
+        margin-left: 0.25rem !important;
+      }
+    }
 
     mat-icon {
       font-size: 1.25rem;
@@ -55,34 +91,49 @@
   display: flex;
   gap: 1.5rem;
   overflow-x: auto;
-  padding-bottom: 1rem; 
-  
-  
+  padding-bottom: 1rem;
+
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 
   &::-webkit-scrollbar {
     height: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
   }
 
-  
+  @include respond-to('md') {
+    gap: 1rem;
+  }
+
+  @include respond-to('sm') {
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
   .slider-item {
-    flex: 0 0 auto;         
-    width: 230px;           
-    max-width: 80vw;        
+    flex: 0 0 auto;
+    width: 230px;
+    max-width: 80vw;
+
+    @include respond-to('md') {
+      width: 180px;
+    }
+
+    @include respond-to('sm') {
+      width: 140px;
+    }
   }
 }
 
@@ -133,63 +184,13 @@
     &:active {
       transform: translateY(-50%) scale(0.95);
     }
-  }
 
-  &:hover .nav-btn {
-    opacity: 1; 
-  }
-}
-
-.slider-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  .nav-btn {
-    position: absolute;
-    z-index: 10;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(23, 24, 26, 0.8);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    transition: background 0.2s, transform 0.2s, opacity 0.2s;
-    opacity: 0;
-
-    &.prev-btn {
-      left: -24px;
-    }
-
-    &.next-btn {
-      right: -24px;
-    }
-
-    mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
-    }
-
-    &:hover {
-      background: rgba(23, 24, 26, 1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    &:active {
-      transform: translateY(-50%) scale(0.95);
+    @include respond-to('md') {
+      display: none;
     }
   }
 
   &:hover .nav-btn {
-    opacity: 1; 
+    opacity: 1;
   }
 }

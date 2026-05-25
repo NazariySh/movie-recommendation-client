@@ -8,13 +8,11 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { catchError, distinctUntilChanged, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { MovieDetail } from '../../../../core/models/movie-detail';
 import { MovieListItem } from '../../../../core/models/movie-list-item';
-import { Movie } from '../../../../core/models/movie';
 import { MovieCast } from '../../../../core/models/movie-cast';
 import { Season } from '../../../../core/models/season';
 import { AppIcon } from '../../../../core/constants/app-icons';
 import { AppRoutes, AuthPaths } from '../../../../core/constants/app-routes';
 import { MovieService } from '../../services/movie.service';
-import { DiscoverApiService } from '../../../discover/services/discover-api.service';
 import { TrailerDialogComponent } from '../../components/trailer-dialog/trailer-dialog.component';
 import { RatingService } from '../../../../core/services/rating.service';
 import { WatchlistService } from '../../../../core/services/watchlist.service';
@@ -64,7 +62,6 @@ export class MovieDetailComponent implements OnInit {
   public movie$!: Observable<MovieDetail | null>;
   public notFound = false;
   public similar: MovieListItem[] = [];
-  public becauseYouLiked: Movie[] = [];
 
   public isAuthenticated = false;
   public myRating: number | null = null;
@@ -88,7 +85,6 @@ export class MovieDetailComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly languageService: LanguageService,
     private readonly toastService: ToastService,
-    private readonly discoverApi: DiscoverApiService,
     private readonly dialog: MatDialog,
     private readonly title: Title,
     private readonly meta: Meta,
@@ -187,6 +183,12 @@ export class MovieDetailComponent implements OnInit {
 
   public crew(movie: MovieDetail): MovieCast[] {
     return movie.casts.filter((c) => c.role.toLowerCase() !== 'acting');
+  }
+
+  public statusKey(status: string | null | undefined): string {
+    if (!status) return 'MOVIE.STATUS.UNKNOWN';
+    const snake = status.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toUpperCase();
+    return `MOVIE.STATUS.${snake}`;
   }
 
   public submitRating(value: number): void {
@@ -344,21 +346,6 @@ export class MovieDetailComponent implements OnInit {
       )
       .subscribe((items) => {
         this.similar = items;
-        this.cdr.markForCheck();
-      });
-
-    if (!this.isAuthenticated) {
-      this.becauseYouLiked = [];
-      return;
-    }
-    this.discoverApi
-      .getBecauseYouLiked(id, 12)
-      .pipe(
-        catchError(() => of<Movie[]>([])),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((items) => {
-        this.becauseYouLiked = items;
         this.cdr.markForCheck();
       });
   }

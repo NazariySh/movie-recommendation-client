@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-image-with-fallback',
-  template: `
-    <img [src]="currentSrc" [alt]="alt" (error)="onError($event)" [class]="imgClass" />
-  `,
+  templateUrl: './image-with-fallback.component.html',
+  styleUrl: './image-with-fallback.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule],

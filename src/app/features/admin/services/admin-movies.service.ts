@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { AdminMovieFormDto } from '../models/admin-models';
+import { AdminMovieDetail, AdminMovieFormDto } from '../models/admin-models';
 
 interface CreateResponse {
   id: string;
@@ -12,7 +12,11 @@ interface CreateResponse {
 export class AdminMoviesService {
   private readonly apiUrl = `${environment.apiUrl}/admin/movies`;
 
-  constructor(private readonly http: HttpClient) {}
+  public constructor(private readonly http: HttpClient) {}
+
+  public getById(id: string): Observable<AdminMovieDetail> {
+    return this.http.get<AdminMovieDetail>(`${this.apiUrl}/${id}`);
+  }
 
   public create(dto: AdminMovieFormDto): Observable<CreateResponse> {
     return this.http.post<CreateResponse>(this.apiUrl, dto);

@@ -64,8 +64,11 @@ export class FiltersStateService {
 
   private parse(params: Params): CatalogFilters {
     const search = (params['search'] as string | undefined) ?? '';
-    const typeRaw = (params['type'] as string | undefined) ?? 'all';
-    const type = typeRaw === 'Movie' || typeRaw === 'Series' ? typeRaw : 'all';
+    const typeRaw = ((params['type'] as string | undefined) ?? 'all').toLowerCase();
+    const type =
+      typeRaw === 'movie' ? 'Movie'
+      : typeRaw === 'series' ? 'Series'
+      : 'all';
 
     const genres =
       typeof params['genres'] === 'string' && params['genres'].length
@@ -110,7 +113,7 @@ export class FiltersStateService {
   private serialize(filters: CatalogFilters): Params {
     return {
       search: filters.search || null,
-      type: filters.type === 'all' ? null : filters.type,
+      type: filters.type === 'all' ? null : filters.type.toLowerCase(),
       genres: filters.genres.length ? filters.genres.join(',') : null,
       years: filters.years.length ? filters.years.join(',') : null,
       yearFrom: filters.yearFrom,

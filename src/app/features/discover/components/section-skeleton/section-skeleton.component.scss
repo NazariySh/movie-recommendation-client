@@ -1,15 +1,28 @@
+@use '../../../../../styles/mixins' as *;
+
 .section-skeleton {
   margin-bottom: 2.5rem;
+
+  @include respond-to('sm') {
+    margin-bottom: 1.25rem;
+  }
 
   &__title {
     margin: 0 0 1rem;
     font-size: 1.4rem;
+
+    @include respond-to('md') { font-size: 1.15rem; }
+    @include respond-to('sm') { font-size: 1rem; margin-bottom: 0.75rem; }
   }
 
   &__row {
     display: flex;
     gap: 1rem;
     overflow: hidden;
+
+    @include respond-to('sm') {
+      gap: 0.75rem;
+    }
   }
 
   &__card {
@@ -17,5 +30,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    @include respond-to('md') { flex: 0 0 140px; }
+    @include respond-to('sm') { flex: 0 0 120px; }
   }
 }

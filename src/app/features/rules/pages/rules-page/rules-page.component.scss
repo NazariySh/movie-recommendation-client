@@ -1,4 +1,5 @@
 @use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
 .rules-page {
   max-width: 56rem;
@@ -41,11 +42,19 @@
     }
   }
 
-  @media (max-width: $breakpoint-md) {
+  @include respond-to('md') {
     padding: 1.5rem 1rem 3rem;
 
     &__title {
       font-size: 1.5rem;
     }
+  }
+
+  @include respond-to('sm') {
+    padding: 1rem 0.75rem 2rem;
+
+    &__title { font-size: 1.25rem; }
+    &__intro { font-size: 0.9rem; }
+    &__list { padding-left: 1.25rem; }
   }
 }

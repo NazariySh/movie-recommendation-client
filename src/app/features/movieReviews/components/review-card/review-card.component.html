@@ -9,8 +9,7 @@
         <mat-icon [fontIcon]="AppIcon.Warning" class="spoiler-icon"></mat-icon>
         <p class="spoiler-text">{{ 'REVIEWS.SPOILER_WARNING' | translate }}</p>
         <app-button
-          class="view-btn"
-          buttonType="basic"
+          buttonType="stroked"
           color="primary"
           size="sm"
           (clicked)="revealSpoiler()">
@@ -69,8 +68,7 @@
         </span>
         <app-button
           *ngIf="canReply"
-          class="reply-btn"
-          buttonType="basic"
+          buttonType="stroked"
           color=""
           size="sm"
           [attr.aria-label]="'REVIEWS.REPLY_ARIA' | translate"
@@ -91,7 +89,6 @@
         required
         [disabled]="replySubmitting()" />
       <app-button
-        class="reply-submit"
         type="submit"
         buttonType="flat"
         color="primary"
@@ -121,8 +118,7 @@
                 <mat-icon [fontIcon]="AppIcon.Warning" class="spoiler-icon"></mat-icon>
                 <p class="spoiler-text">{{ 'REVIEWS.SPOILER_WARNING' | translate }}</p>
                 <app-button
-                  class="view-btn"
-                  buttonType="basic"
+                  buttonType="stroked"
                   color="primary"
                   size="sm"
                   (clicked)="revealReplySpoiler(reply.id)">

@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, combineLatest, map } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AdminPaths } from '../../../../core/constants/app-routes';
+import { SidebarStateService } from '../../../../core/services/sidebar-state.service';
 
 interface AdminNavItem {
   labelKey: string;
@@ -36,16 +39,31 @@ export class AdminSidebarComponent {
 
   public readonly dashboardLink = AdminPaths.DASHBOARD;
   public readonly visibleNavItems$: Observable<AdminNavItem[]>;
+  public readonly drawerOpen$: Observable<boolean>;
 
-  public constructor(private readonly authService: AuthService) {
+  public constructor(
+    private readonly authService: AuthService,
+    private readonly sidebarState: SidebarStateService,
+    private readonly router: Router,
+    private readonly destroyRef: DestroyRef,
+  ) {
     this.visibleNavItems$ = combineLatest([
       this.authService.hasRole$('Admin'),
     ]).pipe(
       map(([isAdmin]) => ADMIN_NAV_ITEMS.filter((item) => !item.adminOnly || isAdmin)),
     );
+    this.drawerOpen$ = this.sidebarState.drawerOpen$;
+
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.sidebarState.close());
   }
 
   public toggle(): void {
     this.collapsed = !this.collapsed;
+  }
+
+  public closeDrawer(): void {
+    this.sidebarState.close();
   }
 }

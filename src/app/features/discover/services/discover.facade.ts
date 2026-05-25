@@ -1,6 +1,6 @@
 import { DestroyRef, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, Observable, catchError, distinctUntilChanged, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, distinctUntilChanged, map, of, switchMap, take } from 'rxjs';
 import { Movie } from '../../../core/models/movie';
 import { AuthService } from '../../../core/services/auth.service';
 import { DiscoverSection, emptySection } from '../models/discover-section.model';
@@ -21,14 +21,11 @@ export class DiscoverFacade {
   public readonly popular$ = this._popular$.asObservable();
   public readonly featured$ = this._featured$.asObservable();
 
-  private loaded = false;
-
   public constructor(
     private readonly api: DiscoverApiService,
     private readonly auth: AuthService,
     private readonly destroyRef: DestroyRef,
   ) {
-    // React to login/logout so the for-you section refreshes without a page reload.
     this.auth.user$
       .pipe(
         map((u) => u?.id ?? null),
@@ -40,11 +37,20 @@ export class DiscoverFacade {
   }
 
   public load(): void {
-    if (this.loaded) return;
-    this.loaded = true;
     this.loadTrendingMovies();
     this.loadTrendingSeries();
     this.loadPopular();
+    this.refreshForYou();
+  }
+
+  private refreshForYou(): void {
+    this.auth.user$
+      .pipe(
+        take(1),
+        switchMap((u) => this.loadForYouStream(u !== null)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((section) => this._forYou$.next(section));
   }
 
   private loadForYouStream(isAuthenticated: boolean): Observable<DiscoverSection> {

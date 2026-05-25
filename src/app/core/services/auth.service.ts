@@ -4,40 +4,14 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { User, LoginDto, RegisterDto } from '../models/user.model';
-
-interface AuthResponse {
-  accessToken: string;
-  user: User;
-}
-
-interface ForgotPasswordDto {
-  email: string;
-}
-
-interface ResetPasswordDto {
-  userId: string;
-  token: string;
-  newPassword: string;
-}
-
-interface VerifyEmailDto {
-  userId: string;
-  token: string;
-}
-
-interface ResendVerificationDto {
-  email: string;
-}
-
-interface ChangePasswordDto {
-  currentPassword: string;
-  newPassword: string;
-}
-
-interface GoogleAuthDto {
-  idToken: string;
-}
+import { User } from '../models/user.model';
+import { AuthResponse } from '../models/auth/auth-response.model';
+import { LoginDto, GoogleAuthDto } from '../models/auth/login.model';
+import { RegisterDto, ResendVerificationDto } from '../models/auth/register.model';
+import { ForgotPasswordDto } from '../models/auth/forgot-password.model';
+import { ResetPasswordDto } from '../models/auth/reset-password.model';
+import { VerifyEmailDto } from '../models/auth/verify-email.model';
+import { ChangePasswordDto } from '../models/auth/change-password.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

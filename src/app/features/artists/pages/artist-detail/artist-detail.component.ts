@@ -41,7 +41,6 @@ export class ArtistDetailComponent implements OnInit {
 
   public readonly detailTabs: DetailTabDef[] = [
     { id: 'information', labelKey: 'ARTISTS.TAB.INFORMATION' },
-    { id: 'gallery', labelKey: 'ARTISTS.TAB.GALLERY' },
     { id: 'works', labelKey: 'ARTISTS.TAB.WORKS' },
   ];
 

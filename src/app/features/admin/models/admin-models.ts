@@ -77,6 +77,13 @@ export interface MlModelStatus {
   isActive?: boolean | null;
 }
 
+export interface AdminMovieTranslationDto {
+  languageCode: string;
+  title: string;
+  overview?: string | null;
+  tagline?: string | null;
+}
+
 export interface AdminMovieFormDto {
   key?: string;
   type: 'Movie' | 'Series';
@@ -88,15 +95,33 @@ export interface AdminMovieFormDto {
   trailerYoutubeId?: string | null;
   releaseDate?: string | null;
   runtime?: number | null;
-  budget?: number | null;
-  revenue?: number | null;
   imdbId?: string | null;
   tmdbId?: number | null;
   seasonsCount?: number | null;
   episodesCount?: number | null;
   isOngoing?: boolean | null;
   genreIds: number[];
-  translations: { languageCode: string; title: string; overview?: string | null; tagline?: string | null }[];
+  translations: AdminMovieTranslationDto[];
+}
+
+export interface AdminMovieDetail {
+  id: string;
+  key: string;
+  type: 'Movie' | 'Series';
+  originalTitle: string;
+  originalLang: string;
+  imdbId: string | null;
+  tmdbId: number | null;
+  posterUrl: string | null;
+  backdropUrl: string | null;
+  trailerYoutubeId: string | null;
+  releaseDate: string | null;
+  status: string;
+  runtime: number | null;
+  seasonsCount: number | null;
+  isOngoing: boolean | null;
+  genreIds: number[];
+  translations: AdminMovieTranslationDto[];
 }
 
 export interface AdminArtistFormDto {

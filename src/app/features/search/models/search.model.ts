@@ -1,3 +1,4 @@
+import { MovieListItem } from '../../../core/models/movie-list-item';
 import { TitleType } from '../../../core/models/title-type';
 
 export interface MovieSuggestion {
@@ -33,18 +34,8 @@ export type SearchTab = 'all' | 'movies' | 'series' | 'artists';
 
 export type SearchMode = 'keyword' | 'semantic';
 
-export interface SemanticSearchMovieItem {
-  id: string;
-  title: string;
-  overview: string | null;
-  posterUrl: string | null;
-  releaseYear: number | null;
-  voteAverage: number;
-  similarityScore: number;
-}
-
 export interface SemanticSearchMoviesResult {
-  items: SemanticSearchMovieItem[];
+  items: MovieListItem[];
   query: string;
   total: number;
 }

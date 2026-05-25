@@ -1,9 +1,18 @@
 @use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .footer {
   background-color: var(--surface-color);
   border-top: 1px solid var(--border-color);
   padding: 1.5rem 2rem;
+
+  @include respond-to('md') {
+    padding: 1.25rem 1rem;
+  }
+
+  @include respond-to('sm') {
+    padding: 1rem 0.75rem;
+  }
 
   &__content {
     max-width: 1400px;
@@ -13,6 +22,12 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 1rem;
+
+    @include respond-to('sm') {
+      justify-content: center;
+      text-align: center;
+      gap: 0.625rem;
+    }
   }
 
   &__logo {

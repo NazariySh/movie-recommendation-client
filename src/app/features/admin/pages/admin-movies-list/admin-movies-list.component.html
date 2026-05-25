@@ -2,9 +2,9 @@
   <header class="admin-page__header">
     <h1>{{ 'ADMIN.MOVIES.TITLE' | translate }}</h1>
     <div class="admin-page__header-actions">
-      <button mat-flat-button color="primary" (click)="createNew()">
+      <app-button buttonType="flat" color="primary" (clicked)="createNew()">
         <mat-icon fontIcon="add"></mat-icon> {{ 'ADMIN.MOVIES.NEW' | translate }}
-      </button>
+      </app-button>
     </div>
   </header>
 

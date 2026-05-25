@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import {
@@ -72,16 +71,9 @@ export class ArtistListComponent implements OnInit {
 
   public artists$!: Observable<PagedList<Artist>>;
 
-  constructor(
-    private readonly artistService: ArtistService,
-    private readonly destroyRef: DestroyRef,
-  ) {}
+  constructor(private readonly artistService: ArtistService) {}
 
   public ngOnInit(): void {
-    this.searchControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.page$.next(1));
-
     this.artists$ = this.initTableStream();
   }
 
@@ -102,9 +94,10 @@ export class ArtistListComponent implements OnInit {
 
   private initTableStream(): Observable<PagedList<Artist>> {
     const search$ = this.searchControl.valueChanges.pipe(
-      startWith(this.searchControl.value),
-      debounceTime(250),
+      debounceTime(400),
       distinctUntilChanged(),
+      tap(() => this.page$.next(1)),
+      startWith(this.searchControl.value),
     );
 
     return combineLatest([search$, this.role$, this.sortBy$, this.page$]).pipe(

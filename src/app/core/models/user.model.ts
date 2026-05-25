@@ -9,24 +9,3 @@ export interface User {
   preferredLanguage: string;
   roles: string[];
 }
-
-export interface LoginDto {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
-
-export interface RegisterDto {
-  username: string;
-  email: string;
-  password: string;
-  preferredLanguage: string;
-}
-
-export interface PagedResult<T> {
-  items: T[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}

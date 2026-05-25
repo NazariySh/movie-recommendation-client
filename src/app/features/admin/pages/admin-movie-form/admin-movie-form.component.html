@@ -10,23 +10,23 @@
     <fieldset class="form__group">
       <legend>{{ 'ADMIN.MOVIES.SECTION_BASIC' | translate }}</legend>
       <div class="form__row">
-        <app-input-text [control]="form.get('originalTitle')" [label]="('ADMIN.MOVIES.ORIGINAL_TITLE' | translate) + ' *'"></app-input-text>
+        <app-input-text [control]="form.get('originalTitle')" [label]="'ADMIN.MOVIES.ORIGINAL_TITLE' | translate"></app-input-text>
         <app-input-text [control]="form.get('key')" [label]="'ADMIN.MOVIES.KEY' | translate"></app-input-text>
       </div>
       <div class="form__row">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'ADMIN.MOVIES.TYPE' | translate }} *</mat-label>
+          <mat-label>{{ 'ADMIN.MOVIES.TYPE' | translate }}</mat-label>
           <mat-select formControlName="type">
             <mat-option *ngFor="let t of types" [value]="t">{{ t }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'ADMIN.MOVIES.STATUS' | translate }} *</mat-label>
+          <mat-label>{{ 'ADMIN.MOVIES.STATUS' | translate }}</mat-label>
           <mat-select formControlName="status">
             <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <app-input-text [control]="form.get('originalLang')" [label]="('ADMIN.MOVIES.ORIGINAL_LANG' | translate) + ' *'"></app-input-text>
+        <app-input-text [control]="form.get('originalLang')" [label]="'ADMIN.MOVIES.ORIGINAL_LANG' | translate"></app-input-text>
       </div>
       <div class="form__row">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -67,10 +67,10 @@
       <legend>{{ 'ADMIN.MOVIES.SECTION_TRANSLATIONS' | translate }}</legend>
       <div formArrayName="translations" class="translations">
         <div *ngFor="let group of translations.controls; let i = index" [formGroupName]="i" class="translation">
-          <div class="form__row">
-            <app-input-text class="lang" [control]="group.get('languageCode')" [label]="('ADMIN.MOVIES.LANG' | translate) + ' *'"></app-input-text>
-            <app-input-text class="grow" [control]="group.get('title')" [label]="('ADMIN.MOVIES.TITLE_LOCAL' | translate) + ' *'"></app-input-text>
-            <button type="button" mat-icon-button color="warn" (click)="removeTranslation(i)">
+          <div class="translation__header">
+            <app-input-text class="lang" [control]="group.get('languageCode')" [label]="'ADMIN.MOVIES.LANG' | translate"></app-input-text>
+            <app-input-text class="grow" [control]="group.get('title')" [label]="'ADMIN.MOVIES.TITLE_LOCAL' | translate"></app-input-text>
+            <button type="button" mat-icon-button color="warn" class="translation__delete" (click)="removeTranslation(i)">
               <mat-icon fontIcon="delete"></mat-icon>
             </button>
           </div>

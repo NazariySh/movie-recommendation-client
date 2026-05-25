@@ -1,4 +1,5 @@
 @use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
 :host {
   display: block;
@@ -8,6 +9,14 @@
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+
+  @include respond-to('md') {
+    gap: 1.25rem;
+  }
+
+  @include respond-to('sm') {
+    gap: 1rem;
+  }
 }
 
 .page-title {
@@ -16,6 +25,10 @@
   color: var(--text-primary);
   margin: 0;
   text-align: center;
+
+  @include respond-to('sm') {
+    font-size: 1.375rem;
+  }
 }
 
 .search-field {
@@ -35,10 +48,14 @@
 
 .role-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 
   .tab-btn {
+    white-space: nowrap;
     background: none;
     border: none;
     border-bottom: 3px solid transparent;
@@ -67,6 +84,16 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.25rem;
+
+  @include respond-to('md') {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.875rem;
+  }
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+  }
 }
 
 .empty-state {

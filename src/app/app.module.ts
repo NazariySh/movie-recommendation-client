@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { UrlSerializer } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +23,7 @@ import { retryInterceptor } from './core/interceptors/retry.interceptor';
 
 import { LanguageService } from './core/services/language.service';
 import { AuthService } from './core/services/auth.service';
+import { LocaleUrlSerializer } from './core/locale/locale-url-serializer';
 
 function initApp(languageService: LanguageService, authService: AuthService): () => Promise<void> {
   return async (): Promise<void> => {
@@ -48,6 +50,7 @@ function initApp(languageService: LanguageService, authService: AuthService): ()
       withInterceptors([errorInterceptor, languageInterceptor, authInterceptor, retryInterceptor])
     ),
     ...provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+    { provide: UrlSerializer, useClass: LocaleUrlSerializer },
     {
       provide: APP_INITIALIZER,
       useFactory: initApp,

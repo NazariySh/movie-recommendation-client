@@ -1,7 +1,13 @@
 @use '../../styles/admin-page' as *;
 
+.admin-page__table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .admin-table {
   width: 100%;
+  min-width: 720px;
   background: var(--surface-color);
   color: var(--text-primary);
 

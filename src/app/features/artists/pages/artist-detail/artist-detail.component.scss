@@ -1,4 +1,5 @@
 @use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
 .detail-page-state {
   display: flex;
@@ -26,6 +27,16 @@
   flex-direction: column;
   gap: 2rem;
   padding-bottom: 3rem;
+
+  @include respond-to('md') {
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  @include respond-to('sm') {
+    gap: 1.25rem;
+    padding-bottom: 1.5rem;
+  }
 }
 
 .back-btn {
@@ -41,6 +52,17 @@
   align-items: flex-start;
   gap: 2rem;
   position: relative;
+
+  @include respond-to('md') {
+    gap: 1.25rem;
+  }
+
+  @include respond-to('sm') {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
 }
 
 .artist-photo {
@@ -50,6 +72,14 @@
   aspect-ratio: 2/3;
   border-radius: $border-radius-2;
   overflow: hidden;
+
+  @include respond-to('md') {
+    width: 130px;
+  }
+
+  @include respond-to('sm') {
+    width: 150px;
+  }
 
   ::ng-deep .artist-photo__img {
     width: 100%;
@@ -74,6 +104,14 @@
   color: $color-primary;
   margin: 0;
   line-height: 1.2;
+
+  @include respond-to('md') {
+    font-size: 1.6rem;
+  }
+
+  @include respond-to('sm') {
+    font-size: 1.35rem;
+  }
 }
 
 .artist-roles {
@@ -104,13 +142,26 @@
   height: 5rem;
   color: var(--border-color);
   user-select: none;
+
+  @include respond-to('md') {
+    font-size: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  @include respond-to('sm') {
+    display: none;
+  }
 }
 
 .detail-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.25rem;
   border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 
   .tab-btn {
     background: none;
@@ -124,6 +175,7 @@
     cursor: pointer;
     margin-bottom: -1px;
     transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
 
     &:hover { color: var(--text-secondary); }
 
@@ -131,6 +183,11 @@
       color: $color-primary;
       font-weight: 700;
       border-bottom-color: $color-primary;
+    }
+
+    @include respond-to('sm') {
+      padding: 0.4rem 0.75rem 0.6rem;
+      font-size: 0.875rem;
     }
   }
 }
@@ -172,7 +229,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
 
-  @media (max-width: $breakpoint-md) {
+  @include respond-to('md') {
     grid-template-columns: 1fr;
   }
 }
@@ -185,6 +242,17 @@
   border-bottom: 1px solid var(--border-color);
 
   &:nth-child(odd) { padding-right: 2rem; }
+
+  @include respond-to('md') {
+    gap: 1rem;
+    &:nth-child(odd) { padding-right: 0.5rem; }
+  }
+
+  @include respond-to('sm') {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0.25rem;
+  }
 }
 
 .info-label {
@@ -195,6 +263,15 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   white-space: nowrap;
+
+  @include respond-to('md') {
+    min-width: 130px;
+  }
+
+  @include respond-to('sm') {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
 
   mat-icon {
     font-size: 18px;
@@ -220,16 +297,30 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 1rem;
+
+  @include respond-to('md') {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+  }
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+  }
 }
 
 .works-section .role-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.25rem;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 
   .tab-btn {
+    white-space: nowrap;
     background: none;
     border: none;
     border-bottom: 3px solid transparent;

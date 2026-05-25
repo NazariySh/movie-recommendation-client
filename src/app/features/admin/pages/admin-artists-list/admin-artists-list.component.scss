@@ -2,8 +2,14 @@
 
 .admin-table {
   width: 100%;
+  min-width: 600px;
   background: var(--surface-color);
   color: var(--text-primary);
+}
+
+.admin-page__table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .avatar,

@@ -1,25 +1,26 @@
 <header class="admin-topbar">
+  <button
+    type="button"
+    class="admin-topbar__hamburger"
+    [attr.aria-label]="'NAV.EXPAND_SIDEBAR' | translate"
+    (click)="openDrawer()">
+    <mat-icon fontIcon="menu"></mat-icon>
+  </button>
+
   <a [routerLink]="homeLink" class="admin-topbar__exit" [matTooltip]="'ADMIN.BACK_TO_SITE' | translate">
     <mat-icon fontIcon="arrow_back"></mat-icon>
     <span class="admin-topbar__exit-text">{{ 'ADMIN.BACK_TO_SITE' | translate }}</span>
   </a>
 
   <div class="admin-topbar__actions">
-    <button class="admin-topbar__lang" [mat-menu-trigger-for]="langMenu" [matTooltip]="'LANGUAGE.' + currentLang.toUpperCase() | translate">
-      <span>{{ currentLang.toUpperCase() }}</span>
-    </button>
-    <mat-menu #langMenu="matMenu">
-      <button mat-menu-item *ngFor="let lang of languages" (click)="setLanguage(lang.code)" [class.active]="currentLang === lang.code">
-        {{ lang.labelKey | translate }}
-      </button>
-    </mat-menu>
+    <app-language-switcher></app-language-switcher>
 
     <button class="admin-topbar__user" [mat-menu-trigger-for]="userMenu" *ngIf="user$ | async as user">
       <app-avatar [src]="user.avatarUrl" [name]="user.username" size="sm"></app-avatar>
       <span class="admin-topbar__user-name">{{ user.username }}</span>
       <mat-icon fontIcon="arrow_drop_down"></mat-icon>
     </button>
-    <mat-menu #userMenu="matMenu">
+    <mat-menu #userMenu="matMenu" class="app-menu">
       <button mat-menu-item [routerLink]="profileLink">
         <mat-icon fontIcon="person"></mat-icon> {{ 'NAV.PROFILE' | translate }}
       </button>
