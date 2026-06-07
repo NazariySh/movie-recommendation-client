@@ -1,0 +1,38 @@
+<div class="image-upload" [ngClass]="'image-upload--' + aspect">
+  <span class="image-upload__label" *ngIf="label">{{ label }}</span>
+
+  <div class="image-upload__body">
+    <div class="image-upload__preview" [class.image-upload__preview--empty]="!hasImage">
+      <app-image-with-fallback
+        *ngIf="hasImage; else emptyTpl"
+        [src]="displaySrc"
+        [alt]="label">
+      </app-image-with-fallback>
+      <ng-template #emptyTpl>
+        <mat-icon class="image-upload__placeholder" fontIcon="image"></mat-icon>
+      </ng-template>
+    </div>
+
+    <div class="image-upload__actions">
+      <input
+        #fileInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="image-upload__input"
+        (change)="onSelect($event)" />
+
+      <app-button buttonType="stroked" size="sm" (clicked)="fileInput.click()">
+        <mat-icon fontIcon="upload"></mat-icon>
+        {{ (hasImage ? 'ADMIN.UPLOAD.REPLACE' : 'ADMIN.UPLOAD.SELECT') | translate }}
+      </app-button>
+
+      <app-button *ngIf="hasImage" buttonType="basic" color="warn" size="sm" (clicked)="remove()">
+        <mat-icon fontIcon="delete"></mat-icon>
+        {{ 'ADMIN.UPLOAD.REMOVE' | translate }}
+      </app-button>
+
+      <p class="image-upload__filename" *ngIf="fileName">{{ fileName }}</p>
+      <p class="image-upload__hint" *ngIf="hint">{{ hint }}</p>
+    </div>
+  </div>
+</div>

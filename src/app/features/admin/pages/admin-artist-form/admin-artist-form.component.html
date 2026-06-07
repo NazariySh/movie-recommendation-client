@@ -37,7 +37,13 @@
 
     <fieldset class="form__group">
       <legend>{{ 'ADMIN.ARTISTS.SECTION_MEDIA' | translate }}</legend>
-      <app-input-text [control]="form.get('photoUrl')" [label]="'ADMIN.ARTISTS.PHOTO_URL' | translate"></app-input-text>
+      <app-image-upload
+        [control]="form.get('photoUrl')"
+        aspect="poster"
+        [label]="'ADMIN.ARTISTS.PHOTO' | translate"
+        [hint]="'ADMIN.UPLOAD.HINT' | translate"
+        (fileChange)="photoFile = $event">
+      </app-image-upload>
     </fieldset>
 
     <fieldset class="form__group">

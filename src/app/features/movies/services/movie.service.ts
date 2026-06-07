@@ -55,7 +55,9 @@ export class MovieService {
 
     if (filters.search) params = params.set('search', filters.search);
     if (filters.type !== 'all') params = params.set('type', filters.type);
-    if (filters.genres.length) params = params.set('genreSlugs', filters.genres.join(','));
+    for (const slug of filters.genres) {
+      params = params.append('genreSlugs', slug);
+    }
 
     const yearFrom = filters.years.length ? Math.min(...filters.years) : filters.yearFrom;
     const yearTo = filters.years.length ? Math.max(...filters.years) : filters.yearTo;

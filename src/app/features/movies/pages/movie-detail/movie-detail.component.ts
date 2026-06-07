@@ -319,20 +319,25 @@ export class MovieDetailComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((rating) => {
+        if (this.currentMovieId !== movieId) {
+          return;
+        }
         this.myRating = rating?.score ?? null;
         this.draftRating = Math.round(rating?.score ?? 7);
         this.cdr.markForCheck();
       });
 
     this.watchlistService
-      .getMyWatchlist(undefined, 1, 100)
+      .getStatus(movieId)
       .pipe(
-        catchError(() => of(null)),
+        catchError(() => of<WatchlistStatus | null>(null)),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((page) => {
-        const item = page?.items.find((w) => w.movieId === movieId);
-        this.watchlistStatus = item?.status ?? null;
+      .subscribe((status) => {
+        if (this.currentMovieId !== movieId) {
+          return;
+        }
+        this.watchlistStatus = status;
         this.cdr.markForCheck();
       });
   }

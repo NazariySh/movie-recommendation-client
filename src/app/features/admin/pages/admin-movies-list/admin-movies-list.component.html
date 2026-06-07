@@ -62,7 +62,7 @@
           <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon fontIcon="more_vert"></mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #menu="matMenu" class="app-menu">
             <button mat-menu-item (click)="edit(m)">
               <mat-icon fontIcon="edit"></mat-icon> {{ 'COMMON.EDIT' | translate }}
             </button>

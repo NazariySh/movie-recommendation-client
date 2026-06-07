@@ -21,6 +21,7 @@ export class AdminArtistFormComponent extends FormComponent implements OnInit {
   public artistId: string | null = null;
   public loading = false;
   public saving = false;
+  public photoFile: File | null = null;
 
   public readonly AppPaths = AppPaths;
   public readonly AdminRoutes = AdminRoutes;
@@ -99,7 +100,7 @@ export class AdminArtistFormComponent extends FormComponent implements OnInit {
 
     if (this.artistId) {
       const id = this.artistId;
-      this.api.update(id, dto)
+      this.api.update(id, dto, this.photoFile)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
@@ -111,7 +112,7 @@ export class AdminArtistFormComponent extends FormComponent implements OnInit {
           error: (err: HttpErrorResponse) => this.onSubmitError(err),
         });
     } else {
-      this.api.create(dto)
+      this.api.create(dto, this.photoFile)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (result) => {

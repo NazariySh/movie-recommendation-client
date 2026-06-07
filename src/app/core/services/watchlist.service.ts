@@ -30,6 +30,10 @@ export class WatchlistService {
     return this.http.get<PagedList<WatchlistItem>>(this.apiUrl, { params });
   }
 
+  public getStatus(movieId: string): Observable<WatchlistStatus | null> {
+    return this.http.get<WatchlistStatus | null>(`${this.apiUrl}/${movieId}`);
+  }
+
   public upsert(request: UpsertWatchlistRequest): Observable<void> {
     return this.http.post<void>(this.apiUrl, request);
   }

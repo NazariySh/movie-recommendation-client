@@ -564,8 +564,8 @@
       "ORIGINAL_LANG": "Original language",
       "RELEASE_DATE": "Release date",
       "RUNTIME": "Runtime (minutes)",
-      "POSTER_URL": "Poster URL",
-      "BACKDROP_URL": "Backdrop URL",
+      "POSTER": "Poster",
+      "BACKDROP": "Backdrop",
       "TRAILER_YT": "Trailer YouTube ID",
       "SEASONS": "Seasons",
       "EPISODES": "Episodes",
@@ -587,7 +587,7 @@
       "BIRTHDAY": "Birthday",
       "DEATH": "Date of death",
       "PLACE_OF_BIRTH": "Place of birth",
-      "PHOTO_URL": "Photo URL",
+      "PHOTO": "Photo",
       "BIOGRAPHY": "Biography",
       "NEW": "Add manually",
       "EDIT": "Edit artist",
@@ -614,6 +614,14 @@
       "RETRAIN_STARTED": "Training job queued",
       "RETRAIN_FAILED": "Could not start training. Please try again.",
       "LOAD_FAILED": "Could not load model status."
+    },
+    "UPLOAD": {
+      "SELECT": "Upload image",
+      "REPLACE": "Replace",
+      "REMOVE": "Remove",
+      "HINT": "JPG, PNG or WebP, up to 5 MB.",
+      "INVALID_TYPE": "Unsupported image type. Use JPG, PNG or WebP.",
+      "TOO_LARGE": "Image is too large. Maximum size is 5 MB."
     }
   },
   "ARTISTS": {

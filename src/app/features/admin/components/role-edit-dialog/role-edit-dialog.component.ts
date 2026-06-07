@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormFieldsModule } from '../../../../shared/components/form-fields/form-fields.module';
 
 export interface RoleEditDialogData {
   username: string;
@@ -19,34 +19,29 @@ export interface RoleEditDialogData {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
-    MatCheckboxModule,
+    FormFieldsModule,
     TranslateModule,
   ],
 })
 export class RoleEditDialogComponent {
-  public selected = new Set<string>();
+  public readonly controls: { role: string; control: FormControl<boolean> }[];
 
   public constructor(
     @Inject(MAT_DIALOG_DATA) public readonly data: RoleEditDialogData,
     private readonly ref: MatDialogRef<RoleEditDialogComponent, string[]>,
   ) {
-    this.selected = new Set(data.roles);
-  }
-
-  public toggle(role: string, checked: boolean): void {
-    if (checked) this.selected.add(role);
-    else this.selected.delete(role);
-  }
-
-  public isChecked(role: string): boolean {
-    return this.selected.has(role);
+    this.controls = data.available.map((role) => ({
+      role,
+      control: new FormControl<boolean>(data.roles.includes(role), { nonNullable: true }),
+    }));
   }
 
   public save(): void {
-    this.ref.close(Array.from(this.selected));
+    const selected = this.controls.filter((c) => c.control.value).map((c) => c.role);
+    this.ref.close(selected);
   }
 
   public cancel(): void {

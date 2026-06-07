@@ -40,8 +40,20 @@
     <fieldset class="form__group">
       <legend>{{ 'ADMIN.MOVIES.SECTION_MEDIA' | translate }}</legend>
       <div class="form__col">
-        <app-input-text [control]="form.get('posterUrl')" [label]="'ADMIN.MOVIES.POSTER_URL' | translate"></app-input-text>
-        <app-input-text [control]="form.get('backdropUrl')" [label]="'ADMIN.MOVIES.BACKDROP_URL' | translate"></app-input-text>
+        <app-image-upload
+          [control]="form.get('posterUrl')"
+          aspect="poster"
+          [label]="'ADMIN.MOVIES.POSTER' | translate"
+          [hint]="'ADMIN.UPLOAD.HINT' | translate"
+          (fileChange)="posterFile = $event">
+        </app-image-upload>
+        <app-image-upload
+          [control]="form.get('backdropUrl')"
+          aspect="backdrop"
+          [label]="'ADMIN.MOVIES.BACKDROP' | translate"
+          [hint]="'ADMIN.UPLOAD.HINT' | translate"
+          (fileChange)="backdropFile = $event">
+        </app-image-upload>
         <app-input-text [control]="form.get('trailerYoutubeId')" [label]="'ADMIN.MOVIES.TRAILER_YT' | translate"></app-input-text>
       </div>
     </fieldset>

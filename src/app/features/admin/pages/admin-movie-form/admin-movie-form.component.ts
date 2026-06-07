@@ -23,6 +23,8 @@ export class AdminMovieFormComponent extends FormComponent implements OnInit {
   public loading = false;
   public saving = false;
   public movieId: string | null = null;
+  public posterFile: File | null = null;
+  public backdropFile: File | null = null;
   public readonly types = ['Movie', 'Series'];
   public readonly statuses = ['Released', 'In Production', 'Upcoming'];
   public readonly moviesLink = AdminPaths.MOVIES;
@@ -93,7 +95,7 @@ export class AdminMovieFormComponent extends FormComponent implements OnInit {
 
     if (this.movieId) {
       const id = this.movieId;
-      this.api.update(id, dto)
+      this.api.update(id, dto, this.posterFile, this.backdropFile)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
@@ -105,7 +107,7 @@ export class AdminMovieFormComponent extends FormComponent implements OnInit {
           error: (err: HttpErrorResponse) => this.onSubmitError(err),
         });
     } else {
-      this.api.create(dto)
+      this.api.create(dto, this.posterFile, this.backdropFile)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: result => {

@@ -79,7 +79,7 @@
           <button mat-icon-button [mat-menu-trigger-for]="menu" [attr.aria-label]="'COMMON.ACTIONS' | translate">
             <mat-icon fontIcon="more_vert"></mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #menu="matMenu" class="app-menu">
             <button mat-menu-item (click)="openDetail(u)">
               <mat-icon fontIcon="visibility"></mat-icon> {{ 'COMMON.VIEW' | translate }}
             </button>

@@ -1,11 +1,9 @@
 <h2 mat-dialog-title>{{ 'ADMIN.USERS.EDIT_ROLES' | translate }} — {{ data.username }}</h2>
 <mat-dialog-content>
   <div class="role-list">
-    <mat-checkbox *ngFor="let r of data.available"
-                  [checked]="isChecked(r)"
-                  (change)="toggle(r, $event.checked)">
-      {{ r }}
-    </mat-checkbox>
+    <app-input-checkbox *ngFor="let item of controls" [control]="item.control">
+      {{ item.role }}
+    </app-input-checkbox>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

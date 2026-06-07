@@ -20,6 +20,7 @@ import { AdminMovieFormComponent } from './pages/admin-movie-form/admin-movie-fo
 import { AdminArtistsListComponent } from './pages/admin-artists-list/admin-artists-list.component';
 import { AdminArtistFormComponent } from './pages/admin-artist-form/admin-artist-form.component';
 import { AdminMlModelComponent } from './pages/admin-ml-model/admin-ml-model.component';
+import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AdminMlModelComponent } from './pages/admin-ml-model/admin-ml-model.com
     AdminArtistsListComponent,
     AdminArtistFormComponent,
     AdminMlModelComponent,
+    ImageUploadComponent,
   ],
   imports: [
     SharedModule,
