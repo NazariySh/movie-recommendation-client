@@ -1,0 +1,112 @@
+@use '../../../../../styles/mixins' as *;
+
+.stats {
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  @include respond-to('sm') {
+    padding: 1rem 0;
+    gap: 1.25rem;
+  }
+
+  &__loading,
+  &__error,
+  &__empty {
+    color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+    margin: 0;
+    padding: 1rem 0;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.625rem;
+    }
+  }
+
+  &__card {
+    background: var(--surface-color, #2a2b2c);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    @include respond-to('sm') {
+      padding: 0.875rem 0.75rem;
+      border-radius: 10px;
+    }
+  }
+
+  &__card-value {
+    font-size: 1.85rem;
+    font-weight: 700;
+
+    @include respond-to('sm') {
+      font-size: 1.35rem;
+    }
+  }
+
+  &__card-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+  }
+
+  &__section-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  &__chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+
+    
+    ::ng-deep {
+      .ngx-charts text {
+        fill: var(--text-secondary, rgba(255, 255, 255, 0.7));
+      }
+      .ngx-charts .gridline-path {
+        stroke: rgba(255, 255, 255, 0.06);
+      }
+      .ngx-charts .legend-labels {
+        background: transparent !important;
+      }
+      .ngx-charts .legend-label-text {
+        color: var(--text-secondary, rgba(255, 255, 255, 0.7)) !important;
+      }
+    }
+  }
+
+  &__summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  }
+
+  &__summary-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__summary-item--tier {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+
+    &[data-tier='bronze'] { background: rgba(205, 127, 50, 0.15); color: #cd7f32; }
+    &[data-tier='silver'] { background: rgba(192, 192, 192, 0.18); color: #c0c0c0; }
+    &[data-tier='gold']   { background: rgba(255, 215, 0, 0.18);   color: #ffd700; }
+  }
+}

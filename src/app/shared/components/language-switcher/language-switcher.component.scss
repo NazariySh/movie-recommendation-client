@@ -1,0 +1,52 @@
+:host {
+  display: inline-flex;
+}
+
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--surface-2-color);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  &__flag {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  &__code {
+    line-height: 1;
+  }
+
+  &__caret {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    color: var(--text-muted);
+  }
+
+  &--inline {
+    border-color: transparent;
+    padding: 0.25rem 0.5rem;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+  }
+}

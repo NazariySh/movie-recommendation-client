@@ -1,0 +1,110 @@
+@use '../../../../styles/mixins' as *;
+
+$admin-radius: 12px;
+$admin-border: 1px solid var(--border-color);
+$admin-card-bg: var(--surface-color);
+$admin-section-gap: 1.5rem;
+$admin-row-gap: 0.75rem;
+
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: $admin-section-gap;
+
+  @include respond-to('sm') {
+    gap: 1rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+
+      @include respond-to('sm') {
+        font-size: 1.15rem;
+      }
+    }
+  }
+
+  &__header-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    @include respond-to('sm') {
+      width: 100%;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    mat-form-field,
+    app-input-text,
+    app-input-number {
+      min-width: 180px;
+    }
+
+    @include respond-to('md') {
+      gap: 0.625rem;
+
+      mat-form-field,
+      app-input-text,
+      app-input-number {
+        min-width: 0;
+        flex: 1 1 calc(50% - 0.625rem);
+      }
+    }
+
+    @include respond-to('sm') {
+      mat-form-field,
+      app-input-text,
+      app-input-number {
+        flex: 1 1 100%;
+      }
+    }
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 240px;
+    display: block;
+
+    @include respond-to('md') {
+      min-width: 0;
+      flex: 1 1 100%;
+    }
+  }
+
+  &__table {
+    background: $admin-card-bg;
+    border: $admin-border;
+    border-radius: $admin-radius;
+    overflow: hidden;
+  }
+
+  &__table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__loading,
+  &__empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+
+    @include respond-to('sm') {
+      padding: 1.25rem 0.75rem;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<div class="profile-page">
+  <h1 class="profile-page__title">{{ 'PROFILE.EDIT' | translate }}</h1>
+
+  <p *ngIf="loading" class="profile-page__loading">{{ 'COMMON.LOADING' | translate }}</p>
+
+  <mat-tab-group *ngIf="!loading && profile" animationDuration="0ms">
+    <mat-tab [label]="'PROFILE.TAB_GENERAL' | translate">
+      <app-general-info-tab [profile]="profile" (profileUpdated)="onProfileUpdated($event)"></app-general-info-tab>
+    </mat-tab>
+
+    <mat-tab [label]="'PROFILE.TAB_PASSWORD' | translate">
+      <app-change-password-tab></app-change-password-tab>
+    </mat-tab>
+
+    <mat-tab [label]="'PROFILE.TAB_STATS' | translate">
+      <app-statistics-tab></app-statistics-tab>
+    </mat-tab>
+
+    <mat-tab [label]="'PROFILE.TAB_SURVEY' | translate">
+      <app-survey-tab></app-survey-tab>
+    </mat-tab>
+
+    <mat-tab [label]="'PROFILE.TAB_GENRE_PREFS' | translate">
+      <app-genre-preferences-tab></app-genre-preferences-tab>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,0 +1,57 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.subtitle {
+  color: $color-primary;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+.error-code-wrapper {
+  position: relative;
+  margin-bottom: 4rem;
+}
+
+.error-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 50vh;
+  object-fit: contain;
+  display: block;
+}
+
+.go-home-btn {
+  background: transparent;
+  color: $color-primary;
+  border: 1px solid $color-primary;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: $border-radius-1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+
+  &:hover {
+    background: rgba(255, 200, 0, 0.05);
+    border-color: $color-primary;
+    box-shadow: 0 0 15px rgba(255, 200, 0, 0.1);
+  }
+}

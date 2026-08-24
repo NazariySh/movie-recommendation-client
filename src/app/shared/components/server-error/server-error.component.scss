@@ -1,0 +1,58 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.subtitle {
+  color: $color-primary;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+  max-width: 480px;
+}
+
+.error-code-wrapper {
+  margin-bottom: 4rem;
+}
+
+.error-code {
+  font-size: 10rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  user-select: none;
+}
+
+.go-home-btn {
+  background: transparent;
+  color: $color-primary;
+  border: 1px solid $color-primary;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: $border-radius-1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+
+  &:hover {
+    background: rgba($color-primary, 0.08);
+    box-shadow: 0 0 20px rgba($color-primary, 0.2);
+  }
+}

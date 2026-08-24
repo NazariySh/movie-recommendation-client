@@ -1,0 +1,94 @@
+<section class="admin-page">
+  <header class="admin-page__header">
+    <h1>{{ 'ADMIN.MOVIES.TITLE' | translate }}</h1>
+    <div class="admin-page__header-actions">
+      <app-button buttonType="flat" color="primary" (clicked)="createNew()">
+        <mat-icon fontIcon="add"></mat-icon> {{ 'ADMIN.MOVIES.NEW' | translate }}
+      </app-button>
+    </div>
+  </header>
+
+  <div class="admin-page__filters">
+    <app-input-text
+      class="admin-page__search"
+      [control]="searchControl"
+      [label]="'COMMON.SEARCH' | translate">
+    </app-input-text>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>{{ 'ADMIN.MOVIES.TYPE' | translate }}</mat-label>
+      <mat-select [value]="state.type" (selectionChange)="onTypeChange($event.value)">
+        <mat-option value="all">{{ 'COMMON.ANY' | translate }}</mat-option>
+        <mat-option value="Movie">{{ 'NAV.MOVIES' | translate }}</mat-option>
+        <mat-option value="Series">{{ 'NAV.SERIES' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="admin-page__table">
+    <table mat-table [dataSource]="movies" class="admin-table">
+      <ng-container matColumnDef="poster">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let m">
+          <img *ngIf="m.posterUrl" [src]="m.posterUrl" [alt]="m.title" class="poster" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.MOVIES.TITLE_COL' | translate }}</th>
+        <td mat-cell *matCellDef="let m">
+          <button type="button" class="link" (click)="edit(m)">{{ m.title }}</button>
+          <div class="muted">{{ m.originalTitle }}</div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.MOVIES.TYPE' | translate }}</th>
+        <td mat-cell *matCellDef="let m">{{ m.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.MOVIES.YEAR' | translate }}</th>
+        <td mat-cell *matCellDef="let m">{{ m.releaseYear ?? '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef>{{ 'MOVIE.RATING' | translate }}</th>
+        <td mat-cell *matCellDef="let m">{{ m.averageRating | number: '1.1-1' }} ({{ m.ratingsCount }})</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let m">
+          <button mat-icon-button [mat-menu-trigger-for]="menu">
+            <mat-icon fontIcon="more_vert"></mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="app-menu">
+            <button mat-menu-item (click)="edit(m)">
+              <mat-icon fontIcon="edit"></mat-icon> {{ 'COMMON.EDIT' | translate }}
+            </button>
+            <button mat-menu-item (click)="regenerateEmbedding(m)">
+              <mat-icon fontIcon="auto_awesome"></mat-icon> {{ 'ADMIN.MOVIES.REGENERATE_EMBEDDING' | translate }}
+            </button>
+            <button mat-menu-item (click)="delete(m)" class="danger">
+              <mat-icon fontIcon="delete_forever"></mat-icon> {{ 'COMMON.DELETE' | translate }}
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <div *ngIf="loading" class="admin-page__loading">{{ 'COMMON.LOADING' | translate }}</div>
+    <div *ngIf="!loading && movies.length === 0" class="admin-page__empty">{{ 'COMMON.NO_RESULTS' | translate }}</div>
+
+    <mat-paginator
+      [length]="totalCount"
+      [pageSize]="state.pageSize"
+      [pageIndex]="state.pageNumber - 1"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPage($event)">
+    </mat-paginator>
+  </div>
+</section>

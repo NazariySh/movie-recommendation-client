@@ -1,0 +1,45 @@
+<section class="ml-page">
+  <header class="ml-page__header">
+    <h1>{{ 'ADMIN.ML.TITLE' | translate }}</h1>
+  </header>
+
+  <p *ngIf="loading">{{ 'COMMON.LOADING' | translate }}</p>
+
+  <div *ngIf="!loading && status as s" class="ml-page__panel">
+    <ng-container *ngIf="s.hasModel; else noModel">
+      <div class="ml-stat">
+        <span class="ml-stat__label">{{ 'ADMIN.ML.LAST_TRAINED' | translate }}</span>
+        <span class="ml-stat__value">{{ s.trainedAt | date: 'medium' }}</span>
+      </div>
+      <div class="ml-stat">
+        <span class="ml-stat__label">{{ 'ADMIN.ML.SAMPLES' | translate }}</span>
+        <span class="ml-stat__value">{{ s.sampleCount }}</span>
+      </div>
+      <div class="ml-stat">
+        <span class="ml-stat__label">RMSE</span>
+        <span class="ml-stat__value">{{ s.rmse !== null ? (s.rmse | number: '1.3-3') : '—' }}</span>
+      </div>
+      <div class="ml-stat" *ngIf="s.r2 !== null && s.r2 !== undefined">
+        <span class="ml-stat__label">R²</span>
+        <span class="ml-stat__value">{{ s.r2 | number: '1.3-3' }}</span>
+      </div>
+      <div class="ml-stat">
+        <span class="ml-stat__label">{{ 'ADMIN.ML.VERSION' | translate }}</span>
+        <span class="ml-stat__value">{{ s.version ?? '—' }}</span>
+      </div>
+    </ng-container>
+
+    <ng-template #noModel>
+      <p class="ml-page__empty">{{ 'ADMIN.ML.NO_MODEL' | translate }}</p>
+    </ng-template>
+
+    <div class="ml-page__actions">
+      <button mat-stroked-button (click)="refresh()">
+        <mat-icon fontIcon="refresh"></mat-icon> {{ 'COMMON.REFRESH' | translate }}
+      </button>
+      <button mat-flat-button color="primary" (click)="retrain()" [disabled]="retraining">
+        <mat-icon fontIcon="auto_awesome"></mat-icon> {{ 'ADMIN.ML.RETRAIN' | translate }}
+      </button>
+    </div>
+  </div>
+</section>

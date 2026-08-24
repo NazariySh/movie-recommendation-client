@@ -1,0 +1,84 @@
+<div class="watchlist-page">
+  <h1 class="watchlist-page__title">{{ 'NAV.WATCHLIST' | translate }}</h1>
+
+  <mat-tab-group
+    animationDuration="0ms"
+    [selectedIndex]="statuses.indexOf(activeStatus)"
+    (selectedIndexChange)="onTabChange($event)">
+    <mat-tab *ngFor="let status of statuses">
+      <ng-template mat-tab-label>
+        {{ labelKey(status) | translate }}
+        <span *ngIf="counts.get(status) !== undefined" class="watchlist-page__count">
+          {{ counts.get(status) }}
+        </span>
+      </ng-template>
+
+      <ng-container *ngIf="status === activeStatus">
+        <ng-container *ngTemplateOutlet="listTpl; context: { status: status }"></ng-container>
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #listTpl let-status="status">
+  <div class="watchlist-tab">
+    <p *ngIf="loading.get(status)" class="watchlist-tab__loading">{{ 'COMMON.LOADING' | translate }}</p>
+
+    <ng-container *ngIf="!loading.get(status) && pages.get(status) as page">
+      <p *ngIf="page.items.length === 0" class="watchlist-tab__empty">
+        {{ 'WATCHLIST.EMPTY' | translate }}
+      </p>
+
+      <div *ngIf="page.items.length > 0" class="watchlist-tab__grid">
+        <article *ngFor="let item of page.items" class="wl-item">
+          <a class="wl-item__poster" [routerLink]="movieLink(item.movieId)">
+            <app-image-with-fallback
+              [src]="item.posterUrl"
+              [alt]="item.movieTitle"
+              imgClass="wl-item__poster-img">
+            </app-image-with-fallback>
+          </a>
+
+          <div class="wl-item__body">
+            <a class="wl-item__title" [routerLink]="movieLink(item.movieId)">{{ item.movieTitle }}</a>
+            <p *ngIf="item.notes" class="wl-item__notes">{{ item.notes }}</p>
+            <p class="wl-item__updated">
+              {{ 'PROFILE.UPDATED_AT' | translate }}: {{ item.updatedAt | localizedDate: 'medium' }}
+            </p>
+          </div>
+
+          <div class="wl-item__actions">
+            <button mat-icon-button [matMenuTriggerFor]="moveMenu" [matTooltip]="'WATCHLIST.MOVE_TO' | translate">
+              <mat-icon fontIcon="swap_horiz"></mat-icon>
+            </button>
+            <mat-menu #moveMenu="matMenu" class="app-menu">
+              <button
+                *ngFor="let target of otherStatuses(item.status)"
+                mat-menu-item
+                (click)="moveTo(item, target)">
+                {{ labelKey(target) | translate }}
+              </button>
+            </mat-menu>
+
+            <app-button
+              buttonType="icon"
+              color="warn"
+              [matTooltip]="'WATCHLIST.REMOVE' | translate"
+              (clicked)="remove(item)">
+              <mat-icon fontIcon="delete"></mat-icon>
+            </app-button>
+          </div>
+        </article>
+      </div>
+
+      <div *ngIf="page.totalCount > pageSize" class="watchlist-tab__pagination">
+        <app-paginator
+          [length]="page.totalCount"
+          [pageSize]="pageSize"
+          [pageNumber]="activePage"
+          (pageChange)="onPageChange($event)">
+        </app-paginator>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

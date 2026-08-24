@@ -1,0 +1,28 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+
+  --mdc-checkbox-selected-icon-color: #{$color-primary};
+  --mdc-checkbox-selected-focus-icon-color: #{$color-primary};
+  --mdc-checkbox-selected-hover-icon-color: #{$color-primary};
+  --mdc-checkbox-selected-pressed-icon-color: #{$color-primary};
+  --mdc-checkbox-unselected-icon-color: rgba(255, 255, 255, 0.4);
+  --mdc-checkbox-unselected-hover-icon-color: rgba(255, 255, 255, 0.7);
+  --mdc-checkbox-unselected-focus-icon-color: rgba(255, 255, 255, 0.7);
+  --mdc-checkbox-state-layer-size: 36px;
+  --mat-checkbox-label-text-color: rgba(255, 255, 255, 0.85);
+}
+
+.app-checkbox {
+  &__label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  &__error {
+    margin: 0.25rem 0 0 2.25rem;
+    color: var(--error-color);
+    font-size: 0.75rem;
+  }
+}

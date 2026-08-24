@@ -1,0 +1,68 @@
+<section class="dashboard">
+  <header class="dashboard__header">
+    <h1>{{ 'ADMIN.DASHBOARD.TITLE' | translate }}</h1>
+    <button mat-stroked-button (click)="refresh()">
+      <mat-icon fontIcon="refresh"></mat-icon>
+      {{ 'COMMON.REFRESH' | translate }}
+    </button>
+  </header>
+
+  <ng-container *ngIf="!loading && summary as s">
+    <div class="dashboard__kpis">
+      <div class="kpi-card">
+        <span class="kpi-card__label">{{ 'ADMIN.DASHBOARD.TOTAL_USERS' | translate }}</span>
+        <span class="kpi-card__value">{{ s.totalUsers }}</span>
+        <span class="kpi-card__hint">{{ 'ADMIN.DASHBOARD.DAU' | translate }}: {{ s.dau }} · {{ 'ADMIN.DASHBOARD.MAU' | translate }}: {{ s.mau }}</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-card__label">{{ 'ADMIN.DASHBOARD.MOVIES' | translate }}</span>
+        <span class="kpi-card__value">{{ s.totalMovies }}</span>
+        <span class="kpi-card__hint">{{ 'ADMIN.DASHBOARD.SERIES' | translate }}: {{ s.totalSeries }}</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-card__label">{{ 'ADMIN.DASHBOARD.RATINGS' | translate }}</span>
+        <span class="kpi-card__value">{{ s.totalRatings }}</span>
+        <span class="kpi-card__hint">+{{ s.ratingsToday }} {{ 'ADMIN.DASHBOARD.TODAY' | translate }} · {{ s.ratingsLast7Days }} / 7d · {{ s.ratingsLast30Days }} / 30d</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-card__label">{{ 'ADMIN.DASHBOARD.REVIEWS' | translate }}</span>
+        <span class="kpi-card__value">{{ s.totalReviews }}</span>
+      </div>
+      <div class="kpi-card" *ngIf="s.model as m">
+        <span class="kpi-card__label">{{ 'ADMIN.DASHBOARD.MODEL' | translate }}</span>
+        <span class="kpi-card__value">{{ m.rmse !== null ? (m.rmse | number: '1.3-3') : '—' }}</span>
+        <span class="kpi-card__hint">RMSE · {{ m.lastTrainedAt | date: 'short' }}</span>
+      </div>
+    </div>
+
+    <div class="dashboard__panel" *ngIf="activity">
+      <h2>{{ 'ADMIN.DASHBOARD.ACTIVITY_30D' | translate }}</h2>
+      <div class="activity-legend">
+        <span class="legend-users">{{ 'ADMIN.DASHBOARD.NEW_USERS' | translate }}</span>
+        <span class="legend-ratings">{{ 'ADMIN.DASHBOARD.RATINGS' | translate }}</span>
+        <span class="legend-reviews">{{ 'ADMIN.DASHBOARD.REVIEWS' | translate }}</span>
+      </div>
+      <div class="activity-chart">
+        <div *ngFor="let p of activity.points" class="activity-day" [matTooltip]="p.date + ' · users:' + p.newUsers + ' ratings:' + p.ratings + ' reviews:' + p.reviews">
+          <div class="activity-day__stack">
+            <div class="activity-day__bar activity-day__bar--users" [style.height.%]="barHeight(p.newUsers)"></div>
+            <div class="activity-day__bar activity-day__bar--ratings" [style.height.%]="barHeight(p.ratings)"></div>
+            <div class="activity-day__bar activity-day__bar--reviews" [style.height.%]="barHeight(p.reviews)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard__panel" *ngIf="s.topGenres.length">
+      <h2>{{ 'ADMIN.DASHBOARD.TOP_GENRES' | translate }}</h2>
+      <ul class="top-genres">
+        <li *ngFor="let g of s.topGenres">
+          <span>{{ g.slug }}</span>
+          <span>{{ g.count }}</span>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+
+  <p *ngIf="loading">{{ 'COMMON.LOADING' | translate }}</p>
+</section>

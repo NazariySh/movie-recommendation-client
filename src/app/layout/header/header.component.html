@@ -1,0 +1,60 @@
+<header class="header">
+  <button
+    type="button"
+    class="header__hamburger"
+    [attr.aria-label]="'NAV.EXPAND_SIDEBAR' | translate"
+    (click)="openDrawer()">
+    <mat-icon fontIcon="menu"></mat-icon>
+  </button>
+
+  <nav class="header__nav">
+    <a *ngFor="let item of navItems"
+       [routerLink]="item.route"
+       [queryParams]="item.queryParams"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ paths: 'exact', queryParams: 'exact', matrixParams: 'ignored', fragment: 'ignored' }"
+       class="header__nav-link">
+      {{ item.labelKey | translate }}
+    </a>
+  </nav>
+
+  <div class="header__search">
+    <app-search-bar></app-search-bar>
+  </div>
+
+  <div class="header__actions">
+    <app-language-switcher></app-language-switcher>
+
+    <ng-container *ngIf="isAuthenticated$ | async; else guestActions">
+      <button class="header__avatar-btn" [mat-menu-trigger-for]="userMenu">
+        <ng-container *ngIf="user$ | async as user">
+          <img *ngIf="user.avatarUrl; else initials" [src]="user.avatarUrl" [alt]="user.username" class="header__avatar" />
+          <ng-template #initials>
+            <span class="header__avatar-initials">{{ user.username.charAt(0).toUpperCase() }}</span>
+          </ng-template>
+        </ng-container>
+      </button>
+      <mat-menu #userMenu="matMenu" class="app-menu" xPosition="before">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon> {{ 'NAV.PROFILE' | translate }}
+        </button>
+        <button mat-menu-item routerLink="/profile/watchlist">
+          <mat-icon>bookmark</mat-icon> {{ 'NAV.WATCHLIST' | translate }}
+        </button>
+        <ng-container *ngIf="(user$ | async)?.roles?.includes('Admin') || (user$ | async)?.roles?.includes('Moderator')">
+          <button mat-menu-item routerLink="/admin">
+            <mat-icon>admin_panel_settings</mat-icon> {{ 'NAV.ADMIN' | translate }}
+          </button>
+        </ng-container>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon> {{ 'AUTH.LOGOUT' | translate }}
+        </button>
+      </mat-menu>
+    </ng-container>
+
+    <ng-template #guestActions>
+      <a routerLink="/auth/login" class="header__login-btn">{{ 'AUTH.LOGIN' | translate }}</a>
+      <a routerLink="/auth/register" class="header__register-btn">{{ 'AUTH.REGISTER' | translate }}</a>
+    </ng-template>
+  </div>
+</header>

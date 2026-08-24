@@ -1,0 +1,70 @@
+<div class="artist-list-page">
+  <h1 class="page-title">{{ 'ARTISTS.LIST_TITLE' | translate }}</h1>
+
+  <app-input-text
+    class="search-field"
+    [control]="searchControl"
+    [label]="'ARTISTS.SEARCH_PLACEHOLDER' | translate">
+  </app-input-text>
+
+  <div class="role-row">
+    <nav class="role-tabs" role="tablist">
+      <button
+        *ngFor="let tab of roleTabs"
+        type="button"
+        class="tab-btn"
+        role="tab"
+        [class.active]="(role$ | async) === tab.id"
+        [attr.aria-selected]="(role$ | async) === tab.id"
+        (click)="setRole(tab.id)">
+        {{ tab.labelKey | translate }}
+      </button>
+    </nav>
+
+    <app-select
+      class="sort-select"
+      mode="single"
+      [items]="sortItems"
+      [value]="(sortBy$ | async) ?? ''"
+      [placeholder]="'ARTISTS.SORT.LABEL' | translate"
+      (valueChange)="onSortChange($event)">
+    </app-select>
+  </div>
+
+  <ng-container *ngIf="artists$ | async as p">
+    <ng-container *ngIf="(loading$ | async) === false; else loadingState">
+      <div class="artist-grid" *ngIf="p.items.length; else emptyState">
+        <app-artist-card
+          *ngFor="let artist of p.items"
+          [artist]="artist">
+        </app-artist-card>
+      </div>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <mat-icon [fontIcon]="AppIcon.PersonSearch"></mat-icon>
+          <p>{{ ((error$ | async) ? 'ARTISTS.ERROR_LOADING' : 'ARTISTS.NO_RESULTS') | translate }}</p>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <div class="pagination-row" *ngIf="p.totalCount > pageSize">
+      <app-paginator
+        [length]="p.totalCount"
+        [pageSize]="pageSize"
+        [pageNumber]="(page$ | async) ?? 1"
+        (pageChange)="onPageChange($event)">
+      </app-paginator>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingState>
+    <div class="artist-grid">
+      <app-skeleton-loader
+        *ngFor="let i of skeletonSlots"
+        shape="card"
+        height="280px">
+      </app-skeleton-loader>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,29 @@
+<div
+  class="app-rating-stars"
+  [class.app-rating-stars--readonly]="readonly"
+  [class.app-rating-stars--disabled]="disabled"
+  [attr.role]="isInteractive() ? 'radiogroup' : 'img'"
+  [attr.aria-label]="ariaLabel"
+  (mouseleave)="onStarLeave()">
+  <button
+    *ngFor="let star of stars"
+    type="button"
+    class="app-rating-stars__btn"
+    [class.app-rating-stars__btn--filled]="isFilled(star)"
+    [attr.role]="isInteractive() ? 'radio' : null"
+    [attr.aria-checked]="isInteractive() ? isFilled(star) : null"
+    [attr.aria-label]="star + ' / ' + max"
+    [disabled]="!isInteractive()"
+    (click)="onStarClick(star)"
+    (mouseenter)="onStarEnter(star)"
+    (focus)="onStarEnter(star)">
+    <svg class="app-rating-stars__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 2.5l2.95 5.98 6.6.96-4.78 4.66 1.13 6.57L12 17.6l-5.9 3.07 1.13-6.57L2.45 9.44l6.6-.96L12 2.5z"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linejoin="round" />
+    </svg>
+    <span *ngIf="showNumbers" class="app-rating-stars__num">{{ star }}</span>
+  </button>
+</div>

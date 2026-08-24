@@ -1,0 +1,39 @@
+@use '../../styles/admin-page' as *;
+@use '../../../../../styles/mixins' as *;
+
+.admin-table {
+  width: 100%;
+  min-width: 600px;
+  background: var(--surface-color);
+  color: var(--text-primary);
+}
+
+.admin-page__table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.poster {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary-color);
+  cursor: pointer;
+  font: inherit;
+
+  &:hover { text-decoration: underline; }
+}
+
+.muted {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.danger { color: var(--error-color); }

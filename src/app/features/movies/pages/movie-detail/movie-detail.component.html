@@ -1,0 +1,295 @@
+<ng-container *ngIf="notFound">
+  <div class="not-found-state">
+    <mat-icon [fontIcon]="AppIcon.HelpOutline"></mat-icon>
+    <p>{{ 'MOVIE.NOT_FOUND' | translate }}</p>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="movie$ | async as movie">
+  <div class="detail-page">
+
+    <div class="hero">
+      <div
+        class="hero-backdrop"
+        [style.background-image]="movie.backdropUrl ? 'url(' + movie.backdropUrl + ')' : null">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <div class="hero-body">
+        <app-button
+          class="back-btn"
+          buttonType="icon"
+          [attr.aria-label]="'COMMON.BACK' | translate"
+          (clicked)="goBack()">
+          <mat-icon [fontIcon]="AppIcon.ArrowBack"></mat-icon>
+        </app-button>
+
+        <div class="hero-content">
+          <img
+            class="hero-poster"
+            [src]="movie.posterUrl || 'images/placeholder.png'"
+            [alt]="movie.title"
+            (error)="$any($event.target).src = 'images/placeholder.png'">
+
+          <div class="hero-info">
+            <h1 class="hero-title">{{ movie.title }}</h1>
+            <p class="hero-original" *ngIf="movie.originalTitle && movie.originalTitle !== movie.title">
+              {{ movie.originalTitle }}
+            </p>
+
+            <div class="hero-meta">
+              <span *ngIf="movie.releaseDate">{{ movie.releaseDate | date:'yyyy' }}</span>
+              <span *ngIf="movie.runtime">·&nbsp;{{ movie.runtime | runtime }}</span>
+              <span *ngIf="movie.type === 'Series' && movie.seasonsCount">
+                ·&nbsp;{{ movie.seasonsCount }} {{ 'MOVIE.SEASONS' | translate }}
+              </span>
+              <span class="rating-pill" *ngIf="movie.voteAverage > 0">
+                <mat-icon [fontIcon]="AppIcon.Star"></mat-icon>
+                {{ movie.voteAverage | number:'1.1-1' }}
+                <span class="rating-count" *ngIf="movie.voteCount">({{ movie.voteCount }})</span>
+              </span>
+            </div>
+
+            <div class="hero-genres" *ngIf="movie.genres.length">
+              <span *ngFor="let genre of movie.genres" class="genre-chip">{{ genre }}</span>
+            </div>
+
+            <p class="hero-overview" *ngIf="movie.overview">{{ movie.overview }}</p>
+
+            <div class="hero-actions">
+              <app-button *ngIf="movie.trailerYoutubeId"
+                class="trailer-btn"
+                buttonType="flat"
+                color="primary"
+                [matTooltip]="movie.trailerYoutubeId ? '' : ('MOVIE.NO_TRAILER' | translate)"
+                (clicked)="openTrailer(movie)">
+                <mat-icon [fontIcon]="AppIcon.PlayArrow"></mat-icon>
+                {{ 'MOVIE.WATCH_TRAILER' | translate }}
+              </app-button>
+
+              <button
+                *ngIf="isAuthenticated; else watchlistGuestBtn"
+                type="button"
+                class="secondary-btn"
+                [class.secondary-btn--active]="watchlistStatus !== null"
+                [disabled]="watchlistPending"
+                [matMenuTriggerFor]="watchlistMenu">
+                <mat-icon [fontIcon]="AppIcon.Bookmark"></mat-icon>
+                {{ watchlistLabelKey() | translate }}
+                <mat-icon [fontIcon]="AppIcon.ExpandMore"></mat-icon>
+              </button>
+              <ng-template #watchlistGuestBtn>
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  (click)="promptLoginForWatchlist()">
+                  <mat-icon [fontIcon]="AppIcon.Bookmark"></mat-icon>
+                  {{ 'MOVIE.ADD_TO_WATCHLIST' | translate }}
+                </button>
+              </ng-template>
+              <mat-menu #watchlistMenu="matMenu" class="app-menu">
+                <button
+                  *ngFor="let opt of watchlistOptions"
+                  type="button"
+                  mat-menu-item
+                  [class.menu-item--active]="watchlistStatus === opt.status"
+                  (click)="setWatchlistStatus(opt.status)">
+                  {{ opt.labelKey | translate }}
+                </button>
+                <button
+                  *ngIf="watchlistStatus !== null"
+                  type="button"
+                  mat-menu-item
+                  (click)="removeFromWatchlist()">
+                  {{ 'WATCHLIST.REMOVE' | translate }}
+                </button>
+              </mat-menu>
+            </div>
+
+            <div class="my-rating" *ngIf="isAuthenticated">
+              <span class="my-rating-label">
+                <ng-container *ngIf="myRating !== null; else noRating">
+                  {{ 'MOVIE.YOUR_RATING' | translate }}: <strong>{{ myRating | number:'1.0-1' }}/10</strong>
+                </ng-container>
+                <ng-template #noRating>{{ 'MOVIE.RATE_THIS' | translate }}</ng-template>
+              </span>
+
+              <app-rating-stars
+                [value]="myRating"
+                [max]="10"
+                [scale]="10"
+                [disabled]="ratingPending"
+                [ariaLabel]="'MOVIE.RATE_THIS' | translate"
+                (valueChange)="submitRating($event)">
+              </app-rating-stars>
+
+              <app-button
+                *ngIf="myRating !== null"
+                buttonType="stroked"
+                size="sm"
+                [disabled]="ratingPending"
+                (clicked)="clearRating()">
+                {{ 'MOVIE.CLEAR_RATING' | translate }}
+              </app-button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <nav class="detail-tabs" role="tablist">
+      <button
+        *ngFor="let tab of tabsFor(movie)"
+        type="button"
+        class="tab-btn"
+        role="tab"
+        [class.active]="activeTab === tab.id"
+        [attr.aria-selected]="activeTab === tab.id"
+        (click)="setTab(tab.id)">
+        {{ tab.labelKey | translate }}
+      </button>
+    </nav>
+
+    <div class="tab-content" [ngSwitch]="activeTab">
+
+      <div *ngSwitchCase="'information'" class="info-tab">
+        <h2 class="section-title">{{ 'MOVIE.OVERVIEW' | translate }}</h2>
+        <p class="overview-text" *ngIf="movie.overview">{{ movie.overview }}</p>
+        <p class="empty-text" *ngIf="!movie.overview">{{ 'MOVIE.NO_OVERVIEW' | translate }}</p>
+
+        <h2 class="section-title">{{ 'MOVIE.TAB.INFORMATION' | translate }}</h2>
+        <div class="info-card">
+          <div class="info-card__row" *ngIf="movie.releaseDate">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.CalendarMonth"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.RELEASE_DATE' | translate }}</span>
+            <span class="info-card__value">{{ movie.releaseDate | localizedDate:'long' }}</span>
+          </div>
+          <div class="info-card__row" *ngIf="director(movie) as d">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.MovieFilter"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.DIRECTOR' | translate }}</span>
+            <span class="info-card__value">{{ d.personName }}</span>
+          </div>
+          <div class="info-card__row" *ngIf="movie.runtime">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.Schedule"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.RUNTIME' | translate }}</span>
+            <span class="info-card__value">{{ movie.runtime | runtime }}</span>
+          </div>
+          <div class="info-card__row" *ngIf="movie.originalLang">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.Language"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.LANGUAGE' | translate }}</span>
+            <span class="info-card__value">{{ movie.originalLang | uppercase }}</span>
+          </div>
+          <div class="info-card__row" *ngIf="movie.status">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.TagFaces"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.STATUS_LABEL' | translate }}</span>
+            <span class="info-card__value">{{ statusKey(movie.status) | translate }}</span>
+          </div>
+          <div class="info-card__row" *ngIf="movie.tagline">
+            <mat-icon class="info-card__icon" [fontIcon]="AppIcon.Forum"></mat-icon>
+            <span class="info-card__label">{{ 'MOVIE.TAGLINE' | translate }}</span>
+            <span class="info-card__value">{{ movie.tagline }}</span>
+          </div>
+        </div>
+
+        <h2 class="section-title" *ngIf="castOnly(movie).length">{{ 'MOVIE.CAST' | translate }}</h2>
+        <div class="cast-row" *ngIf="castOnly(movie) as cast">
+          <button
+            *ngFor="let member of cast"
+            type="button"
+            class="cast-cell"
+            (click)="navigateToArtist(member.personId)">
+            <span class="cast-photo">
+              <img *ngIf="member.photoUrl" [src]="member.photoUrl" [alt]="member.personName">
+              <mat-icon *ngIf="!member.photoUrl" [fontIcon]="AppIcon.Person"></mat-icon>
+            </span>
+            <span class="cast-name">{{ member.personName }}</span>
+            <span class="cast-character" *ngIf="member.character">{{ member.character }}</span>
+          </button>
+        </div>
+
+        <h2 class="section-title" *ngIf="movie.keywords.length">{{ 'MOVIE.KEYWORDS' | translate }}</h2>
+        <div class="keyword-chips" *ngIf="movie.keywords.length">
+          <span *ngFor="let kw of movie.keywords" class="keyword-chip">{{ kw }}</span>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'episodes'" class="seasons-tab">
+        <ng-container *ngIf="seasons.length; else noSeasons">
+          <article
+            *ngFor="let season of seasons"
+            class="season-card">
+            <img
+              *ngIf="season.posterUrl; else seasonNoPoster"
+              class="season-card__poster"
+              [src]="season.posterUrl"
+              [alt]="season.name || ('MOVIE.SEASON' | translate) + ' ' + season.seasonNumber"
+              loading="lazy" />
+            <ng-template #seasonNoPoster>
+              <div class="season-card__poster season-card__poster--placeholder">
+                <mat-icon [fontIcon]="AppIcon.PhotoLibrary"></mat-icon>
+              </div>
+            </ng-template>
+
+            <div class="season-card__body">
+              <header class="season-card__head">
+                <h3 class="season-card__title">
+                  {{ season.name || ('MOVIE.SEASON' | translate) + ' ' + season.seasonNumber }}
+                </h3>
+                <div class="season-card__meta">
+                  <span *ngIf="season.airDate">{{ season.airDate | date:'yyyy' }}</span>
+                  <span *ngIf="season.episodeCount">
+                    · {{ 'MOVIE.EPISODES_COUNT' | translate: { count: season.episodeCount } }}
+                  </span>
+                  <span *ngIf="season.voteAverage && season.voteAverage > 0" class="season-card__tmdb">
+                    <mat-icon [fontIcon]="AppIcon.Star"></mat-icon>
+                    {{ season.voteAverage | number:'1.1-1' }}
+                  </span>
+                </div>
+              </header>
+
+              <p class="season-card__overview" *ngIf="season.overview">{{ season.overview }}</p>
+            </div>
+          </article>
+        </ng-container>
+
+        <ng-template #noSeasons>
+          <p class="empty-text">{{ 'MOVIE.NO_SEASONS' | translate }}</p>
+        </ng-template>
+      </div>
+
+      <div *ngSwitchCase="'similar'">
+        <section class="similar-block">
+          <h3 class="similar-block__title">
+            {{ 'MOVIE.SIMILAR_TITLES' | translate }}
+          </h3>
+          <div class="similar-grid" *ngIf="similar.length; else noSimilar">
+            <a
+              *ngFor="let item of similar"
+              class="similar-card"
+              [routerLink]="['/movies', item.id]">
+              <div class="poster-wrap">
+                <span class="rating-badge" *ngIf="item.averageRating > 0">{{ item.averageRating | number:'1.1-1' }}</span>
+                <img
+                  [src]="item.posterUrl || 'images/placeholder.png'"
+                  [alt]="item.title"
+                  loading="lazy"
+                  (error)="$any($event.target).src = 'images/placeholder.png'">
+              </div>
+              <span class="similar-title">{{ item.title }}</span>
+              <span class="similar-meta" *ngIf="item.releaseYear">{{ item.releaseYear }}</span>
+            </a>
+          </div>
+
+          <ng-template #noSimilar>
+            <p class="empty-text">{{ 'MOVIE.NO_SIMILAR' | translate }}</p>
+          </ng-template>
+        </section>
+      </div>
+
+      <div *ngSwitchCase="'reviews'">
+        <app-reviews [movieId]="movie.id"></app-reviews>
+      </div>
+    </div>
+  </div>
+</ng-container>

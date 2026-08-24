@@ -1,0 +1,109 @@
+<section class="form-page" *ngIf="!loading; else loadingTpl">
+  <header class="form-page__header">
+    <a [routerLink]="moviesLink" class="form-page__back">
+      <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
+    </a>
+    <h1>{{ (movieId ? 'ADMIN.MOVIES.EDIT' : 'ADMIN.MOVIES.NEW') | translate }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.MOVIES.SECTION_BASIC' | translate }}</legend>
+      <div class="form__row">
+        <app-input-text [control]="form.get('originalTitle')" [label]="'ADMIN.MOVIES.ORIGINAL_TITLE' | translate"></app-input-text>
+        <app-input-text [control]="form.get('key')" [label]="'ADMIN.MOVIES.KEY' | translate"></app-input-text>
+      </div>
+      <div class="form__row">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'ADMIN.MOVIES.TYPE' | translate }}</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let t of types" [value]="t">{{ t }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'ADMIN.MOVIES.STATUS' | translate }}</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <app-input-text [control]="form.get('originalLang')" [label]="'ADMIN.MOVIES.ORIGINAL_LANG' | translate"></app-input-text>
+      </div>
+      <div class="form__row">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'ADMIN.MOVIES.RELEASE_DATE' | translate }}</mat-label>
+          <input matInput type="date" formControlName="releaseDate" />
+        </mat-form-field>
+        <app-input-number [control]="form.get('runtime')" [label]="'ADMIN.MOVIES.RUNTIME' | translate"></app-input-number>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.MOVIES.SECTION_MEDIA' | translate }}</legend>
+      <div class="form__col">
+        <app-image-upload
+          [control]="form.get('posterUrl')"
+          aspect="poster"
+          [label]="'ADMIN.MOVIES.POSTER' | translate"
+          [hint]="'ADMIN.UPLOAD.HINT' | translate"
+          (fileChange)="posterFile = $event">
+        </app-image-upload>
+        <app-image-upload
+          [control]="form.get('backdropUrl')"
+          aspect="backdrop"
+          [label]="'ADMIN.MOVIES.BACKDROP' | translate"
+          [hint]="'ADMIN.UPLOAD.HINT' | translate"
+          (fileChange)="backdropFile = $event">
+        </app-image-upload>
+        <app-input-text [control]="form.get('trailerYoutubeId')" [label]="'ADMIN.MOVIES.TRAILER_YT' | translate"></app-input-text>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.MOVIES.SECTION_IDS' | translate }}</legend>
+      <div class="form__row">
+        <app-input-text [control]="form.get('imdbId')" label="IMDb ID" placeholder="tt0816692"></app-input-text>
+        <app-input-number [control]="form.get('tmdbId')" label="TMDb ID"></app-input-number>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group" *ngIf="form.value.type === 'Series'">
+      <legend>{{ 'ADMIN.MOVIES.SECTION_SERIES' | translate }}</legend>
+      <div class="form__row">
+        <app-input-number [control]="form.get('seasonsCount')" [label]="'ADMIN.MOVIES.SEASONS' | translate"></app-input-number>
+        <app-input-number [control]="form.get('episodesCount')" [label]="'ADMIN.MOVIES.EPISODES' | translate"></app-input-number>
+        <mat-checkbox formControlName="isOngoing">{{ 'ADMIN.MOVIES.IS_ONGOING' | translate }}</mat-checkbox>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.MOVIES.SECTION_TRANSLATIONS' | translate }}</legend>
+      <div formArrayName="translations" class="translations">
+        <div *ngFor="let group of translations.controls; let i = index" [formGroupName]="i" class="translation">
+          <div class="translation__header">
+            <app-input-text class="lang" [control]="group.get('languageCode')" [label]="'ADMIN.MOVIES.LANG' | translate"></app-input-text>
+            <app-input-text class="grow" [control]="group.get('title')" [label]="'ADMIN.MOVIES.TITLE_LOCAL' | translate"></app-input-text>
+            <button type="button" mat-icon-button color="warn" class="translation__delete" (click)="removeTranslation(i)">
+              <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+          </div>
+          <app-input-text [control]="group.get('tagline')" [label]="'ADMIN.MOVIES.TAGLINE' | translate"></app-input-text>
+          <app-input-textarea [control]="group.get('overview')" [label]="'ADMIN.MOVIES.OVERVIEW' | translate" [minRows]="3" [maxRows]="8"></app-input-textarea>
+        </div>
+      </div>
+      <button type="button" mat-stroked-button (click)="addTranslation()">
+        <mat-icon fontIcon="add"></mat-icon> {{ 'ADMIN.MOVIES.ADD_TRANSLATION' | translate }}
+      </button>
+    </fieldset>
+
+    <div class="form__actions">
+      <button type="button" mat-button (click)="cancel()">{{ 'COMMON.CANCEL' | translate }}</button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="saving">
+        {{ 'COMMON.SAVE' | translate }}
+      </button>
+    </div>
+  </form>
+</section>
+
+<ng-template #loadingTpl>
+  <p>{{ 'COMMON.LOADING' | translate }}</p>
+</ng-template>

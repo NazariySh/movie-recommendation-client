@@ -1,0 +1,32 @@
+<header class="admin-topbar">
+  <button
+    type="button"
+    class="admin-topbar__hamburger"
+    [attr.aria-label]="'NAV.EXPAND_SIDEBAR' | translate"
+    (click)="openDrawer()">
+    <mat-icon fontIcon="menu"></mat-icon>
+  </button>
+
+  <a [routerLink]="homeLink" class="admin-topbar__exit" [matTooltip]="'ADMIN.BACK_TO_SITE' | translate">
+    <mat-icon fontIcon="arrow_back"></mat-icon>
+    <span class="admin-topbar__exit-text">{{ 'ADMIN.BACK_TO_SITE' | translate }}</span>
+  </a>
+
+  <div class="admin-topbar__actions">
+    <app-language-switcher></app-language-switcher>
+
+    <button class="admin-topbar__user" [mat-menu-trigger-for]="userMenu" *ngIf="user$ | async as user">
+      <app-avatar [src]="user.avatarUrl" [name]="user.username" size="sm"></app-avatar>
+      <span class="admin-topbar__user-name">{{ user.username }}</span>
+      <mat-icon fontIcon="arrow_drop_down"></mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu" class="app-menu">
+      <button mat-menu-item [routerLink]="profileLink">
+        <mat-icon fontIcon="person"></mat-icon> {{ 'NAV.PROFILE' | translate }}
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon fontIcon="logout"></mat-icon> {{ 'AUTH.LOGOUT' | translate }}
+      </button>
+    </mat-menu>
+  </div>
+</header>

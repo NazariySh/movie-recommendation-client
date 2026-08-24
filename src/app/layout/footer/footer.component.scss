@@ -1,0 +1,44 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.footer {
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+
+  @include respond-to('md') {
+    padding: 1.25rem 1rem;
+  }
+
+  @include respond-to('sm') {
+    padding: 1rem 0.75rem;
+  }
+
+  &__content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    @include respond-to('sm') {
+      justify-content: center;
+      text-align: center;
+      gap: 0.625rem;
+    }
+  }
+
+  &__logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $color-primary;
+  }
+
+  &__copyright {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+}

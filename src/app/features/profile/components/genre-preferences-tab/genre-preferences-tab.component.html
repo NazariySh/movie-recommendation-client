@@ -1,0 +1,40 @@
+<div class="genre-prefs">
+  <ng-container *ngIf="loading">
+    <p>{{ 'COMMON.LOADING' | translate }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="!loading">
+    <p *ngIf="rows.length === 0" class="genre-prefs__empty">
+      {{ 'PROFILE.GENRE_PREFS_EMPTY' | translate }}
+    </p>
+
+    <div *ngIf="rows.length > 0" class="genre-prefs__list">
+      <div *ngFor="let row of rows" class="genre-prefs__row">
+        <span class="genre-prefs__name">{{ row.name }}</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="5"
+          [value]="sliderPct(row)"
+          (input)="onWeightInput(row, $event)"
+          class="genre-prefs__slider"
+        />
+        <span class="genre-prefs__pct">{{ sliderPct(row) }}%</span>
+      </div>
+    </div>
+
+    <section *ngIf="topGenres.length > 0" class="genre-prefs__top">
+      <h3 class="genre-prefs__top-title">{{ 'PROFILE.GENRE_PREFS_TOP' | translate }}</h3>
+      <ul class="genre-prefs__top-list">
+        <li *ngFor="let g of topGenres">{{ g.name }} <span class="genre-prefs__top-pct">({{ sliderPct(g) }}%)</span></li>
+      </ul>
+    </section>
+
+    <div class="genre-prefs__actions">
+      <app-button buttonType="raised" color="primary" [disabled]="saving || rows.length === 0" (clicked)="save()">
+        {{ (saving ? 'COMMON.LOADING' : 'COMMON.SAVE') | translate }}
+      </app-button>
+    </div>
+  </ng-container>
+</div>

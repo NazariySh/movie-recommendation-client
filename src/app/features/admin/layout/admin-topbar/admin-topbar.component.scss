@@ -1,0 +1,99 @@
+@use '../../../../../styles/mixins' as *;
+
+:host {
+  display: block;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 1.5rem;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
+
+  @include respond-to('md') {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  @include respond-to('sm') {
+    padding: 0 0.75rem;
+    height: 52px;
+  }
+
+  &__hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    mat-icon { font-size: 1.5rem; width: 1.5rem; height: 1.5rem; }
+
+    &:hover {
+      background-color: var(--surface-2-color);
+      color: var(--text-primary);
+    }
+
+    @include respond-to('md') {
+      display: inline-flex;
+    }
+  }
+
+  &__exit {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover { color: var(--text-primary); }
+
+    mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; }
+  }
+
+  &__exit-text {
+    @include respond-to('sm') { display: none; }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--surface-2-color);
+    }
+
+    mat-icon { color: var(--text-muted); }
+  }
+
+  &__user-name {
+    font-size: 0.9rem;
+    @include respond-to('sm') { display: none; }
+  }
+}

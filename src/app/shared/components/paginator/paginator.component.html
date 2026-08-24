@@ -1,0 +1,18 @@
+<div class="custom-paginator" *ngIf="totalPages > 0">
+  <button mat-icon-button class="nav-btn" (click)="previousPage()" [disabled]="pageNumber === 1" *ngIf="pageNumber > 1">
+    <mat-icon [fontIcon]="AppIcon.ChevronLeft"></mat-icon>
+  </button>
+
+  <button class="page-btn"
+          *ngFor="let p of pages"
+          [class.active]="p === pageNumber"
+          [class.dots]="p === '...'"
+          (click)="selectPage(p)"
+          [disabled]="p === '...'">
+    {{ p }}
+  </button>
+
+  <button mat-icon-button class="nav-btn" (click)="nextPage()" [disabled]="pageNumber >= totalPages" *ngIf="totalPages > 0">
+    <mat-icon [fontIcon]="AppIcon.ChevronRight"></mat-icon>
+  </button>
+</div>

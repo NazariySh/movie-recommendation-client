@@ -1,0 +1,39 @@
+<app-auth-form-wrapper titleKey="AUTH.LOGIN" subtitleKey="AUTH.WELCOME_BACK">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+    <app-input-text
+      [control]="form.get('email')"
+      [label]="'AUTH.EMAIL' | translate"
+      autocomplete="email">
+    </app-input-text>
+
+    <app-input-password
+      [control]="form.get('password')"
+      [label]="'AUTH.PASSWORD' | translate"
+      autocomplete="current-password">
+    </app-input-password>
+
+    <div class="form-row">
+      <app-input-checkbox [control]="form.get('rememberMe')">
+        {{ 'AUTH.REMEMBER_ME' | translate }}
+      </app-input-checkbox>
+      <a [routerLink]="AuthPaths.FORGOT_PASSWORD" class="link">{{ 'AUTH.FORGOT_PASSWORD' | translate }}</a>
+    </div>
+
+    <app-button
+      class="auth-submit"
+      type="submit"
+      buttonType="flat"
+      color="primary"
+      size="full"
+      [disabled]="(loading$ | async) ?? false">
+      {{ 'AUTH.LOGIN' | translate }}
+    </app-button>
+  </form>
+
+  <app-social-auth-buttons (googleLogin)="onGoogleLogin($event)"></app-social-auth-buttons>
+
+  <div class="auth-footer">
+    {{ 'AUTH.NO_ACCOUNT' | translate }}
+    <a [routerLink]="AuthPaths.REGISTER" class="link link--accent">{{ 'AUTH.SIGN_UP' | translate }}</a>
+  </div>
+</app-auth-form-wrapper>

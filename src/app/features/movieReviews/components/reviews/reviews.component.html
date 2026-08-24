@@ -1,0 +1,77 @@
+<section class="reviews-section" [attr.aria-label]="'REVIEWS.SECTION_ARIA' | translate">
+  <h2 class="reviews-heading">{{ 'REVIEWS.HEADING' | translate }}</h2>
+
+  <app-review-form
+    *ngIf="isAuthenticated(); else loginCta"
+    [movieId]="movieId"
+    [submitting]="submitting()"
+    (submitted)="onSubmit($event)">
+  </app-review-form>
+
+  <ng-template #loginCta>
+    <div class="login-cta">
+      <mat-icon [fontIcon]="AppIcon.Person" class="login-cta__icon"></mat-icon>
+      <p>{{ 'REVIEWS.LOGIN_PROMPT' | translate }}</p>
+      <a class="login-cta__link" [routerLink]="loginPath">{{ 'AUTH.LOGIN' | translate }}</a>
+    </div>
+  </ng-template>
+
+  <div class="sort-bar">
+    <div class="sort-controls" role="group" [attr.aria-label]="'REVIEWS.SORT_ARIA' | translate">
+      <span class="sort-label">
+        <mat-icon [fontIcon]="AppIcon.Star" class="sort-icon"></mat-icon>
+        {{ 'REVIEWS.SORT_BY' | translate }}:
+      </span>
+      <button
+        *ngFor="let sort of sorts"
+        class="sort-btn"
+        [class.sort-btn--active]="sortControl.value === sort.id"
+        (click)="setSort(sort.id)"
+        type="button"
+        [attr.aria-pressed]="sortControl.value === sort.id">
+        {{ sort.labelKey | translate }}
+      </button>
+    </div>
+    <span class="total-count" aria-live="polite">({{ formatTotal() }})</span>
+  </div>
+
+  <div class="reviews-list" *ngIf="!error()">
+    <app-review-card
+      *ngFor="let review of reviews()"
+      [review]="review"
+      [currentUserId]="currentUserId()"
+      (helpful)="onHelpful($event)"
+      (replyCreated)="onReplyCreated($event)">
+    </app-review-card>
+
+    <div *ngIf="loading()" class="loading-row" [attr.aria-label]="'REVIEWS.LOADING_ARIA' | translate">
+      <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="!loading() && reviews().length === 0" class="empty-state">
+      {{ 'REVIEWS.EMPTY' | translate }}
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="error-state">
+    {{ 'REVIEWS.LOAD_FAILED' | translate }}
+    <app-button
+      buttonType="stroked"
+      color="primary"
+      size="sm"
+      (clicked)="retry()">
+      {{ 'COMMON.RETRY' | translate }}
+    </app-button>
+  </div>
+
+  <app-button
+    *ngIf="hasMore() && !loading()"
+    class="show-more-btn"
+    buttonType="stroked"
+    color=""
+    [attr.aria-label]="'REVIEWS.SHOW_MORE_ARIA' | translate"
+    (clicked)="loadMore()">
+    {{ 'REVIEWS.SHOW_MORE' | translate }}
+    <mat-icon [fontIcon]="AppIcon.ExpandMore"></mat-icon>
+  </app-button>
+</section>

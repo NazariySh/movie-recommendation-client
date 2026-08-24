@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ data.titleKey | translate }}</h2>
+<mat-dialog-content>
+  <p>{{ data.messageKey | translate: data.messageParams }}</p>
+
+  <app-input-textarea
+    *ngIf="data.promptForReason"
+    class="full-width"
+    [control]="reason"
+    [label]="'COMMON.REASON' | translate"
+    [minRows]="3"
+    [maxRows]="6">
+  </app-input-textarea>
+
+  <app-input-text
+    *ngIf="data.requireTypedConfirmation"
+    class="full-width"
+    [control]="typed"
+    [label]="typedConfirmationLabel"
+    autocomplete="off">
+  </app-input-text>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">{{ (data.cancelKey ?? 'COMMON.CANCEL') | translate }}</button>
+  <button mat-flat-button [color]="data.destructive ? 'warn' : 'primary'" [disabled]="!canConfirm" (click)="confirm()">
+    {{ (data.confirmKey ?? 'COMMON.CONFIRM') | translate }}
+  </button>
+</mat-dialog-actions>

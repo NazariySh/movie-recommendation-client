@@ -1,0 +1,38 @@
+<div class="public-profile">
+  <p *ngIf="loading">{{ 'COMMON.LOADING' | translate }}</p>
+  <p *ngIf="notFound" class="public-profile__error">{{ 'PROFILE.PUBLIC_NOT_FOUND' | translate }}</p>
+
+  <ng-container *ngIf="profile && !loading && !notFound">
+    <header class="public-profile__header">
+      <app-avatar [src]="profile.avatarUrl" [name]="profile.username" size="lg"></app-avatar>
+
+      <div>
+        <h1 class="public-profile__name">{{ profile.username }}</h1>
+        <p class="public-profile__joined">
+          {{ 'PROFILE.JOINED' | translate }}: {{ profile.createdAt | date: 'longDate' }}
+        </p>
+      </div>
+    </header>
+
+    <p *ngIf="profile.bio" class="public-profile__bio">{{ profile.bio }}</p>
+
+    <section class="public-profile__stats">
+      <div class="public-profile__stat">
+        <span class="public-profile__stat-value">{{ profile.totalRatings }}</span>
+        <span class="public-profile__stat-label">{{ 'PROFILE.RATINGS' | translate }}</span>
+      </div>
+      <div class="public-profile__stat">
+        <span class="public-profile__stat-value">{{ profile.totalReviews }}</span>
+        <span class="public-profile__stat-label">{{ 'PROFILE.REVIEWS' | translate }}</span>
+      </div>
+      <div class="public-profile__stat">
+        <span class="public-profile__stat-value">{{ profile.completedCount }}</span>
+        <span class="public-profile__stat-label">{{ 'PROFILE.STATS_COMPLETED' | translate }}</span>
+      </div>
+      <div *ngIf="profile.averageRatingGiven !== null" class="public-profile__stat">
+        <span class="public-profile__stat-value">{{ profile.averageRatingGiven | number: '1.1-1' }}</span>
+        <span class="public-profile__stat-label">{{ 'PROFILE.STATS_AVG_RATING' | translate }}</span>
+      </div>
+    </section>
+  </ng-container>
+</div>

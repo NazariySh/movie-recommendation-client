@@ -1,0 +1,69 @@
+<div class="general-info" *ngIf="profile">
+  <section class="general-info__avatar">
+    <div class="general-info__avatar-display">
+      <app-avatar [src]="profile.avatarUrl" [name]="profile.username" size="lg"></app-avatar>
+    </div>
+
+    <div class="general-info__avatar-actions">
+      <input
+        #fileInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        class="general-info__file-input"
+        (change)="onAvatarSelected($event)"
+      />
+      <app-button buttonType="stroked" [disabled]="uploadingAvatar" (clicked)="fileInput.click()">
+        <mat-icon fontIcon="upload"></mat-icon>
+        {{ (uploadingAvatar ? 'COMMON.LOADING' : 'PROFILE.UPLOAD_AVATAR') | translate }}
+      </app-button>
+      <p class="general-info__hint">{{ 'PROFILE.AVATAR_HINT' | translate }}</p>
+    </div>
+  </section>
+
+  <form class="general-info__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <app-input-text
+      class="general-info__field"
+      [control]="form.get('username')"
+      [label]="'PROFILE.USERNAME' | translate"
+      autocomplete="username">
+    </app-input-text>
+
+    <mat-form-field appearance="outline" class="general-info__field">
+      <mat-label>{{ 'PROFILE.EMAIL' | translate }}</mat-label>
+      <input matInput [value]="profile.email" readonly />
+      <mat-icon
+        matSuffix
+        [class.is-verified]="profile.emailConfirmed"
+        [fontIcon]="profile.emailConfirmed ? 'verified' : 'pending'"
+        [matTooltip]="(profile.emailConfirmed ? 'PROFILE.EMAIL_VERIFIED' : 'PROFILE.EMAIL_UNVERIFIED') | translate">
+      </mat-icon>
+    </mat-form-field>
+
+    <app-input-textarea
+      class="general-info__field general-info__field--wide"
+      [control]="form.get('bio')"
+      [label]="'PROFILE.BIO' | translate"
+      [placeholder]="'PROFILE.BIO_PLACEHOLDER' | translate"
+      [minRows]="4"
+      [maxRows]="6">
+    </app-input-textarea>
+
+    <app-select
+      class="general-info__field"
+      mode="single"
+      formControlName="preferredLanguage"
+      [items]="languageOptions"
+      [placeholder]="'PROFILE.PREFERRED_LANGUAGE' | translate">
+    </app-select>
+
+    <p class="general-info__meta">
+      {{ 'PROFILE.MEMBER_SINCE' | translate }}: {{ profile.createdAt | date: 'longDate' }}
+    </p>
+
+    <div class="general-info__actions">
+      <app-button buttonType="raised" color="primary" type="submit" [disabled]="form.invalid || saving">
+        {{ (saving ? 'COMMON.LOADING' : 'COMMON.SAVE') | translate }}
+      </app-button>
+    </div>
+  </form>
+</div>

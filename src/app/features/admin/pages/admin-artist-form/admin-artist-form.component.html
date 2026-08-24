@@ -1,0 +1,73 @@
+<section class="form-page" *ngIf="!loading; else loadingTpl">
+  <header class="form-page__header">
+    <a [routerLink]="[AppPaths.ADMIN, AdminRoutes.ARTISTS]" class="form-page__back">
+      <mat-icon fontIcon="arrow_back"></mat-icon> {{ 'COMMON.BACK' | translate }}
+    </a>
+    <h1>{{ (artistId ? 'ADMIN.ARTISTS.EDIT' : 'ADMIN.ARTISTS.NEW') | translate }}</h1>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.ARTISTS.SECTION_BASIC' | translate }}</legend>
+      <div class="form__row">
+        <app-input-text [control]="form.get('name')" [label]="('ADMIN.ARTISTS.NAME' | translate) + ' *'"></app-input-text>
+        <app-input-text [control]="form.get('knownForDepartment')" [label]="'ADMIN.ARTISTS.DEPARTMENT' | translate"></app-input-text>
+      </div>
+      <div class="form__row">
+        <app-select
+          mode="single"
+          formControlName="gender"
+          [items]="genderOptions"
+          [placeholder]="'ADMIN.ARTISTS.GENDER' | translate">
+        </app-select>
+        <app-input-text [control]="form.get('nationality')" [label]="'ADMIN.ARTISTS.NATIONALITY' | translate"></app-input-text>
+      </div>
+      <div class="form__row">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'ADMIN.ARTISTS.BIRTHDAY' | translate }}</mat-label>
+          <input matInput type="date" formControlName="birthday" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'ADMIN.ARTISTS.DEATH' | translate }}</mat-label>
+          <input matInput type="date" formControlName="dateOfDeath" />
+        </mat-form-field>
+        <app-input-text [control]="form.get('placeOfBirth')" [label]="'ADMIN.ARTISTS.PLACE_OF_BIRTH' | translate"></app-input-text>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.ARTISTS.SECTION_MEDIA' | translate }}</legend>
+      <app-image-upload
+        [control]="form.get('photoUrl')"
+        aspect="poster"
+        [label]="'ADMIN.ARTISTS.PHOTO' | translate"
+        [hint]="'ADMIN.UPLOAD.HINT' | translate"
+        (fileChange)="photoFile = $event">
+      </app-image-upload>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.ARTISTS.SECTION_IDS' | translate }}</legend>
+      <div class="form__row">
+        <app-input-text [control]="form.get('imdbId')" label="IMDb ID"></app-input-text>
+        <app-input-number [control]="form.get('tmdbId')" label="TMDb ID"></app-input-number>
+      </div>
+    </fieldset>
+
+    <fieldset class="form__group">
+      <legend>{{ 'ADMIN.ARTISTS.SECTION_BIO' | translate }}</legend>
+      <app-input-textarea [control]="form.get('biography')" [label]="'ADMIN.ARTISTS.BIOGRAPHY' | translate" [minRows]="4" [maxRows]="12"></app-input-textarea>
+    </fieldset>
+
+    <div class="form__actions">
+      <app-button buttonType="basic" color="" (clicked)="cancel()">
+        {{ 'COMMON.CANCEL' | translate }}
+      </app-button>
+      <app-button type="submit" buttonType="flat" color="primary" [disabled]="saving">
+        {{ 'COMMON.SAVE' | translate }}
+      </app-button>
+    </div>
+  </form>
+</section>
+
+<ng-template #loadingTpl><p>{{ 'COMMON.LOADING' | translate }}</p></ng-template>

@@ -1,0 +1,31 @@
+<button
+  type="button"
+  class="admin-sidebar-backdrop"
+  *ngIf="drawerOpen$ | async"
+  [attr.aria-label]="'COMMON.COLLAPSE' | translate"
+  (click)="closeDrawer()"></button>
+
+<aside class="admin-sidebar" [class.admin-sidebar--collapsed]="collapsed" [class.admin-sidebar--drawer-open]="drawerOpen$ | async">
+  <div class="admin-sidebar__header">
+    <a [routerLink]="dashboardLink" class="admin-sidebar__logo">
+      <mat-icon class="admin-sidebar__logo-icon" fontIcon="admin_panel_settings"></mat-icon>
+      <span *ngIf="!collapsed" class="admin-sidebar__logo-text">{{ 'ADMIN.TITLE' | translate }}</span>
+    </a>
+  </div>
+
+  <nav class="admin-sidebar__nav">
+    <a *ngFor="let item of visibleNavItems$ | async"
+       [routerLink]="item.link"
+       routerLinkActive="active"
+       class="admin-sidebar__link"
+       [matTooltip]="collapsed ? (item.labelKey | translate) : ''"
+       matTooltipPosition="right">
+      <mat-icon class="admin-sidebar__icon" [fontIcon]="item.icon"></mat-icon>
+      <span *ngIf="!collapsed" class="admin-sidebar__label">{{ item.labelKey | translate }}</span>
+    </a>
+  </nav>
+
+  <button type="button" class="admin-sidebar__toggle" (click)="toggle()" [attr.aria-label]="(collapsed ? 'COMMON.EXPAND' : 'COMMON.COLLAPSE') | translate">
+    <mat-icon [fontIcon]="collapsed ? 'chevron_right' : 'chevron_left'"></mat-icon>
+  </button>
+</aside>

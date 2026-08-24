@@ -1,0 +1,164 @@
+<div class="search-page" *ngIf="state$ | async as s">
+  <header class="search-page__header">
+    <h1 class="search-page__title">
+      {{ 'SEARCH.TITLE' | translate }}
+      <ng-container *ngIf="s.query"> · "{{ s.query }}"</ng-container>
+    </h1>
+    <p
+      *ngIf="s.query.length >= 2 && s.mode === 'keyword'"
+      class="search-page__subtitle">
+      {{ 'SEARCH.RESULT_COUNT' | translate: { count: s.counts.total } }}
+    </p>
+    <p
+      *ngIf="s.query.length >= 2 && s.mode === 'semantic' && s.semantic"
+      class="search-page__subtitle">
+      {{ 'SEARCH.RESULT_COUNT' | translate: { count: s.semantic.total } }}
+    </p>
+  </header>
+
+  <div class="search-page__modes" role="tablist" aria-label="Search mode">
+    <button
+      type="button"
+      role="tab"
+      class="search-page__mode"
+      [class.search-page__mode--active]="s.mode === 'keyword'"
+      (click)="selectMode('keyword')">
+      <mat-icon fontIcon="search"></mat-icon>
+      {{ 'SEARCH.MODE_KEYWORD' | translate }}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="search-page__mode"
+      [class.search-page__mode--active]="s.mode === 'semantic'"
+      (click)="selectMode('semantic')">
+      <mat-icon fontIcon="auto_awesome"></mat-icon>
+      {{ 'SEARCH.MODE_SEMANTIC' | translate }}
+    </button>
+  </div>
+
+  <p *ngIf="s.mode === 'semantic' && s.query.length >= 2" class="search-page__hint">
+    {{ 'SEARCH.SEMANTIC_HINT' | translate }}
+  </p>
+
+  <ng-container *ngIf="s.query.length >= 2; else emptyQuery">
+    <ng-container *ngIf="s.mode === 'keyword'; else semanticBlock">
+      <nav class="search-page__tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="search-page__tab"
+          [class.search-page__tab--active]="s.activeTab === 'all'"
+          (click)="selectTab('all')">
+          {{ 'SEARCH.TAB_ALL' | translate }}
+          <span class="search-page__count">{{ s.counts.total }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="search-page__tab"
+          [class.search-page__tab--active]="s.activeTab === 'movies'"
+          (click)="selectTab('movies')">
+          {{ 'SEARCH.TAB_MOVIES' | translate }}
+          <span class="search-page__count">{{ s.counts.movies }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="search-page__tab"
+          [class.search-page__tab--active]="s.activeTab === 'series'"
+          (click)="selectTab('series')">
+          {{ 'SEARCH.TAB_SERIES' | translate }}
+          <span class="search-page__count">{{ s.counts.series }}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="search-page__tab"
+          [class.search-page__tab--active]="s.activeTab === 'artists'"
+          (click)="selectTab('artists')">
+          {{ 'SEARCH.TAB_ARTISTS' | translate }}
+          <span class="search-page__count">{{ s.counts.artists }}</span>
+        </button>
+      </nav>
+
+      <section *ngIf="showMovies(s.activeTab)" class="search-page__section">
+        <h2 *ngIf="s.activeTab === 'all'" class="search-page__section-title">{{ 'SEARCH.TAB_MOVIES' | translate }}</h2>
+        <ng-container *ngIf="s.movies && s.movies.items.length > 0; else moviesEmpty">
+          <div class="search-page__grid">
+            <app-movie-card *ngFor="let m of s.movies.items" [movie]="$any(m)"></app-movie-card>
+          </div>
+        </ng-container>
+        <ng-template #moviesEmpty>
+          <p *ngIf="(loading$ | async) === false && s.counts.movies === 0" class="search-page__empty">
+            {{ 'SEARCH.NO_MOVIES' | translate }}
+          </p>
+        </ng-template>
+      </section>
+
+      <section *ngIf="showSeries(s.activeTab)" class="search-page__section">
+        <h2 *ngIf="s.activeTab === 'all'" class="search-page__section-title">{{ 'SEARCH.TAB_SERIES' | translate }}</h2>
+        <ng-container *ngIf="s.series && s.series.items.length > 0; else seriesEmpty">
+          <div class="search-page__grid">
+            <app-movie-card *ngFor="let m of s.series.items" [movie]="$any(m)"></app-movie-card>
+          </div>
+        </ng-container>
+        <ng-template #seriesEmpty>
+          <p *ngIf="(loading$ | async) === false && s.counts.series === 0" class="search-page__empty">
+            {{ 'SEARCH.NO_SERIES' | translate }}
+          </p>
+        </ng-template>
+      </section>
+
+      <section *ngIf="showArtists(s.activeTab)" class="search-page__section">
+        <h2 *ngIf="s.activeTab === 'all'" class="search-page__section-title">{{ 'SEARCH.TAB_ARTISTS' | translate }}</h2>
+        <ng-container *ngIf="s.artists && s.artists.items.length > 0; else artistsEmpty">
+          <div class="search-page__artists-grid">
+            <a *ngFor="let a of s.artists.items" class="artist-tile" [routerLink]="[artistsPath, a.id]">
+              <app-avatar [src]="a.photoUrl" [name]="a.name" size="lg"></app-avatar>
+              <p class="artist-tile__name">{{ a.name }}</p>
+              <p *ngIf="a.knownForDepartment" class="artist-tile__role">{{ a.knownForDepartment }}</p>
+            </a>
+          </div>
+        </ng-container>
+        <ng-template #artistsEmpty>
+          <p *ngIf="(loading$ | async) === false && s.counts.artists === 0" class="search-page__empty">
+            {{ 'SEARCH.NO_ARTISTS' | translate }}
+          </p>
+        </ng-template>
+      </section>
+
+      <div class="search-page__pagination" *ngIf="s.activeTab !== 'all' && activeTabLength(s) > pageSize">
+        <app-paginator
+          [length]="activeTabLength(s)"
+          [pageSize]="pageSize"
+          [pageNumber]="s.page"
+          (pageChange)="goToPage($event)">
+        </app-paginator>
+      </div>
+
+      <p *ngIf="s.counts.total === 0 && (loading$ | async) === false" class="search-page__empty">
+        {{ 'SEARCH.NO_RESULTS' | translate: { query: s.query } }}
+      </p>
+    </ng-container>
+
+    <ng-template #semanticBlock>
+      <section class="search-page__section">
+        <ng-container *ngIf="s.semantic && s.semantic.items.length > 0; else semanticEmpty">
+          <div class="search-page__grid">
+            <app-movie-card *ngFor="let m of s.semantic.items" [movie]="$any(m)"></app-movie-card>
+          </div>
+        </ng-container>
+        <ng-template #semanticEmpty>
+          <p *ngIf="(loading$ | async) === false" class="search-page__empty">
+            {{ 'SEARCH.NO_SEMANTIC_RESULTS' | translate: { query: s.query } }}
+          </p>
+        </ng-template>
+      </section>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #emptyQuery>
+    <p class="search-page__empty">{{ 'SEARCH.EMPTY_PROMPT' | translate }}</p>
+  </ng-template>
+</div>

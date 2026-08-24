@@ -1,0 +1,17 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  width: 100%;
+
+  --mat-icon-button-state-layer-color: rgba(255, 255, 255, 0.1);
+  --mat-icon-button-ripple-color: rgba(255, 255, 255, 0.1);
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .mat-mdc-form-field-icon-suffix {
+    color: var(--text-secondary, #a1a1aa);
+  }
+}

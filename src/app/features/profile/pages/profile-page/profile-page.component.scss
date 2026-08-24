@@ -1,0 +1,36 @@
+@use '../../../../../styles/mixins' as *;
+
+.profile-page {
+  padding: 1.5rem 2rem 3rem;
+  max-width: 960px;
+  margin: 0 auto;
+
+  @include respond-to('md') {
+    padding: 1rem 0.5rem 2rem;
+  }
+
+  @include respond-to('sm') {
+    padding: 0.75rem 0 1.5rem;
+  }
+
+  &__title {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+
+    @include respond-to('sm') {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  &__loading {
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+    padding: 2rem 0;
+  }
+}
+
+::ng-deep .profile-page .mat-mdc-tab-header {
+  @include respond-to('sm') {
+    --mat-tab-header-label-text-size: 0.875rem;
+  }
+}

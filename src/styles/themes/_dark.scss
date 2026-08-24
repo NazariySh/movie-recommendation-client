@@ -1,0 +1,47 @@
+:root {
+  // Surfaces — 4-layer system: base / surface / raised / inset
+  --bg-color: #0b0b0f;
+  --surface-color: #14141a;
+  --surface-2-color: #1c1c24;
+  --surface-3-color: #27272a;
+
+  // Borders
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-color-strong: rgba(255, 255, 255, 0.14);
+
+  // Text
+  --text-primary: #ffffff;
+  --text-on-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-faint: #52525b;
+
+  // Brand
+  --primary-color: #2283dc;
+  --primary-color-soft: rgba(34, 131, 220, 0.15);
+  --primary-color-strong: #4ea4ef;
+
+  // Status
+  --error-color: #cf6679;
+  --error-color-soft: rgba(207, 102, 121, 0.18);
+  --success-color: #4caf84;
+  --success-color-soft: rgba(76, 175, 132, 0.18);
+  --warning-color: #f5a623;
+  --warning-color-soft: rgba(245, 166, 35, 0.18);
+
+  // Effects
+  --overlay-color: rgba(0, 0, 0, 0.7);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
+
+  // Motion
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 320ms;
+  --ease-out: cubic-bezier(0.25, 0.8, 0.4, 1);
+
+  color-scheme: dark;
+}

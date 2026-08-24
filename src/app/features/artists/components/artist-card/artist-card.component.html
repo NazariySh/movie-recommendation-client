@@ -1,0 +1,28 @@
+<a
+  class="artist-card"
+  [routerLink]="['/', AppRoutes.ARTISTS, artist.id]"
+  [attr.aria-label]="artist.name">
+  <div class="photo-wrapper">
+    <app-image-with-fallback
+      class="photo"
+      imgClass="photo__img"
+      [src]="artist.photoUrl"
+      [alt]="artist.name">
+    </app-image-with-fallback>
+
+    <div class="role-badges" *ngIf="artist.roles?.length">
+      <span *ngFor="let role of artist.roles" class="role-badge">
+        {{ ('ARTISTS.ROLE.' + role.toUpperCase()) | translate }}
+      </span>
+    </div>
+
+    <div class="gradient"></div>
+
+    <div class="artist-info">
+      <span class="artist-name">{{ artist.name }}</span>
+      <span class="movie-count">
+        {{ 'ARTISTS.MOVIE_COUNT' | translate: { count: artist.movieCount } }}
+      </span>
+    </div>
+  </div>
+</a>

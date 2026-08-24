@@ -1,0 +1,30 @@
+<div class="slider-container">
+  <div class="slider-header">
+    <h2 class="slider-title">{{ title }}</h2>
+    <a
+      *ngIf="viewAllPath"
+      [routerLink]="viewAllPath"
+      [queryParams]="viewAllQueryParams"
+      class="view-all-link">
+      {{ 'COMMON.SEE_ALL' | translate }} <mat-icon [fontIcon]="AppIcon.ArrowForward"></mat-icon>
+    </a>
+  </div>
+
+  <div class="slider-wrapper">
+    <button class="nav-btn prev-btn" (click)="scroll('left')">
+      <mat-icon [fontIcon]="AppIcon.ChevronLeft"></mat-icon>
+    </button>
+
+    <div class="slider-content" #sliderContent>
+      <app-movie-card
+        *ngFor="let movie of movies"
+        [movie]="movie"
+        class="slider-item">
+      </app-movie-card>
+    </div>
+
+    <button class="nav-btn next-btn" (click)="scroll('right')">
+      <mat-icon [fontIcon]="AppIcon.ChevronRight"></mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="genres-page">
+  <h1 class="page-title">{{ 'CATALOG.GENRES_TITLE' | translate }}</h1>
+
+  <ng-container *ngIf="genres$ | async as genres">
+    <div class="genres-grid" *ngIf="genres.length; else emptyState">
+      <a
+        *ngFor="let genre of genres"
+        class="genre-tile"
+        [routerLink]="['/movies']"
+        [queryParams]="{ genres: genre.slug }">
+        <div class="tile-bg"></div>
+        <span class="tile-name">{{ genre.name }}</span>
+      </a>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <mat-icon [fontIcon]="AppIcon.PersonSearch"></mat-icon>
+        <p>{{ 'CATALOG.NO_GENRES' | translate }}</p>
+      </div>
+    </ng-template>
+  </ng-container>
+</div>

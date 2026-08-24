@@ -1,0 +1,72 @@
+﻿@use 'sass:map';
+@use '../../../../styles/variables' as *;
+
+.custom-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: map.get($spacers, 2);
+  margin: 1.5rem 0;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $border-radius-2;
+  padding: 0 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &.active {
+    background-color: $color-primary;
+    color: #fff;
+  }
+
+  &.dots {
+    min-width: 2rem;
+    pointer-events: none;
+    color: var(--text-muted);
+  }
+
+  &:not(.active):not(.dots):hover {
+    background-color: var(--surface-2-color);
+  }
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $border-radius-2;
+  background-color: var(--surface-color);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  mat-icon {
+    font-size: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--surface-2-color);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+

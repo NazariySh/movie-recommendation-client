@@ -1,0 +1,62 @@
+<button
+  type="button"
+  class="sidebar-backdrop"
+  *ngIf="drawerOpen$ | async"
+  [attr.aria-label]="'NAV.COLLAPSE_SIDEBAR' | translate"
+  (click)="closeDrawer()"></button>
+
+<aside class="sidebar" [class.collapsed]="isCollapsed" [class.drawer-open]="drawerOpen$ | async">
+  <div class="sidebar-header">
+    <a routerLink="/" class="brand">
+      <img [src]="isCollapsed ? 'images/logo.png' : 'images/logo_full.png'" [alt]="'COMMON.LOGO' | translate" class="logo-image">
+    </a>
+  </div>
+
+  <button class="collapse-btn"
+          type="button"
+          (click)="toggleSidebar()"
+          [attr.aria-label]="(isCollapsed ? 'NAV.EXPAND_SIDEBAR' : 'NAV.COLLAPSE_SIDEBAR') | translate">
+    <mat-icon [fontIcon]="AppIcon.Menu"></mat-icon>
+  </button>
+
+  <ng-container *ngIf="{ isAuth: (isAuthenticated$ | async) } as ctx">
+    <nav class="nav-menu">
+      <div class="menu-label" *ngIf="!isCollapsed">{{ 'NAV.MENU' | translate }}</div>
+
+      <ul class="menu-list main-menu">
+        <li *ngIf="showOnboarding$ | async" class="onboarding-item">
+          <a [routerLink]="onboardingMenuItem.route" routerLinkActive="active" class="menu-link">
+            <div class="active-indicator"></div>
+            <mat-icon class="menu-icon" [fontIcon]="onboardingMenuItem.icon"></mat-icon>
+            <span class="menu-text" *ngIf="!isCollapsed">{{ onboardingMenuItem.label | translate }}</span>
+            <span class="menu-badge" *ngIf="!isCollapsed" aria-hidden="true">!</span>
+          </a>
+        </li>
+
+        <ng-container *ngFor="let item of mainMenuItems">
+          <li *ngIf="!item.requiresAuth || ctx.isAuth">
+            <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: !!item.exact }" class="menu-link">
+              <div class="active-indicator"></div>
+              <mat-icon class="menu-icon" [fontIcon]="item.icon"></mat-icon>
+              <span class="menu-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <hr class="divider" *ngIf="!isCollapsed && ctx.isAuth" />
+
+      <ul class="menu-list bottom-list">
+        <ng-container *ngFor="let item of bottomMenuItems">
+          <li *ngIf="!item.requiresAuth || ctx.isAuth">
+            <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: !!item.exact }" class="menu-link">
+              <div class="active-indicator"></div>
+              <mat-icon class="menu-icon" [fontIcon]="item.icon"></mat-icon>
+              <span class="menu-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </nav>
+  </ng-container>
+</aside>

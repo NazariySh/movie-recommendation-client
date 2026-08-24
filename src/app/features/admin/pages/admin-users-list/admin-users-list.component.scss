@@ -1,0 +1,65 @@
+@use '../../styles/admin-page' as *;
+
+.admin-page__table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 720px;
+  background: var(--surface-color);
+  color: var(--text-primary);
+
+  &__avatar,
+  &__initials {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+
+  &__avatar { object-fit: cover; }
+
+  &__initials {
+    background: var(--primary-color);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  &__link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary-color);
+    cursor: pointer;
+    font: inherit;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  &__chip {
+    background: var(--surface-2-color);
+    color: var(--text-secondary);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
+  }
+}
+
+.status {
+  font-size: 0.78rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  margin-right: 0.25rem;
+
+  &--ok { background: var(--success-color-soft); color: var(--success-color); }
+  &--off { background: var(--error-color-soft); color: var(--error-color); }
+  &--locked { background: var(--warning-color-soft); color: var(--warning-color); }
+}
+
+.danger { color: var(--error-color); }

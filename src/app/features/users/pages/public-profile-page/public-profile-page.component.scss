@@ -1,0 +1,105 @@
+@use '../../../../../styles/mixins' as *;
+
+.public-profile {
+  padding: 1.5rem 2rem 3rem;
+  max-width: 720px;
+  margin: 0 auto;
+
+  @include respond-to('md') {
+    padding: 1rem 1rem 2rem;
+  }
+
+  @include respond-to('sm') {
+    padding: 0.875rem 0.5rem 1.5rem;
+  }
+
+  &__error {
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    @include respond-to('sm') {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.875rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    @include respond-to('sm') {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__name {
+    margin: 0 0 0.25rem;
+
+    @include respond-to('sm') {
+      font-size: 1.15rem;
+    }
+  }
+
+  &__joined {
+    margin: 0;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+  }
+
+  &__bio {
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.85));
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.625rem;
+    }
+  }
+
+  &__stat {
+    background: var(--surface-color, #2a2b2c);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    @include respond-to('sm') {
+      padding: 0.75rem;
+      border-radius: 10px;
+    }
+  }
+
+  &__stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    @include respond-to('sm') {
+      font-size: 1.2rem;
+    }
+  }
+
+  &__stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+  }
+}

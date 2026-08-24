@@ -1,0 +1,45 @@
+@use '../../styles/admin-page' as *;
+
+.admin-table {
+  width: 100%;
+  min-width: 600px;
+  background: var(--surface-color);
+  color: var(--text-primary);
+}
+
+.admin-page__table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.avatar,
+.initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.avatar { object-fit: cover; }
+
+.initials {
+  background: var(--primary-color);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary-color);
+  cursor: pointer;
+  font: inherit;
+
+  &:hover { text-decoration: underline; }
+}
+
+.danger { color: var(--error-color); }

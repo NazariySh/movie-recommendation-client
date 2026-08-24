@@ -1,0 +1,21 @@
+<div class="trailer-dialog">
+  <button
+    type="button"
+    class="close-btn"
+    (click)="close()"
+    [attr.aria-label]="'COMMON.CLOSE' | translate">
+    <mat-icon [fontIcon]="AppIcon.ArrowBack"></mat-icon>
+  </button>
+
+  <h2 class="dialog-title" id="trailer-dialog-title">{{ data.title }}</h2>
+
+  <div class="iframe-wrap">
+    <iframe
+      [src]="trailerUrl"
+      [title]="data.title"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>

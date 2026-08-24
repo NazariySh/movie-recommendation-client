@@ -1,0 +1,35 @@
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-color, #14141a) 0%,
+    var(--surface-2-color, #1c1c24) 50%,
+    var(--surface-color, #14141a) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+
+  &--card {
+    width: 100%;
+    aspect-ratio: 2/3;
+    border-radius: 12px;
+  }
+
+  &--line {
+    height: 1rem;
+    border-radius: 4px;
+  }
+
+  &--circle {
+    border-radius: 50%;
+  }
+
+  &--rectangle {
+    border-radius: 8px;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
