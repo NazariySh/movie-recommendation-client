@@ -29,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             toast.error(translate.instant('AUTH.ERROR.INVALID_CREDENTIALS'));
           } else if (!isUrl(error, '/auth/')) {
             toast.warning(translate.instant('AUTH.ERROR.SESSION_EXPIRED'));
-            router.navigate([AuthPaths.LOGIN]);
+            router.navigate([AuthPaths.LOGIN], { queryParams: { returnUrl: router.url } });
           }
           break;
 

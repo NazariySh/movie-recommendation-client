@@ -1,15 +1,12 @@
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, catchError, finalize, shareReplay, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { AuthPaths } from '../constants/app-routes';
 
 let inflightRefresh: Observable<string> | null = null;
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
   const authService = inject(AuthService);
-  const router = inject(Router);
   const token = authService.accessToken;
 
   const authedReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
@@ -23,7 +20,6 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
       inflightRefresh ??= authService.refreshToken().pipe(
         catchError((refreshErr: unknown) => {
           authService.clearSession();
-          void router.navigate([AuthPaths.LOGIN], { queryParams: { returnUrl: router.url } });
           return throwError(() => refreshErr);
         }),
         finalize(() => { inflightRefresh = null; }),
@@ -31,6 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
       );
 
       return inflightRefresh.pipe(
+        catchError(() => throwError(() => error)),
         switchMap(newToken => next(req.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } }))),
       );
     }),
